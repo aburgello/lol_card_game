@@ -1,9 +1,9 @@
 <!-- Champion Section -->
-<div class="lg:max-w-full mx-auto mb-12 py-6 sm:px-6 rounded-lg lg:px-8 lg:py-8 bg-gray-900 text-white">
+<div class="lg:max-w-full mx-4 mb-12 py-6 sm:px-6 rounded-lg lg:px-8 lg:py-8 bg-gray-900 text-white">
   <div class="grid grid-cols-1">
 
     <!-- Champion Splash Art and Lore -->
-    <div class="flex flex-col items-center relative">
+    <div class="flex flex-col items-center relative mx-4 md:mx-0">
       <!-- Splash Art -->
       <div class="relative w-full">
         <%= image_tag @champion.splash_art, alt: "#{@champion.name} splash art", class: "w-full rounded-xl shadow-xl" %>
@@ -12,14 +12,14 @@
         <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent rounded-lg"></div>
 
         <!-- Name and Title -->
-        <div class="absolute bottom-4 left-4 text-white p-2 rounded-md">
-          <h2 class="text-4xl font-bold capitalize"><%= @champion.name %>, <%= @champion.title %></h2>
+        <div class="absolute bottom-2 left-4 text-white p-2 rounded-md">
+          <h2 class="text-base sm:text-lg md:text-xl lg:text-4xl font-bold capitalize"><%= @champion.name %>, <%= @champion.title %></h2>
         </div>
 
         <!-- Abilities Icons (Overlay on Splash Art) -->
-        <div class="absolute bottom-4 right-4 flex space-x-4">
+        <div class="absolute bottom-4 right-4 flex space-x-2 lg:space-x-4">
           <% @champion.abilities.each do |ability| %>
-            <div class="relative group w-16 h-16 rounded-xl shadow-lg overflow-hidden cursor-pointer">
+            <div class="relative group w-8 h-8 lg:w-16 lg:h-16 rounded-xl shadow-lg overflow-hidden cursor-pointer">
               <!-- Ability Icon Image -->
               <%= image_tag ability.image, alt: "#{ability.name} icon", class: "w-full h-full object-cover" %>
 
@@ -36,15 +36,15 @@
       </div>
 
       <!-- Lore -->
-      <div class="mt-6 text-lg text-gray-300">
+      <div class="mt-6 text-lg text-gray-300 text-center mx-2">
         <p><%= @champion.lore %></p>
       </div>
     </div>
 
     <!-- Champion Skins Section -->
-    <div class="mt-12 ">
+    <div class="mt-12">
       <h3 class="text-3xl font-semibold mb-4 text-center">Skins</h3>
-      <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8">
+      <div class="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-8 mx-4">
         <% @champion.skins.drop(1).each do |skin| %> <!-- Exclude first skin -->
           <div class="relative group bg-gray-800 rounded-lg shadow-lg cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out">
             <!-- Skin Loading Art -->
@@ -75,22 +75,18 @@
   </div>
 
   <script>
-    // Get all images with the skin splash art and add event listener to show modal
     document.querySelectorAll('[data-skin-splash]').forEach(img => {
       img.addEventListener('click', function() {
         const splashArt = this.getAttribute('data-skin-splash');
         const modal = document.getElementById('splash-art-modal');
         const splashImage = document.getElementById('splash-art-image');
         
-        // Set the splash art image source and show the modal
         splashImage.src = splashArt;
         modal.classList.remove('hidden');
       });
     });
 
-    // Close the modal when clicking outside the modal content
     document.getElementById('splash-art-modal').addEventListener('click', function(e) {
-      // Check if the click is outside the modal content area
       if (e.target === this) {
         this.classList.add('hidden');
       }
