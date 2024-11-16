@@ -34,6 +34,18 @@
           <% end %>
         </div>
       </div>
+<!-- Types and Region Section -->
+<div class="mt-4 text-sm text-gray-400 text-center">
+  <!-- Displaying Champion Types -->
+  <p class="font-semibold">Types: 
+    <%= @champion.types.map(&:name).join(', ') %>
+  </p>
+  
+  <!-- Displaying Champion Region -->
+  <p class="font-semibold">Region: 
+    <%= @champion.region.name if @champion.region %>
+  </p>
+</div>
 
       <!-- Lore -->
       <div class="mt-6 text-lg text-gray-300 text-center mx-2">
@@ -41,55 +53,62 @@
       </div>
     </div>
 
-    <!-- Champion Skins Section -->
-    <div class="mt-12">
-      <h3 class="text-3xl font-semibold mb-4 text-center">Skins</h3>
-      <div class="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-8 mx-4">
-        <% @champion.skins.drop(1).each do |skin| %> <!-- Exclude first skin -->
-          <div class="relative group bg-gray-800 rounded-lg shadow-lg cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out">
-            <!-- Skin Loading Art -->
-            <%= image_tag skin.loading_art, alt: "#{skin.name} loading art", 
-                          class: "w-full h-full object-cover rounded-lg shadow-md", 
-                          data: { skin_splash: skin.splash_art, skin_name: skin.name, skin_id: skin.id } %>
+<!-- Champion Skins Section -->
+<div class="mt-12">
+  <h3 class="text-3xl font-semibold mb-4 text-center">Skins</h3>
+  <div class="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-8 mx-4">
+    <% @champion.skins.drop(1).each do |skin| %> <!-- Exclude first skin -->
+      <div class="relative group bg-gray-800 rounded-lg shadow-lg cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out">
+        <!-- Skin Loading Art -->
+        <%= image_tag skin.loading_art, alt: "#{skin.name} loading art", 
+                      class: "w-full h-full object-cover rounded-lg shadow-md", 
+                      data: { skin_splash: skin.splash_art, skin_name: skin.name, skin_id: skin.id } %>
 
-            <!-- Overlay with Gradient Effect -->
-            <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent rounded-lg" style="pointer-events: none;"></div>
+        <!-- Overlay with Gradient Effect -->
+        <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent rounded-lg" style="pointer-events: none;"></div>
 
-            <!-- Skin Name -->
-            <h4 class="text-lg font-semibold mb-2 mt-2 absolute bottom-2 text-center text-white px-4 rounded-md" style="pointer-events: none;">
-              <%= skin.name %>
-            </h4>
-          </div>
-        <% end %>
+        <!-- Skin Name (Removed from here) -->
+        <!-- <h4 class="text-lg font-semibold mb-2 mt-2 absolute bottom-2 text-center text-white px-4 rounded-md" style="pointer-events: none;">
+          <%= skin.name %>
+        </h4> -->
       </div>
+    <% end %>
+  </div>
+</div>
+
+
+<!-- Modal to Show Full Splash Art -->
+<div id="splash-art-modal" class="fixed mx-10 inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 flex">
+  <div class="bg-gradient-to-b from-slate-950 to-gray-900 p-3 rounded-xl max-w-6xl w-full relative">
+    <!-- Skin Name -->
+    <div id="modal-skin-name" class="absolute bottom-4 left-6 text-white text-2xl shadow-xl font-bold"></div>
+
+    <div class="flex justify-center">
+      <img id="splash-art-image" src="" alt="Splash Art" class="max-w-full max-h-full object-contain rounded-xl shadow-md">
     </div>
   </div>
+</div>
 
-  <!-- Modal to Show Full Splash Art -->
-  <div id="splash-art-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 flex">
-    <div class="bg-gradient-to-b from-slate-950 to-gray-900 p-3 rounded-xl max-w-6xl w-full relative">
-      <div class="flex justify-center">
-        <img id="splash-art-image" src="" alt="Splash Art" class="max-w-full max-h-full object-contain rounded-xl shadow-md">
-      </div>
-    </div>
-  </div>
-
-  <script>
-    document.querySelectorAll('[data-skin-splash]').forEach(img => {
-      img.addEventListener('click', function() {
-        const splashArt = this.getAttribute('data-skin-splash');
-        const modal = document.getElementById('splash-art-modal');
-        const splashImage = document.getElementById('splash-art-image');
-        
-        splashImage.src = splashArt;
-        modal.classList.remove('hidden');
-      });
+<script>
+  document.querySelectorAll('[data-skin-splash]').forEach(img => {
+    img.addEventListener('click', function() {
+      const splashArt = this.getAttribute('data-skin-splash');
+      const skinName = this.getAttribute('data-skin-name');  // Get the skin name
+      const modal = document.getElementById('splash-art-modal');
+      const splashImage = document.getElementById('splash-art-image');
+      const modalSkinName = document.getElementById('modal-skin-name');
+      
+      splashImage.src = splashArt;
+      modalSkinName.textContent = skinName;  // Display the skin name in the modal
+      modal.classList.remove('hidden');
     });
+  });
 
-    document.getElementById('splash-art-modal').addEventListener('click', function(e) {
-      if (e.target === this) {
-        this.classList.add('hidden');
-      }
-    });
-  </script>
+  document.getElementById('splash-art-modal').addEventListener('click', function(e) {
+    if (e.target === this) {
+      this.classList.add('hidden');
+    }
+  });
+</script>
+
 </div>

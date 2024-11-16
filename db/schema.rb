@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_11_14_233710) do
+ActiveRecord::Schema[7.2].define(version: 2024_11_16_000401) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -25,6 +25,15 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_14_233710) do
     t.index ["champion_id"], name: "index_abilities_on_champion_id"
   end
 
+  create_table "champion_types", force: :cascade do |t|
+    t.bigint "champion_id", null: false
+    t.bigint "type_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["champion_id"], name: "index_champion_types_on_champion_id"
+    t.index ["type_id"], name: "index_champion_types_on_type_id"
+  end
+
   create_table "champions", force: :cascade do |t|
     t.string "name"
     t.string "title"
@@ -34,6 +43,21 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_14_233710) do
     t.string "passive_name"
     t.text "passive_description"
     t.string "passive_image"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "region_id"
+    t.index ["region_id"], name: "index_champions_on_region_id"
+  end
+
+  create_table "champions_types", id: false, force: :cascade do |t|
+    t.bigint "champion_id", null: false
+    t.bigint "type_id", null: false
+    t.index ["champion_id"], name: "index_champions_types_on_champion_id"
+    t.index ["type_id"], name: "index_champions_types_on_type_id"
+  end
+
+  create_table "regions", force: :cascade do |t|
+    t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -49,6 +73,15 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_14_233710) do
     t.index ["champion_id"], name: "index_skins_on_champion_id"
   end
 
+  create_table "types", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   add_foreign_key "abilities", "champions"
+  add_foreign_key "champion_types", "champions"
+  add_foreign_key "champion_types", "types"
+  add_foreign_key "champions", "regions"
   add_foreign_key "skins", "champions"
 end

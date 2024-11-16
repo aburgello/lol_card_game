@@ -29,9 +29,7 @@ class RiotApi
       champions.each do |name, details|
         champion = Champion.find_or_create_by(name: name) do |champion|
           champion.title = details["title"]
-          # We now fetch lore from the detailed champion JSON
           champion.lore = fetch_lore_for_champion(name)
-          # Set the splash and square art images correctly using the champion's name
           champion.splash_art = "https://ddragon.leagueoflegends.com/cdn/img/champion/splash/#{name}_0.jpg"
           champion.square_art = "https://ddragon.leagueoflegends.com/cdn/14.22.1/img/champion/#{name}.png"
 
@@ -45,6 +43,14 @@ class RiotApi
 
         # Now fetch the detailed data for each champion (abilities, skins, etc.)
         fetch_detailed_data_for_champion(champion, name)
+
+        # Add champion types (e.g., Fighter, Mage, etc.) if available
+        if details["tags"]
+          details["tags"].each do |type_name|
+            type = Type.find_or_create_by(name: type_name)
+            champion.types << type unless champion.types.include?(type)
+          end
+        end
       end
     else
       raise "Failed to fetch champions"
@@ -53,7 +59,6 @@ class RiotApi
 
   # Fetch detailed data (abilities, skins) for each champion
   def self.fetch_detailed_data_for_champion(champion, name)
-    # Fetch the detailed champion data
     url = "https://ddragon.leagueoflegends.com/cdn/14.22.1/data/en_US/champion/#{name}.json"
     response = HTTParty.get(url)
 
