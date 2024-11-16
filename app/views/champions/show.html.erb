@@ -1,62 +1,72 @@
 <!-- Champion Section -->
-<div class="lg:max-w-full mx-4 mb-12 py-6 sm:px-6 rounded-lg lg:px-8 lg:py-8 bg-gray-900 text-white">
+<div class="lg:max-w-full mx-4 mb-12 py-2 sm:px-6 rounded-lg lg:px-8 lg:py-0 ">
   <div class="grid grid-cols-1">
 
     <!-- Champion Splash Art and Lore -->
     <div class="flex flex-col items-center relative mx-4 md:mx-0">
       <!-- Splash Art -->
       <div class="relative w-full">
-        <%= image_tag @champion.splash_art, alt: "#{@champion.name} splash art", class: "w-full rounded-xl shadow-xl" %>
+        <%= image_tag @champion.splash_art, alt: "#{@champion.name} splash art", class: "w-full rounded-xl shadow-lg" %>
 
         <!-- Gradient Overlay -->
-        <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent rounded-lg"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-[#0A1428]/70 via-[#091428]/30 to-transparent rounded-lg"></div>
 
         <!-- Name and Title -->
-        <div class="absolute bottom-2 left-4 text-white p-2 rounded-md">
-          <h2 class="text-base sm:text-lg md:text-xl lg:text-4xl font-bold capitalize"><%= @champion.name %>, <%= @champion.title %></h2>
+        <div class="absolute bottom-2 lg:bottom-4 left-6  text-white p-2 rounded-md">
+          <h2 class="text-lg md:text-2xl lg:text-4xl font-bold  text-[#C8AA6E]">
+            <%= @champion.name %>, <%= @champion.title %></h2>
         </div>
 
         <!-- Abilities Icons (Overlay on Splash Art) -->
-        <div class="absolute bottom-4 right-4 flex space-x-2 lg:space-x-4">
-          <% @champion.abilities.each do |ability| %>
-            <div class="relative group w-8 h-8 lg:w-16 lg:h-16 rounded-xl shadow-lg overflow-hidden cursor-pointer">
-              <!-- Ability Icon Image -->
-              <%= image_tag ability.image, alt: "#{ability.name} icon", class: "w-full h-full object-cover" %>
+<!-- Abilities Icons (Overlay on Splash Art) -->
+<div class="absolute bottom-4 right-4 flex space-x-2 lg:space-x-4">
+  <% @champion.abilities.each do |ability| %>
+    <div class="relative group w-8 h-8 lg:w-16 lg:h-16 rounded-xl shadow-lg cursor-pointer">
+      <!-- Ability Icon Image -->
+      <%= image_tag ability.image, alt: "#{ability.name} icon", class: "w-full h-full object-cover rounded-xl" %>
 
-              <!-- Ability Name and Description on Hover -->
-              <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 text-white text-center p-4 transition-opacity">
-                <div>
-                  <h4 class="text-xs font-semibold my-2"><%= ability.name %></h4>
-                  <!-- You can add more description or effects here if necessary -->
-                </div>
-              </div>
-            </div>
-          <% end %>
-        </div>
+      <!-- Ability Name Tooltip -->
+    <div class="absolute top-0 transform -translate-y-10 -translate-x-8 tooltip bg-[#0A1428] text-white text-xs font-semibold w-32 px-2 py-2 rounded-md hidden text-center group-hover:block">
+        <%= ability.name %>
+      </div>
+      
+      <!-- Ability Name and Description on Hover (existing overlay) -->
+      
+    </div>
+  <% end %>
+</div>
+
       </div>
 <!-- Types and Region Section -->
-<div class="mt-4 text-sm text-gray-400 text-center">
-  <!-- Displaying Champion Types -->
-  <p class="font-semibold">Types: 
-    <%= @champion.types.map(&:name).join(', ') %>
-  </p>
+<div class="mt-8 w-full bg-gradient-to-r from-[#0A1428]/20 to-[#0A0C14]/20 p-6 rounded-lg shadow-xl border-2 border-slate-900">
+  <div class="flex justify-between items-center space-x-8">
+    <!-- Displaying Champion Types -->
+    <p class="text-xl font-semibold text-gray-300">
+      <span class="text-xl font-medium text-gray-400">Type:</span> 
+      <%= @champion.types.map(&:name).join(', ') %>
+    </p>
   
-  <!-- Displaying Champion Region -->
-  <p class="font-semibold">Region: 
-    <%= @champion.region.name if @champion.region %>
+    <!-- Displaying Champion Region -->
+    <p class="text-xl font-semibold text-gray-300 text-right">
+      <span class="text-xl font-medium text-gray-400">Region:</span> 
+      <%= @champion.region.name if @champion.region %>
+    </p>
+  </div>
+</div>
+
+
+<!-- Lore Section -->
+<div class="mt-8 p-6 bg-gradient-to-r from-[#0A1428]/20 to-[#0A0C14]/20 rounded-lg shadow-xl border-2 border-slate-900">
+  <p class="text-lg text-gray-300 mx-2">
+    <%= @champion.lore %>
   </p>
 </div>
 
-      <!-- Lore -->
-      <div class="mt-6 text-lg text-gray-300 text-center mx-2">
-        <p><%= @champion.lore %></p>
-      </div>
-    </div>
 
 <!-- Champion Skins Section -->
-<div class="mt-12">
-  <h3 class="text-3xl font-semibold mb-4 text-center">Skins</h3>
-  <div class="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-8 mx-4">
+<div class="mt-8">
+  <h3 class="text-3xl font-semibold mb-4 text-center text-[#C8AA6E]">Skins</h3>
+  <div class="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-8 mx-4 mt-4">
     <% @champion.skins.drop(1).each do |skin| %> <!-- Exclude first skin -->
       <div class="relative group bg-gray-800 rounded-lg shadow-lg cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out">
         <!-- Skin Loading Art -->
@@ -81,7 +91,7 @@
 <div id="splash-art-modal" class="fixed mx-10 inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 flex">
   <div class="bg-gradient-to-b from-slate-950 to-gray-900 p-3 rounded-xl max-w-6xl w-full relative">
     <!-- Skin Name -->
-    <div id="modal-skin-name" class="absolute bottom-4 left-6 text-white text-2xl shadow-xl font-bold"></div>
+    <div id="modal-skin-name" class="absolute bottom-6 left-8 text-white text-2xl font-bold"></div>
 
     <div class="flex justify-center">
       <img id="splash-art-image" src="" alt="Splash Art" class="max-w-full max-h-full object-contain rounded-xl shadow-md">

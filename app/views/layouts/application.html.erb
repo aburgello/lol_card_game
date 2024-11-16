@@ -21,20 +21,21 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
+  <body class="bg-gradient-to-r from-[#0A0C14] to-[#0A1428]">
     <!-- Navbar -->
-    <nav class="bg-slate-900 p-4">
-      <div class="flex justify-between items-center container mx-auto">
-        <a href="/" class="text-white text-2xl font-bold">Runeterra Champions</a>
-        <div class="space-x-4">
-          <a href="/champions" class="text-white hover:text-gray-300">Champions</a>
-          <a href="#" class="text-white hover:text-gray-300">Regions</a>
-        </div>
-      </div>
-    </nav>
+<nav class="p-4 text-white border-b-2 border-slate-900">
+  <div class="flex justify-between items-center container mx-auto">
+    <a href="/" class="text-[#C8AA6E] text-2xl font-bold">Runeterra Champions</a>
+    <div class="space-x-4">
+      <a href="/champions" class="text-[#A09B8C] hover:text-[#C8AA6E] text-lg transition-all duration-200 ease-in-out">Champions</a>
+      <a href="#" class="text-[#A09B8C] hover:text-[#C8AA6E] text-lg transition-all duration-200 ease-in-out">Regions</a>
+    </div>
+  </div>
+</nav>
 
-    <main class="container mx-auto mt-12 flex">
-      <%= yield %>
-    </main>
+<main class="container mx-auto mt-12 flex">
+  <%= yield %>
+</main>
+
   </body>
 </html>

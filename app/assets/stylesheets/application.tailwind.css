@@ -11,48 +11,42 @@
 }
 
 */
-.champions-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
+
+@font-face {
+  font-family: 'BeaufortForLol';
+  src: url('/assets/beaufortforlol-regular.otf') format('opentype'),
+       url('/assets/beaufortforlol-bold.otf') format('opentype'),
+       url('/assets/beaufortforlol-italic.otf') format('opentype'),
+       url('/assets/beaufortforlol-light.otf') format('opentype'),
+       url('/assets/beaufortforlol-heavy.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
 }
 
-.champion-card {
-  width: 200px;
-  padding: 10px;
-  border: 1px solid #ccc;
-  text-align: center;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
+@layer components {
+  .btn-primary {
+    @apply py-2 px-4 bg-[#F0C419] text-black;
+  }
+
+  .btn-primary:hover {
+    @apply bg-[#D9A000];
+  }
 }
 
-.champion-card img {
-  width: 100%;
-  height: auto;
-  border-radius: 4px;
-}
-
-.champion-card h2 {
-  font-size: 1.5em;
-  margin: 10px 0;
-}
-
-.champion-card p {
-  font-size: 0.9em;
-  color: #555;
-}
-
-.btn {
-  background-color: #007bff;
-  color: white;
-  padding: 8px 16px;
-  border-radius: 4px;
-  text-decoration: none;
-}
-
-.btn:hover {
-  background-color: #0056b3;
-}
 body {
-  background-color: rgb(3 7 18);
-    font-family: "Josefin Sans", sans-serif;}
+  background-color: rgb(10, 12, 20);
+  font-family: 'BeaufortForLol', sans-serif;
+}
+
+.text-yellow-400 {
+  color: #F0C419; /* League of Legends Yellow */
+}
+
+.bg-dark-purple {
+  background-color: #1D1F29; /* Dark Purple/Black */
+}
+
+.bg-darker {
+  background-color: #0A0C14; /* Darker Background */
+}
