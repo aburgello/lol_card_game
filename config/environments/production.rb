@@ -94,6 +94,9 @@ Rails.application.configure do
 
   # Only use :id for inspections in production.
   config.active_record.attributes_for_inspect = [ :id ]
+  config.assets.enabled = true
+  config.assets.compile = true
+  config.assets.precompile += %w[ .otf ]
 
   # Enable DNS rebinding protection and other `Host` header attacks.
   # config.hosts = [
