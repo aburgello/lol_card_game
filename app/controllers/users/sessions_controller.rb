@@ -2,7 +2,9 @@
 
 class Users::SessionsController < Devise::SessionsController
   # before_action :configure_sign_in_params, only: [:create]
-
+  def find_for_authentication(conditions)
+    conditions[:email].present? ? super : User.find_by(username: conditions[:email])
+  end
   # GET /resource/sign_in
   # def new
   #   super
