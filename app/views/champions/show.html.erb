@@ -1,15 +1,15 @@
 <!-- Champion Section -->
-<div class="lg:max-w-full mx-4 mb-12 py-2 sm:px-6 rounded-lg lg:px-8 lg:py-0 ">
+<div class="lg:max-w-full mx-4 mb-12 rounded-lg">
   <div class="grid grid-cols-1">
 
     <!-- Champion Splash Art and Lore -->
     <div class="flex flex-col items-center relative mx-4 md:mx-0">
       <!-- Splash Art -->
       <div class="relative w-full">
-        <%= image_tag @champion.splash_art, alt: "#{@champion.name} splash art", class: "w-full rounded-xl shadow-lg" %>
+        <%= image_tag @champion.splash_art, alt: "#{@champion.name} splash art", class: "w-full rounded-lg shadow-md" %>
 
         <!-- Gradient Overlay -->
-<div class="absolute inset-0 bg-gradient-to-t from-[#0A1428]/70 via-[#091428]/30 to-transparent rounded-lg"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-[#0A1428]/90 via-[#091428]/30 to-transparent rounded-lg"></div>
 
         <!-- Name and Title -->
         <div class="absolute bottom-2 lg:bottom-4 left-6  text-white p-2 rounded-md">
@@ -21,7 +21,7 @@
 <!-- Abilities Icons (Overlay on Splash Art) -->
 <div class="absolute bottom-4 right-4 flex space-x-2 lg:space-x-4">
   <% @champion.abilities.each do |ability| %>
-    <div class="relative group w-8 h-8 lg:w-16 lg:h-16 rounded-xl shadow-lg cursor-pointer">
+    <div class="relative group w-8 h-8 lg:w-16 lg:h-16 rounded-lg shadow-lg cursor-pointer">
       <!-- Ability Icon Image -->
       <%= image_tag ability.image, alt: "#{ability.name} icon", class: "w-full h-full object-cover rounded-xl hover:scale-105 transition-all duration-300 ease-in-out" %>
 

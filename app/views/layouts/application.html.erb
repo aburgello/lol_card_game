@@ -29,13 +29,24 @@
     <div class="space-x-4">
       <a href="/champions" class="text-[#A09B8C] hover:text-[#C8AA6E] text-lg transition-all duration-200 ease-in-out">Champions</a>
       <a href="#" class="text-[#A09B8C] hover:text-[#C8AA6E] text-lg transition-all duration-200 ease-in-out">Regions</a>
+
+      <% if user_signed_in? %>
+        <a href="/users/edit" class="text-[#C8AA6E] text-lg font-semibold">Profile</a>
+<%= link_to "Sign Out", destroy_user_session_path, method: :delete, class: "text-[#A09B8C] hover:text-[#C8AA6E] text-lg" %>
+      <% else %>
+        <a href="/users/sign_up" class="text-[#A09B8C] hover:text-[#C8AA6E] text-lg transition-all duration-200 ease-in-out">Sign Up</a>
+        <a href="/users/sign_in" class="text-[#A09B8C] hover:text-[#C8AA6E] text-lg transition-all duration-200 ease-in-out">Login</a>
+      <% end %>
     </div>
   </div>
 </nav>
 
-<main class="container mx-auto mt-12 flex">
+
+<main  class="container mx-auto my-8 flex justify-center">
   <%= yield %>
 </main>
+<p class="notice"><%= notice %></p>
+<p class="alert"><%= alert %></p>
 
   </body>
 </html>
