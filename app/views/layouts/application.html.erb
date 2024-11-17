@@ -22,8 +22,9 @@
   </head>
 
   <body class="bg-gradient-to-r from-[#0A0C14] to-[#0A1428]">
-    <!-- Navbar -->
-<nav class="p-4 text-white border-b-2 border-slate-900">
+    
+      <!-- Navbar -->
+  <nav class="p-4 text-white border-b-2 border-slate-900">
   <div class="flex justify-between items-center container mx-auto">
     <a href="/" class="text-[#C8AA6E] text-2xl font-bold">Runeterra Champions</a>
     <div class="space-x-4">
@@ -31,8 +32,16 @@
       <a href="#" class="text-[#A09B8C] hover:text-[#C8AA6E] text-lg transition-all duration-200 ease-in-out">Regions</a>
 
       <% if user_signed_in? %>
-        <a href="/users/edit" class="text-[#A09B8C] hover:text-[#C8AA6E] text-lg">Profile</a>
-<%= link_to "Sign Out", destroy_user_session_path, method: :delete, class: "text-[#A09B8C] hover:text-red-500 text-lg" %>
+        <div class="group relative inline-block z-20">
+  <span class="text-[#A09B8C] hover:text-[#C8AA6E] text-lg cursor-pointer transition-all duration-200 ease-in-out">
+    <%= current_user.username.capitalize %>
+  </span>
+  <div class="absolute right-0 mt-2 w-36 bg-[#0A1428] text-white shadow-lg rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-100 ease-in-out hover:opacity-100 hover:visible">
+    <%= link_to "Edit Profile", edit_user_registration_path, class: "block px-4 py-2 hover:bg-[#C8AA6E]" %>
+    <%= link_to "Sign Out", destroy_user_session_path, method: :delete, class: "block px-4 py-2 hover:bg-[#C8AA6E]" %>
+  </div>
+</div>
+
       <% else %>
         <a href="/users/sign_in" class="text-[#A09B8C] hover:text-[#C8AA6E] text-lg transition-all duration-200 ease-in-out">Login</a>
       <% end %>
@@ -41,11 +50,11 @@
 </nav>
 
 
-<main  class="container mx-auto my-8 flex justify-center">
-  <%= yield %>
-</main>
-<p class="notice"><%= notice %></p>
-<p class="alert"><%= alert %></p>
+  <main  class="container mx-auto my-8 flex justify-center">
+    <%= yield %>
+  </main>
+  <p class="notice"><%= notice %></p>
+  <p class="alert"><%= alert %></p>
 
   </body>
 </html>
