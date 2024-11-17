@@ -31,10 +31,9 @@
       <a href="#" class="text-[#A09B8C] hover:text-[#C8AA6E] text-lg transition-all duration-200 ease-in-out">Regions</a>
 
       <% if user_signed_in? %>
-        <a href="/users/edit" class="text-[#C8AA6E] text-lg font-semibold">Profile</a>
-<%= link_to "Sign Out", destroy_user_session_path, method: :delete, class: "text-[#A09B8C] hover:text-[#C8AA6E] text-lg" %>
+        <a href="/users/edit" class="text-[#A09B8C] hover:text-[#C8AA6E] text-lg">Profile</a>
+<%= link_to "Sign Out", destroy_user_session_path, method: :delete, class: "text-[#A09B8C] hover:text-red-500 text-lg" %>
       <% else %>
-        <a href="/users/sign_up" class="text-[#A09B8C] hover:text-[#C8AA6E] text-lg transition-all duration-200 ease-in-out">Sign Up</a>
         <a href="/users/sign_in" class="text-[#A09B8C] hover:text-[#C8AA6E] text-lg transition-all duration-200 ease-in-out">Login</a>
       <% end %>
     </div>
