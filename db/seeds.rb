@@ -1,4 +1,6 @@
+Champion.destroy_all
 
+RiotApi.fetch_champions
 
 # Create or find regions
 regions = [
