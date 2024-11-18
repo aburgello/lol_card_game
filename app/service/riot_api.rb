@@ -1,144 +1,148 @@
-require "open-uri"
-require "json"
-require "httparty"
-
+require 'open-uri'
+require 'json'
+require 'httparty'
+require 'faraday'
 class RiotApi
-  API_KEY = ENV["RIOT_API_KEY"]
-  BASE_URL = "https://ddragon.leagueoflegends.com/cdn/14.22.1/data/en_US/champion.json"
+  CHAMPION_SUMMARY_URL = 'https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-summary.json'
+  CHAMPION_DETAILS_URL = "https://cdn.communitydragon.org/latest/champion/%{champion_id}/data"
 
-  # Fetch the current version for Riot's assets
-  def self.fetch_version
-    url = "https://ddragon.leagueoflegends.com/realms/na.json"
-    response = HTTParty.get(url)
-    if response.success?
-      data = response.parsed_response
-      data["n"]["champion"]
+  def self.map_asset_path(asset_path)
+    if asset_path.starts_with?('/lol-game-data/assets/')
+      path = asset_path.sub('/lol-game-data/assets/', '').downcase
+      "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/#{path}"
     else
-      raise "Failed to fetch version"
+      asset_path
     end
   end
 
-  # Fetch champions from the Riot API and seed them into your database
   def self.fetch_champions
-    # Fetch the list of champions
-    url = "https://ddragon.leagueoflegends.com/cdn/14.22.1/data/en_US/champion.json"
-    response = HTTParty.get(url)
-    if response.success?
-      champions = response.parsed_response["data"]
+    response = Faraday.get(CHAMPION_SUMMARY_URL)
 
-      champions.each do |name, details|
-        champion = Champion.find_or_create_by(name: name) do |champion|
-          champion.title = details["title"]
-          champion.lore = fetch_lore_for_champion(name)
-          champion.splash_art = "https://ddragon.leagueoflegends.com/cdn/img/champion/splash/#{name}_0.jpg"
-          champion.square_art = "https://ddragon.leagueoflegends.com/cdn/14.22.1/img/champion/#{name}.png"
+    if response.status == 200
+      champions_data = JSON.parse(response.body) rescue nil
+      return if champions_data.nil? || champions_data.empty?
+    else
+      puts "Error: Failed to fetch champions data. HTTP Status: #{response.status}"
+      return
+    end
 
-          # Set passive ability information if present
-          if details["passive"]
-            champion.passive_name = details["passive"]["name"]
-            champion.passive_description = details["passive"]["description"]
-            champion.passive_image = "https://ddragon.leagueoflegends.com/cdn/14.22.1/img/passive/#{details['passive']['image']['full']}"
-          end
-        end
+    champions_data.each do |champion_data|
+      next if champion_data['id'] == -1
+      champion_details = RiotApi.fetch_champion_details(champion_data['id'])
 
-        # Now fetch the detailed data for each champion (abilities, skins, etc.)
-        fetch_detailed_data_for_champion(champion, name)
+      champion = Champion.find_or_initialize_by(id: champion_data['id'])
+      champion.name = champion_data['name']
+      champion.title = champion_details['title'].presence || 'Untitled'
+      champion.lore = champion_details['shortBio']
+      champion.save!
 
-        # Add champion types (e.g., Fighter, Mage, etc.) if available
-        if details["tags"]
-          details["tags"].each do |type_name|
-            type = Type.find_or_create_by(name: type_name)
-            champion.types << type unless champion.types.include?(type)
-          end
-        end
+      puts "Champion seeded: #{champion.name}"
+
+      if champion_details
+        champion.splash_art = "https://cdn.communitydragon.org/latest/champion/#{champion.id}/splash-art"
+        
+        self.create_skins(champion, champion_details['skins']) if champion_details['skins'].present?
+        self.create_abilities(champion, champion_details['spells'], champion_details['passive']) if champion_details['spells'].present? || champion_details['passive'].present?
+
+        self.create_types(champion, champion_data['roles']) if champion_data['roles'].present?
+      else
+        puts "Failed to fetch details for champion #{champion_data['name']}, skipping additional data."
       end
-    else
-      raise "Failed to fetch champions"
+
+      if champion_data['squarePortraitPath']
+        champion.square_art = map_asset_path(champion_data['squarePortraitPath'])
+      end
+
+      if champion_data['passive']
+        champion.passive_image = map_asset_path(champion_data['passive']['abilityIconPath'])
+      end
+
+      champion.save!
     end
   end
 
-  # Fetch detailed data (abilities, skins) for each champion
-  def self.fetch_detailed_data_for_champion(champion, name)
-    url = "https://ddragon.leagueoflegends.com/cdn/14.22.1/data/en_US/champion/#{name}.json"
-    response = HTTParty.get(url)
-
-    if response.success?
-      champion_data = response.parsed_response["data"][name]
-
-      # Fetch abilities for the champion
-      fetch_abilities_for_champion(champion, champion_data)
-
-      # Fetch skins for the champion
-      fetch_skins_for_champion(champion, champion_data)
-    else
-      Rails.logger.warn "Failed to fetch detailed data for champion: #{name}"
-    end
-  end
-
-  # Fetch the lore for a champion from the detailed JSON
-  def self.fetch_lore_for_champion(name)
-    url = "https://ddragon.leagueoflegends.com/cdn/14.22.1/data/en_US/champion/#{name}.json"
-    response = HTTParty.get(url)
-
-    if response.success?
-      champion_data = response.parsed_response["data"][name]
-      champion_data["lore"] # Return the lore from the detailed champion data
-    else
-      Rails.logger.warn "Failed to fetch lore for champion: #{name}"
+  def self.fetch_champion_details(champion_id)
+    url = CHAMPION_DETAILS_URL % { champion_id: champion_id }
+    begin
+      JSON.parse(URI.open(url).read)
+    rescue OpenURI::HTTPError => e
+      puts "Error fetching details for champion #{champion_id}: #{e.message}"
       nil
     end
   end
 
-  # Fetch abilities for a champion and save them
-  def self.fetch_abilities_for_champion(champion, champion_data)
-    if champion_data["spells"].present?
-      champion_data["spells"].each do |spell|
-        Rails.logger.info "Creating ability for spell: #{spell['name']}"
-
-        Ability.create(
-          champion: champion,
-          name: spell["name"],
-          description: spell["description"],
-          image: "https://ddragon.leagueoflegends.com/cdn/14.22.1/img/spell/#{spell['id']}.png",
-          ability_type: spell["key"]
-        )
+  def self.create_skins(champion, skins)
+    skins.each do |skin|
+      # Remove the 'k' prefix from the rarity value if it exists and check for 'kNoRarity'
+      rarity_name = skin['rarity'].sub(/^k/, '').capitalize
+      rarity_name = "Base" if rarity_name == "NoRarity"  # Replace "NoRarity" with "Base"
+  
+      # Find or create the skin record
+      skin_record = Skin.find_or_create_by(id: skin['id'], champion_id: champion.id) do |skin_record|
+        skin_record.name = skin['name']
+        skin_record.num = skin['num']
+        skin_record.splash_art = map_asset_path(skin['uncenteredSplashPath'])
+        skin_record.loading_art = map_asset_path(skin['loadScreenPath'])
+        skin_record.is_base = skin['isBase']
+        skin_record.description = skin['description']
+        skin_record.rarity = rarity_name # Assign the cleaned-up rarity
+        skin_record.is_legacy = skin['isLegacy'] # Legacy flag
       end
-    else
-      Rails.logger.warn "No spells found for champion #{champion.name}"
+  
+      # Print info about the skin being seeded, including its rarity and legacy status
+      puts "Skin seeded: #{skin_record.name} (Rarity: #{skin_record.rarity}, Legacy: #{skin_record.is_legacy})"
+      skin_record.save! # Explicitly save after creation
+    end
+  end
+  
+  
+  
+
+  def self.create_abilities(champion, spells, passive)
+    spells.each do |spell|
+      ability_record = Ability.find_or_create_by(champion_id: champion.id, name: spell['name']) do |ability|
+        ability.name = spell['name']
+        ability.image = map_asset_path(spell['abilityIconPath'])
+        ability.description = spell['description']
+      end
+
+      if ability_record.errors.any?
+        puts "Error saving ability for #{champion.name}: #{ability_record.errors.full_messages.join(', ')}"
+      end
+      ability_record.save!
+      puts "Ability seeded: #{ability_record.name} for #{champion.name}"
     end
 
-    # Process the champion's passive ability
-    if champion_data["passive"].present?
-      Rails.logger.info "Creating passive ability for champion: #{champion.name}"
+    if passive
+      ability_record = Ability.find_or_create_by(champion_id: champion.id, name: passive['name']) do |ability|
+        ability.name = passive['name']
+        ability.image = map_asset_path(passive['abilityIconPath'])
+        ability.description = passive['description']
+      end
 
-      Ability.create(
-        champion: champion,
-        name: champion_data["passive"]["name"],
-        description: champion_data["passive"]["description"],
-        image: "https://ddragon.leagueoflegends.com/cdn/14.22.1/img/passive/#{champion_data['passive']['image']['full']}",
-        ability_type: "Passive"
-      )
-    else
-      Rails.logger.warn "No passive abilities found for champion #{champion.name}"
+      if ability_record.errors.any?
+        puts "Error saving passive for #{champion.name}: #{ability_record.errors.full_messages.join(', ')}"
+      end
+      ability_record.save!
+      puts "Passive ability seeded: #{ability_record.name} for #{champion.name}"
     end
   end
 
-  # Fetch skins for a champion and save them
-  def self.fetch_skins_for_champion(champion, champion_data)
-    if champion_data["skins"].present?
-      champion_data["skins"].each do |skin|
-        Rails.logger.info "Creating skin for #{skin['name']}"
-
-        Skin.create(
-          champion: champion,
-          name: skin["name"],
-          num: skin["num"],
-          splash_art: "https://ddragon.leagueoflegends.com/cdn/img/champion/splash/#{champion.name}_#{skin['num']}.jpg",
-          loading_art: "https://ddragon.leagueoflegends.com/cdn/img/champion/loading/#{champion.name}_#{skin['num']}.jpg"
-        )
-      end
-    else
-      Rails.logger.warn "No skins found for champion #{champion.name}"
+  def self.create_types(champion, roles)
+    roles.each do |role|
+      # Capitalize the first letter of the role
+      capitalized_role = role.capitalize
+  
+      # Find or create a Type based on the capitalized role
+      type = Type.find_or_create_by(name: capitalized_role)
+      
+      # Create a ChampionType association
+      ChampionType.find_or_create_by(champion_id: champion.id, type_id: type.id)
+      
+      puts "Type seeded: #{capitalized_role} for #{champion.name}"
     end
   end
+  
 end
+
+ 

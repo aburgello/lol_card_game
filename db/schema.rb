@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_11_17_212057) do
+ActiveRecord::Schema[7.2].define(version: 2024_11_18_202021) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -23,6 +23,32 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_17_212057) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["champion_id"], name: "index_abilities_on_champion_id"
+  end
+
+  create_table "active_admin_comments", force: :cascade do |t|
+    t.string "namespace"
+    t.text "body"
+    t.string "resource_type"
+    t.bigint "resource_id"
+    t.string "author_type"
+    t.bigint "author_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["author_type", "author_id"], name: "index_active_admin_comments_on_author"
+    t.index ["namespace"], name: "index_active_admin_comments_on_namespace"
+    t.index ["resource_type", "resource_id"], name: "index_active_admin_comments_on_resource"
+  end
+
+  create_table "admin_users", force: :cascade do |t|
+    t.string "email", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_admin_users_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true
   end
 
   create_table "champion_types", force: :cascade do |t|
@@ -70,6 +96,10 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_17_212057) do
     t.string "loading_art"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "is_base"
+    t.text "description"
+    t.string "rarity"
+    t.boolean "is_legacy"
     t.index ["champion_id"], name: "index_skins_on_champion_id"
   end
 
@@ -88,6 +118,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_17_212057) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "username"
+    t.boolean "admin"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end

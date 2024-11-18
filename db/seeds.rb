@@ -1,13 +1,4 @@
-ChampionType.destroy_all
-Type.destroy_all
-Ability.destroy_all
-Skin.destroy_all
-Champion.destroy_all
 
-# Fetch and seed champions
-RiotApi.fetch_champions
-
-puts "Successfully seeded champions, abilities, and skins!"
 
 # Create or find regions
 regions = [
@@ -32,17 +23,17 @@ champion_region_map = {
   "Gangplank" => "Bilgewater",
   "Graves" => "Bilgewater",
   "Illaoi" => "Bilgewater",
-  "MissFortune" => "Bilgewater",
+  "Miss Fortune" => "Bilgewater",
   "Nautilus" => "Bilgewater",
   "Pyke" => "Bilgewater",
-  "TahmKench" => "Bilgewater",
-  "TwistedFate" => "Bilgewater",
+  "Tahm Kench" => "Bilgewater",
+  "Twisted Fate" => "Bilgewater",
 
   # Demacia
   "Fiora" => "Demacia",
   "Galio" => "Demacia",
   "Garen" => "Demacia",
-  "JarvanIV" => "Demacia",
+  "Jarvan IV" => "Demacia",
   "Kayle" => "Demacia",
   "Lucian" => "Demacia",
   "Lux" => "Demacia",
@@ -53,7 +44,7 @@ champion_region_map = {
   "Sona" => "Demacia",
   "Sylas" => "Demacia",
   "Vayne" => "Demacia",
-  "XinZhao" => "Demacia",
+  "Xin Zhao" => "Demacia",
 
   # Ionia
   "Ahri" => "Ionia",
@@ -64,10 +55,10 @@ champion_region_map = {
   "Karma" => "Ionia",
   "Kayn" => "Ionia",
   "Kennen" => "Ionia",
-  "LeeSin" => "Ionia",
+  "Lee Sin" => "Ionia",
   "Lillia" => "Ionia",
-  "MasterYi" => "Ionia",
-  "MonkeyKing" => "Ionia",
+  "Master Yi" => "Ionia",
+  "Wukong" => "Ionia",
   "Rakan" => "Ionia",
   "Sett" => "Ionia",
   "Shen" => "Ionia",
@@ -96,7 +87,7 @@ champion_region_map = {
   "Draven" => "Noxus",
   "Katarina" => "Noxus",
   "Kled" => "Noxus",
-  "Leblanc" => "Noxus",
+  "LeBlanc" => "Noxus",
   "Mordekaiser" => "Noxus",
   "Rell" => "Noxus",
   "Riven" => "Noxus",
@@ -130,11 +121,11 @@ champion_region_map = {
 
   # Zaun
   "Blitzcrank" => "Zaun",
-  "DrMundo" => "Zaun",
+  "Dr. Mundo" => "Zaun",
   "Ekko" => "Zaun",
   "Janna" => "Zaun",
   "Jinx" => "Zaun",
-  "Renata" => "Zaun",
+  "Renata Glasc" => "Zaun",
   "Singed" => "Zaun",
   "Twitch" => "Zaun",
   "Urgot" => "Zaun",
@@ -148,7 +139,7 @@ champion_region_map = {
   "Akshan" => "Shurima",
   "Amumu" => "Shurima",
   "Azir" => "Shurima",
-  "KSante" => "Shurima",
+  "K'Sante" => "Shurima",
   "Naafiri" => "Shurima",
   "Nasus" => "Shurima",
   "Rammus" => "Shurima",
@@ -158,19 +149,19 @@ champion_region_map = {
   "Xerath" => "Shurima",
 
   # The Void
-  "Belveth" => "The Void",
-  "Chogath" => "The Void",
-  "Kaisa" => "The Void",
+  "Bel'Veth" => "The Void",
+  "Cho'Gath" => "The Void",
+  "Kai'Sa" => "The Void",
   "Kassadin" => "The Void",
-  "Khazix" => "The Void",
-  "KogMaw" => "The Void",
+  "Kha'Zix" => "The Void",
+  "Kog'Maw" => "The Void",
   "Malzahar" => "The Void",
-  "RekSai" => "The Void",
-  "Velkoz" => "The Void",
+  "Rek'Sai" => "The Void",
+  "Vel'Koz" => "The Void",
 
   # Targon
   "Aphelios" => "Targon",
-  "AurelionSol" => "Targon",
+  "Aurelion Sol" => "Targon",
   "Diana" => "Targon",
   "Leona" => "Targon",
   "Pantheon" => "Targon",
@@ -185,7 +176,7 @@ champion_region_map = {
   "Gnar" => "Freljord",
   "Gragas" => "Freljord",
   "Lissandra" => "Freljord",
-  "Nunu" => "Freljord",
+  "Nunu & Willump" => "Freljord",
   "Olaf" => "Freljord",
   "Ornn" => "Freljord",
   "Sejuani" => "Freljord",
