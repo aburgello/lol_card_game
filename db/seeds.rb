@@ -1,5 +1,8 @@
+ChampionType.destroy_all
+Type.destroy_all
+Ability.destroy_all
+Skin.destroy_all
 Champion.destroy_all
-
 RiotApi.fetch_champions
 
 # Create or find regions
