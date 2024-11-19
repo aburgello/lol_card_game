@@ -35,7 +35,6 @@
 }
 
 body {
-  background-color: rgb(10, 12, 20);
   font-family: 'BeaufortForLol', sans-serif;
 }
 
@@ -50,3 +49,4 @@ body {
 .bg-darker {
   background-color: #0A0C14; /* Darker Background */
 }
+/* Define rarity border classes */
