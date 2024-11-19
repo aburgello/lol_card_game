@@ -1,7 +1,7 @@
 <% if @region.present? %>
   <!-- Full-width Video Backdrop Banner -->
   <div class="relative w-full">
-    <video autoplay loop muted class="w-full h-[70vh] object-cover">
+    <video autoplay loop muted class="w-full h-[40vh] 2xl:h-[60vh] object-cover">
       <source src="<%= @region.video_backdrop %>" type="video/webm">
       Your browser does not support the video tag.
     </video>
@@ -13,17 +13,17 @@
 </div>
 </div>
       <!-- Lore Section -->
-      <div class="mt-12 bg-gradient-to-r from-[#0A1428]/20 to-[#0A0C14]/20 rounded-lg shadow-md border border-[#C8AA6E] mx-12 lg:mx-32 p-10">
-        <p class="text-xl text-gray-300 mx-2">
+      <div class="mt-12 bg-gradient-to-r from-[#0A1428]/20 to-[#0A0C14]/20 rounded-lg shadow-md border border-[#C8AA6E] mx-8 2xl:mx-32 p-10">
+        <p class="text-base md:text-xl text-gray-300 mx-2">
           <%= @region.lore %>
         </p>
       </div>
 
   <!-- Region Details Section -->
-  <div class="max-w-full mx-12 lg:mx-32 mt-8 p-4">
+  <div class="max-w-full mx-6 2xl:mx-32 p-4">
     <!-- Champions List -->
     <div class="mt-12">
-      <h2 class="text-3xl font-semibold text-[#C8AA6E] shadow-md mb-6">Champions from <%= @region.name %></h2>
+      <h2 class="text-3xl font-semibold text-[#C8AA6E] mb-6">Champions from <%= @region.name %></h2>
       
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mb-8">
         <% @region.champions.each do |champion| %>
