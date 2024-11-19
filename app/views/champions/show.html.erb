@@ -1,5 +1,4 @@
-<!-- Champion Section -->
-<div class="lg:max-w-full mx-12 lg:mx-32 2xl:mx-72 mb-12 my-8 rounded-lg">
+<div class="lg:max-w-screen-2xl mx-4 lg:mx-32 2xl:mx-auto mb-12 my-8 rounded-lg">
   <div class="grid grid-cols-1">
 
     <!-- Champion Splash Art and Lore -->
@@ -9,78 +8,79 @@
         <%= image_tag @champion.splash_art, alt: "#{@champion.name} splash art", class: "w-full rounded-lg shadow-md" %>
 
         <!-- Gradient Overlay -->
-<div class="absolute inset-0 bg-gradient-to-t from-[#0A1428]/90 via-[#091428]/30 to-transparent rounded-lg"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-[#0A1428]/90 via-[#091428]/30 to-transparent rounded-lg"></div>
 
         <!-- Name and Title -->
-        <div class="absolute bottom-2 lg:bottom-4 left-6  text-white p-2 rounded-md">
-          <h2 class="text-lg md:text-2xl lg:text-4xl font-bold  text-[#C8AA6E]">
-            <%= @champion.name %>, <%= @champion.title %></h2>
+        <div class="absolute bottom-2 lg:bottom-4 left-6 text-white p-2 rounded-md">
+          <h2 class="text-lg md:text-2xl lg:text-4xl font-bold text-[#C8AA6E]">
+            <%= @champion.name %>, <%= @champion.title %>
+          </h2>
         </div>
 
         <!-- Abilities Icons (Overlay on Splash Art) -->
-<!-- Abilities Icons (Overlay on Splash Art) -->
-<div class="absolute bottom-4 right-4 flex space-x-2 lg:space-x-4">
-  <% @champion.abilities.each do |ability| %>
-    <div class="relative group w-8 h-8 lg:w-16 lg:h-16 rounded-lg shadow-lg cursor-pointer">
-      <!-- Ability Icon Image -->
-      <%= image_tag ability.image, alt: "#{ability.name} icon", class: "w-full h-full object-cover rounded-xl hover:scale-105 transition-all duration-300 ease-in-out" %>
-
-      <!-- Ability Name Tooltip -->
-    <div class="absolute top-0 transform -translate-y-10 -translate-x-8 tooltip bg-[#0A1428] text-white text-xs font-semibold w-32 px-2 py-2 rounded-md hidden text-center group-hover:block">
-        <%= ability.name %>
+        <div class="absolute bottom-4 right-4 flex space-x-2 lg:space-x-4">
+          <% @champion.abilities.each do |ability| %>
+            <div class="relative group w-8 h-8 lg:w-16 lg:h-16 rounded-lg shadow-lg cursor-pointer">
+              <%= image_tag ability.image, alt: "#{ability.name} icon", class: "w-full h-full object-cover rounded-xl hover:scale-105 transition-all duration-300 ease-in-out" %>
+              <div class="absolute top-0 transform -translate-y-10 -translate-x-8 tooltip bg-[#0A1428] text-white text-xs font-semibold w-32 px-2 py-2 rounded-md hidden text-center group-hover:block">
+                <%= ability.name %>
+              </div>
+            </div>
+          <% end %>
+        </div>
       </div>
-      
-      <!-- Ability Name and Description on Hover (existing overlay) -->
-      
-    </div>
-  <% end %>
-</div>
 
-      </div>
-      
       <!-- Lore Section -->
-<div class="mt-8 p-6 bg-gradient-to-r from-[#0A1428]/20 to-[#0A0C14]/20 rounded-lg shadow-md border-2 border-[#C8AA6E]">
-  <p class="text-lg text-gray-300 mx-2">
-    <%= @champion.lore %>
-  </p>
-</div>
+      <div class="mt-8 p-6 bg-gradient-to-r from-[#0A1428]/20 to-[#0A0C14]/20 rounded-lg shadow-md border border-[#C8AA6E]">
+        <p class="text-lg text-gray-300 mx-2">
+          <%= @champion.lore %>
+        </p>
+      </div>
+
 <!-- Types and Region Section -->
-<div class="mt-8 w-full bg-gradient-to-r from-[#0A1428]/20 to-[#0A0C14]/20 p-6 rounded-lg shadow-md border-2 border-slate-900">
+<div class="mt-8 w-full bg-gradient-to-r from-[#0A1428]/20 to-[#0A0C14]/20 p-6 rounded-lg shadow-md border border-slate-900">
   <div class="flex justify-between items-center space-x-8">
     <!-- Displaying Champion Types -->
-    <p class="text-xl font-semibold text-gray-300">
+    <p class="text-xl font-semibold text-[#C8AA6E] hover:text-[#F0C808] cursor-default">
       <span class="text-xl font-medium text-gray-400">Type:</span> 
       <%= @champion.types.map(&:name).join(', ') %>
     </p>
   
-    <!-- Displaying Champion Region -->
-    <p class="text-xl font-semibold text-gray-300 text-right">
-      <span class="text-xl font-medium text-gray-400">Region:</span> 
-      <%= @champion.region.name if @champion.region %>
-    </p>
+    <!-- Displaying Champion Region with Logo Pop-Up on Hover -->
+    <div class="relative group text-xl font-semibold text-gray-300 text-right">
+      <p class="text-xl font-semibold text-gray-300 text-right">
+            <span class="text-xl font-medium text-gray-400">Region:</span> 
+            <%= link_to @champion.region.name, region_path(@champion.region), class: "text-[#C8AA6E] hover:text-[#F0C808]" %>
+          </p>
+      
+      <!-- Region Logo Pop-Up -->
+      <% if @champion.region && @champion.region.logo.present? %>
+        <div class="absolute top-full left-1/2 transform mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-200 ease-in-out">
+          <%= image_tag @champion.region.logo, alt: "#{@champion.region.name} logo", class: 'w-16 h-16 rounded-full' %>
+        </div>
+      <% end %>
+    </div>
   </div>
 </div>
 
 
 
 
-
-<!-- Champion Skins Section -->
-<div class="mt-8 w-full bg-gradient-to-r from-[#0A1428]/20 to-[#0A0C14]/20 p-6 rounded-lg shadow-md border-2 border-slate-900">
-  <h3 class="text-3xl font-semibold mb-4 text-center text-[#C8AA6E]">Skins</h3>
-  <div class="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-8 mx-4 mt-4 justify-items-center">
-    <% @champion.skins.drop(1).each do |skin| %> <!-- Exclude first skin -->
-      <div class="relative group bg-gray-800 rounded-lg shadow-lg cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out">
-        <!-- Skin Loading Art -->
-        <%= image_tag skin.loading_art, alt: "#{skin.name} loading art", 
-              class: "w-full h-full object-cover rounded-lg shadow-md", 
-              data: { skin_splash: skin.splash_art, skin_name: skin.name, skin_id: skin.id, skin_description: skin.description } %>
-
-
-        <!-- Overlay with Gradient Effect -->
-        <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent rounded-lg" style="pointer-events: none;"></div>
+      <!-- Champion Skins Section -->
+      <div class="mt-6 w-full bg-gradient-to-r from-[#0A1428]/20 to-[#0A0C14]/20 p-6 rounded-lg shadow-md border border-slate-900">
+        <h3 class="text-3xl font-semibold mb-6 text-center text-[#C8AA6E]">Skins</h3>
+        <div class="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-8 mx-4 mt-4 justify-items-center">
+          <% @champion.skins.drop(1).each do |skin| %> <!-- Exclude first skin -->
+            <div class="relative group bg-gray-800 rounded-lg shadow-lg cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out">
+              <%= image_tag skin.loading_art, alt: "#{skin.name} loading art", 
+                    class: "w-full h-full object-cover rounded-lg shadow-md", 
+                    data: { skin_splash: skin.splash_art, skin_name: skin.name, skin_id: skin.id, skin_description: skin.description } %>
+              <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent rounded-lg" style="pointer-events: none;"></div>
+            </div>
+          <% end %>
+        </div>
       </div>
-    <% end %>
+    </div>
   </div>
 </div>
 
@@ -88,16 +88,10 @@
 <div id="splash-art-modal" class="fixed mx-10 inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 flex">
   <div class="bg-gradient-to-b from-slate-950 to-gray-900 p-3 rounded-xl max-w-6xl w-full relative">
     <div class="relative group flex justify-center">
-      <!-- Splash Art Image -->
       <img id="splash-art-image" src="/api/placeholder/800/400" alt="Splash Art" 
            class="max-w-full max-h-full object-contain rounded-xl shadow-md">
-
-      <!-- Overlay with Name and Description -->
       <div class="absolute inset-0 flex flex-col justify-end items-start group-hover:bg-gradient-to-t from-slate-950 via-slate-900/10 to-transparent bg-opacity-0 group-hover:bg-opacity-50 transition-all duration-300 rounded-xl">
-        
-        <!-- Content Container -->
         <div class="w-full relative">
-          <!-- Skin Name -->
           <div id="modal-skin-name" 
                class=" bottom-0 left-0 px-6 py-0 translate-y-6 group-hover:translate-y-0
                       text-2xl font-bold text-white text-center
@@ -106,8 +100,6 @@
                       group-hover:text-[#C8AA6E]">
             Skin Name
           </div>
-
-          <!-- Skin Description -->
           <div id="modal-skin-description"
                class="px-6 pb-0 group-hover:pb-4 pt-2 text-lg text-white
                       opacity-0 group-hover:opacity-100  text-center
@@ -115,41 +107,32 @@
             This is a longer description that might span multiple lines. We want to make sure our title adapts properly to however long this description might be. It could be quite extensive in some cases.
           </div>
         </div>
-
       </div>
     </div>
   </div>
 </div>
+
 <script>
   document.querySelectorAll('[data-skin-splash]').forEach(img => {
-  img.addEventListener('click', function() {
-    const splashArt = this.getAttribute('data-skin-splash');
-    const skinName = this.getAttribute('data-skin-name');
-    const skinDescription = this.getAttribute('data-skin-description'); // Correctly grab the description
-    const modal = document.getElementById('splash-art-modal');
-    const splashImage = document.getElementById('splash-art-image');
-    const modalSkinName = document.getElementById('modal-skin-name');
-    const modalSkinDescription = document.getElementById('modal-skin-description');
-    
-    splashImage.src = splashArt;
-    modalSkinName.textContent = skinName;  
-    modalSkinDescription.innerHTML = skinDescription || "No description available."; // Use innerHTML to allow HTML tags
-    modal.classList.remove('hidden');
+    img.addEventListener('click', function() {
+      const splashArt = this.getAttribute('data-skin-splash');
+      const skinName = this.getAttribute('data-skin-name');
+      const skinDescription = this.getAttribute('data-skin-description');
+      const modal = document.getElementById('splash-art-modal');
+      const splashImage = document.getElementById('splash-art-image');
+      const modalSkinName = document.getElementById('modal-skin-name');
+      const modalSkinDescription = document.getElementById('modal-skin-description');
+      
+      splashImage.src = splashArt;
+      modalSkinName.textContent = skinName;  
+      modalSkinDescription.innerHTML = skinDescription || "No description available.";
+      modal.classList.remove('hidden');
+    });
   });
-});
 
-document.getElementById('splash-art-modal').addEventListener('click', function(e) {
-  if (e.target === this) {
-    this.classList.add('hidden');
-  }
-});
-
-
+  document.getElementById('splash-art-modal').addEventListener('click', function(e) {
+    if (e.target === this) {
+      this.classList.add('hidden');
+    }
+  });
 </script>
-
-
-
-
-
-</div>
-</div>

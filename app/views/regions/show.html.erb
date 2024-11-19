@@ -5,14 +5,19 @@
       <source src="<%= @region.video_backdrop %>" type="video/webm">
       Your browser does not support the video tag.
     </video>
-
-    <!-- Region Name Overlay -->
-    <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#0A101E] flex items-center justify-center">
-      <h1 class="text-5xl font-bold text-[#C8AA6E] capitalize text-center">
-        <%= @region.name %>
-      </h1>
-    </div>
-  </div>
+<!-- Region Name Overlay -->
+<div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#0A101E] flex items-center justify-center">
+  <h1 class="text-5xl font-bold text-[#C8AA6E] capitalize text-center" style="cursor: default; text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6);">
+    <%= @region.name %>
+  </h1>
+</div>
+</div>
+      <!-- Lore Section -->
+      <div class="mt-12 bg-gradient-to-r from-[#0A1428]/20 to-[#0A0C14]/20 rounded-lg shadow-md border border-[#C8AA6E] mx-12 lg:mx-32 p-10">
+        <p class="text-xl text-gray-300 mx-2">
+          <%= @region.lore %>
+        </p>
+      </div>
 
   <!-- Region Details Section -->
   <div class="max-w-full mx-12 lg:mx-32 mt-8 p-4">
