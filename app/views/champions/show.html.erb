@@ -76,11 +76,11 @@
         <h3 class="text-3xl font-semibold mb-6 text-center text-[#C8AA6E]">Skins</h3>
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-8 mx-4 mt-4 justify-items-center">
           <% @champion.skins.drop(1).each do |skin| %> <!-- Exclude first skin -->
-            <div class="relative group bg-gray-800 rounded-lg shadow-lg cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out">
+            <div class="relative group bg-gray-800 rounded-lg shadow-lg cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out  overflow-hidden">
               <%= image_tag skin.splash_art_centered, alt: "#{skin.name} loading art", 
-                    class: "w-full h-full object-cover rounded-lg shadow-md", 
+                    class: "w-full h-full object-cover rounded-lg shadow-md group-hover:scale-110 transition-all duration-500 ease-in-out", 
                     data: { skin_splash: skin.splash_art, skin_name: skin.name, skin_id: skin.id, skin_description: skin.description } %>
-              <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent rounded-lg" style="pointer-events: none;"></div>
+              <div class="absolute inset-0 bg-gradient-to-t from-black group-hover:border-[#C89B3C] group-hover:border-2 via-transparent to-transparent rounded-lg" style="pointer-events: none;"></div>
             </div>
           <% end %>
         </div>
