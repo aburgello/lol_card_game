@@ -11,7 +11,7 @@
   <div class="absolute inset-0 bg-gradient-to-t from-[#0A1428]/90 via-[#091428]/30 to-transparent rounded-lg"></div>
 
   <!-- Name and Title -->
-  <div class="absolute bottom-2 lg:bottom-4 left-6 sm:left-4 text-white p-2 rounded-md w-full md:w-auto sm:text-left z-20">
+  <div class="absolute bottom-2 lg:bottom-4 left-4 sm:left-4 text-white p-2 rounded-md w-full md:w-auto sm:text-left z-20">
     <h2 class="text-lg md:text-2xl lg:text-4xl font-bold text-[#C8AA6E]">
       <%= @champion.name %>, <%= @champion.title %>
     </h2>
@@ -22,7 +22,7 @@
     <% @champion.abilities.each do |ability| %>
       <div class="relative group w-6 h-6 sm:w-8 sm:h-8 md:h-12 md:w-12 xl:w-16 xl:h-16 rounded-lg shadow-lg cursor-pointer">
         <%= image_tag ability.image, alt: "#{ability.name} icon", class: "w-full h-full object-cover rounded-xl hover:scale-105 transition-all duration-300 ease-in-out" %>
-        <div class="absolute top-0 transform  z-100 -translate-x-14 md:-translate-y-14 md:-translate-x-8 tooltip bg-[#0A1428] text-white text-xs md:text-base font-semibold w-18 md:w-32 px-2 py-2 rounded-md hidden text-center group-hover:block">
+        <div class="absolute -top-1/2 md:top-0 transform z-100 -translate-x-20 md:-translate-y-14 md:-translate-x-8 tooltip bg-[#0A1428] text-white text-xs md:text-base font-semibold w-20 md:w-32 px-2 py-2 rounded-md hidden text-center group-hover:block">
           <%= ability.name %>
         </div>
       </div>
