@@ -82,6 +82,7 @@ class RiotApi
         skin_record.name = skin['name']
         skin_record.num = skin['num']
         skin_record.splash_art = map_asset_path(skin['uncenteredSplashPath'])
+        skin_record.splash_art_centered = map_asset_path(skin['splashPath'])
         skin_record.loading_art = map_asset_path(skin['loadScreenPath'])
         skin_record.is_base = skin['isBase']
         skin_record.description = skin['description']
