@@ -1,0 +1,35 @@
+<% if @regions.present? %>
+  <div class="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-8 mx-8 xl:mx-64 my-8">
+    <% @regions.each do |region| %>
+      <%= link_to region_path(region) do %>
+        <div class="relative shadow-lg rounded-xl overflow-hidden group hover:scale-105 transition-all duration-300 ease-in-out">
+          <!-- Region Image Backdrop -->
+          <img 
+            src="<%= image_path(region.image_backdrop) %>" 
+            alt="<%= region.name %> Image Backdrop" 
+            class="w-full h-72 object-cover rounded-xl group-hover:scale-125 transition-all duration-700 ease-in-out"
+          >
+
+          <!-- Overlay Gradient -->
+          <div class="absolute inset-0 group-hover:bg-[#0A1428]/60 rounded-xl  transition-all duration-100 ease-in-out"></div>
+
+          <!-- Region Info (Name) -->
+          <div class="absolute bottom-1 left-4 text-white p-2 rounded-md">
+            <h2 class="text-3xl font-bold capitalize text-[#C8AA6E] group-hover:text-[#C89B3C] transition-all duration-300 ease-in-out">
+              <%= region.name %>
+            </h2>
+          </div>
+
+          <!-- Region Logo (Appears in the center on hover) -->
+          <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <%= image_tag region.logo, alt: "#{region.name} Logo", class: "w-32 h-32 object-contain shadow-sm" %>
+          </div>
+
+          <!-- Light Overlay Below Logo on Hover -->
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+<% else %>
+  <p class="text-center text-gray-500">No regions available.</p>
+<% end %>

@@ -25,11 +25,11 @@
     
       <!-- Navbar -->
   <nav class="p-4 text-white border-b-2 border-slate-900">
-  <div class="flex justify-between items-center container mx-auto">
+  <div class="flex justify-between items-center container mx-auto px-2 md:px-12 xl:px-32">
     <a href="/" class="text-[#C8AA6E] text-2xl font-bold">Runeterra Champions</a>
     <div class="space-x-4">
       <a href="/champions" class="text-[#A09B8C] hover:text-[#C8AA6E] text-lg transition-all duration-200 ease-in-out">Champions</a>
-      <a href="#" class="text-[#A09B8C] hover:text-[#C8AA6E] text-lg transition-all duration-200 ease-in-out">Regions</a>
+      <a href="/regions" class="text-[#A09B8C] hover:text-[#C8AA6E] text-lg transition-all duration-200 ease-in-out">Regions</a>
 
       <% if user_signed_in? %>
         <div class="group relative inline-block z-20">
@@ -50,7 +50,7 @@
 </nav>
 
 
-  <main  class="container mx-auto my-8 flex justify-center">
+  <main  class="mx-auto justify-center">
     <%= yield %>
   </main>
   <p class="notice"><%= notice %></p>

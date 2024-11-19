@@ -3,14 +3,97 @@ Type.destroy_all
 Ability.destroy_all
 Skin.destroy_all
 Champion.destroy_all
+Region.destroy_all
 RiotApi.fetch_champions
 
-# Create or find regions
 regions = [
-  "Bandle City", "Bilgewater", "Demacia", "Ionia", "Ixtal", "Noxus",
-  "Piltover", "Shadow Isles", "Shurima", "Targon", "Freljord",
-  "The Void", "Zaun", "Runeterra"
-].map { |name| Region.find_or_create_by(name: name) }
+  { name: "Bandle City", 
+    logo: "bandle_city_crest_icon.png", 
+    video_backdrop: "https://cmsassets.rgpub.io/sanity/files/dsfx7636/universe/84d14187e66ee28277609d55a3db93b96ae2a34c.webm", 
+    image_backdrop: "bandle_city.webp" },
+
+  { name: "Freljord", 
+    logo: "freljord_crest_icon.png", 
+    video_backdrop: "https://cmsassets.rgpub.io/sanity/files/dsfx7636/universe/aa302815ab40524f8382dbc9865d6cbd7df0b9f9.webm", 
+    image_backdrop: "Freljord_Pilgrim_Site_Of_Rakelstake.webp" },  
+
+  { name: "Bilgewater", 
+    logo: "bilgewater_crest_icon.png", 
+    video_backdrop: "https://cmsassets.rgpub.io/sanity/files/dsfx7636/universe/d9beea1a5d1cfc7ec6bbc100d3fb522175930f38.webm", 
+    image_backdrop: "Bilgewater_A_New_Beginning.webp" },
+
+  { name: "Demacia", 
+    logo: "demacia_crest_icon.png", 
+    video_backdrop: "https://cmsassets.rgpub.io/sanity/files/dsfx7636/universe/36c564338d66ac2000a3d6c091dd78c443230623.webm", 
+    image_backdrop: "Demacia_Hall_Of_Valor.webp" },
+
+  { name: "Ionia", 
+    logo: "iona_crest_icon.png", 
+    video_backdrop: "https://cmsassets.rgpub.io/sanity/files/dsfx7636/universe/a9b6b551e2589189615eb4f7d56a17862ff3a882.webm", 
+    image_backdrop: "Ionia_The_Placidium.webp" },
+
+  { name: "Ixtal", 
+    logo: "ixtal_crest_icon.png", 
+    video_backdrop: "https://cmsassets.rgpub.io/sanity/files/dsfx7636/universe/670a63d489e907098afeafd2ce42a81e8e64bfcb.webm", 
+    image_backdrop: "Ixtal_An_Unexplored_Frontier.webp" },
+
+  { name: "Noxus", 
+    logo: "noxus_crest_icon.png", 
+    video_backdrop: "https://cmsassets.rgpub.io/sanity/files/dsfx7636/universe/329c91313054076a869a6ceb95c995107320e334.webm", 
+    image_backdrop: "Noxus_The_Immortal_Bastion_01.webp" },
+
+  { name: "Piltover", 
+    logo: "piltover_crest_icon.png", 
+    video_backdrop: "https://cmsassets.rgpub.io/sanity/files/dsfx7636/universe/2b8b859578a41fc8a9272dacc0bdd6405a248c10.webm", 
+    image_backdrop: "Piltover_Impacts_Across_Valoran.webp" },
+
+  { name: "Shadow Isles", 
+    logo: "shadow_isles_crest_icon.png", 
+    video_backdrop: "https://cmsassets.rgpub.io/sanity/files/dsfx7636/universe/9648da1fe76a45096b7095940d7991269d97d351.webm", 
+    image_backdrop: "Shadow_Isles_Ruins.webp" },
+
+  { name: "Shurima", 
+    logo: "shurima_crest_icon.png", 
+    video_backdrop: "https://cmsassets.rgpub.io/sanity/files/dsfx7636/universe/903a0dc3286518114b68113d0778e5299a26a729.webm", 
+    image_backdrop: "Shurima_The_Rebirth.webp" },
+
+  { name: "Targon", 
+    logo: "mt_targon_crest_icon.png", 
+    video_backdrop: "https://cmsassets.rgpub.io/sanity/files/dsfx7636/universe/d00f9e798c7e63fed1eaa8b92770f280d0c7f241.webm", 
+    image_backdrop: "Mount_Targon_Once_In_A_Lifetime.webp" },
+
+  { name: "The Void", 
+    logo: "void_crest_icon.png", 
+    video_backdrop: "https://cmsassets.rgpub.io/sanity/files/dsfx7636/universe/d02e1a8e54aa5b4ea0bcbb430c5e1bb697400fa5.webm", 
+    image_backdrop: "Void_An_Unknowable_Power.webp" },
+
+  { name: "Zaun", 
+    logo: "zaun_crest_icon.png", 
+    video_backdrop: "https://cmsassets.rgpub.io/sanity/files/dsfx7636/universe/7feffff28f5a4df3f58438b83d4553b37ae647e0.webm", 
+    image_backdrop: "Zaun_Life_Survives_In_The_Depth.webp" },
+
+    { name: "Runeterra", 
+    logo: "Runeterra_Crest_icon.webp", 
+    video_backdrop: "https://cmsassets.rgpub.io/sanity/files/dsfx7636/universe/7feffff28f5a4df3f58438b83d4553b37ae647e0.webm",
+    image_backdrop: "Runeterra_Terrain_map.webp"
+  }
+]
+
+
+
+
+regions_to_create = regions.map do |region|
+  {
+    name: region[:name],
+    logo: "#{region[:logo]}",
+    video_backdrop: region[:video_backdrop],
+    image_backdrop: region[:image_backdrop]
+  }
+end
+Region.insert_all(regions_to_create)
+
+
+
 
 # Create a hash mapping champions to regions
 champion_region_map = {
@@ -191,19 +274,19 @@ champion_region_map = {
   "Volibear" => "Freljord",
 
   # Your champions
-  "Aatrox" => "Shurima",
-  "Alistar" => "Freljord",
-  "Annie" => "Noxus",
-  "Bard" => "Targon",
-  "Brand" => "Freljord",
-  "Evelynn" => "Ionia",
-  "Fiddlesticks" => "Ionia",
+  "Aatrox" => "Runeterra",
+  "Alistar" => "Runeterra",
+  "Annie" => "Runeterra",
+  "Bard" => "Runeterra",
+  "Brand" => "Runeterra",
+  "Evelynn" => "Runeterra",
+  "Fiddlesticks" => "Runeterra",
   "Jax" => "Runeterra",
-  "Kindred" => "Shadow Isles",
-  "Nami" => "Bilgewater",
-  "Nilah" => "Shurima",
-  "Nocturne" => "Shadow Isles",
-  "Ryze" => "Runeterra", # Ryze's origin is tied to many places
+  "Kindred" => "Runeterra",
+  "Nami" => "Runeterra",
+  "Nilah" => "Runeterra",
+  "Nocturne" => "Runeterra",
+  "Ryze" => "Runeterra",
   "Shaco" => "Shurima"
 }
 

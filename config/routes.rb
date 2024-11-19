@@ -18,6 +18,8 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "posts#index"
   # # config/routes.rb
+  resources :regions, only: [:index, :show]
+
   resources :champions, only: [ :index, :show ]
   # other routes
 end
