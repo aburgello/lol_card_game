@@ -2,7 +2,7 @@
   <div class="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-8 mx-8 xl:mx-64 my-8">
     <% @regions.each do |region| %>
       <%= link_to region_path(region) do %>
-        <div class="relative shadow-lg rounded-xl overflow-hidden group hover:scale-105 transition-all duration-300 ease-in-out">
+        <div class="relative shadow-lg rounded-xl overflow-hidden group transition-all duration-300 ease-in-out">
           <!-- Region Image Backdrop -->
           <img 
             src="<%= image_path(region.image_backdrop) %>" 
@@ -11,17 +11,17 @@
           >
 
           <!-- Overlay Gradient -->
-          <div class="absolute inset-0 group-hover:bg-[#0A1428]/60 rounded-xl  transition-all duration-100 ease-in-out"></div>
+          <div class="absolute inset-0 group-hover:bg-[#0A1428]/60 rounded-xl group-hover:border-[#C89B3C] group-hover:border transition-all duration-300 ease-in-out"></div>
 
           <!-- Region Info (Name) -->
           <div class="absolute bottom-1 left-4 text-white p-2 rounded-md">
-            <h2 class="text-3xl font-bold capitalize text-[#C8AA6E] group-hover:text-[#C89B3C] transition-all duration-300 ease-in-out">
+            <h2 class="text-3xl font-bold capitalize text-[#C8AA6E] group-hover:text-[#C89B3C] group-hover:brightness-110 transition-all duration-300 ease-in-out" style="text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.4);">
               <%= region.name %>
             </h2>
           </div>
 
           <!-- Region Logo (Appears in the center on hover) -->
-          <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <div class="absolute inset-0 flex items-center justify-center scale-50 opacity-0 brightness-150 group-hover:opacity-100 group-hover:scale-105 transition-all duration-300 ease-in-out" style="text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.8);">
             <%= image_tag region.logo, alt: "#{region.name} Logo", class: "w-32 h-32 object-contain shadow-sm" %>
           </div>
 
