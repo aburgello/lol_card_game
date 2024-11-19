@@ -60,28 +60,32 @@
     </nav>
 
     <!-- Mobile Menu (Initially hidden) -->
-    <div id="mobile-menu" class="md:hidden hidden bg-[#0A1428] text-[#A09B8C] w-full">
-      <div class="space-y-4 p-4">
-        <a href="/champions" class="block text-lg hover:text-[#C8AA6E]">Champions</a>
-        <a href="/regions" class="block text-lg hover:text-[#C8AA6E]">Regions</a>
+    <div id="mobile-menu" class="md:hidden hidden bg-gradient-to-r from-[#0A0C14] to-[#0A1428] text-[#A09B8C] w-full mr-4">
+      <div class="space-y-4 p-4 text-right px-6">
+        <a href="/champions" class="block text-lg  hover:text-[#C8AA6E] border-b border-[#C8AA6E]/40 pb-4">Champions</a>
+        <a href="/regions" class="block text-lg hover:text-[#C8AA6E] border-b border-[#C8AA6E]/40 pb-4">Regions</a>
 
         <% if user_signed_in? %>
           <div class="group relative inline-block z-20">
             <span class="text-[#A09B8C] hover:text-[#C8AA6E] text-lg cursor-pointer transition-all duration-200 ease-in-out">
               <%= current_user.username.capitalize %>
             </span>
-            <div class="absolute -right-1/2 md:right-0 mt-4 w-28 bg-[#0A1428] text-[#A09B8C] shadow-lg rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-100 ease-in-out hover:opacity-100 hover:visible">
-              <%= link_to "Edit Profile", edit_user_registration_path, class: "block hover:text-white text-left md:text-right rounded-sm px-4 py-4 hover:bg-[#C8AA6E]" %>
+            <div class="absolute -right-1/2 md:right-0 mt-4 w-28 bg-[#0A1428] text-[#A09B8C] shadow-lg  rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-100 ease-in-out hover:opacity-100 hover:visible">
+              <%= link_to "Edit Profile", edit_user_registration_path, class: "block hover:text-white text-left md:text-right rounded-sm px-4 py-4 hover:bg-[#C8AA6E] " %>
               <%= link_to "Sign Out", destroy_user_session_path, method: :delete, class: "block hover:text-white text-left md:text-right rounded-sm px-4 py-4 hover:bg-[#C8AA6E]" %>
             </div>
           </div>
         <% else %>
-          <a href="/users/sign_in" class="block text-lg hover:text-[#C8AA6E]">Login</a>
+          <a href="/users/sign_in" class="block text-lg hover:text-[#C8AA6E] pb-2">Login</a>
         <% end %>
       </div>
     </div>
 
-    <!-- JavaScript for mobile menu toggle -->
+    <main class="mx-auto justify-center">
+      <%= yield %>
+    </main>
+    <p class="notice"><%= notice %></p>
+    <p class="alert"><%= alert %></p>
     <script>
       document.addEventListener("turbo:load", function () {
         const hamburger = document.getElementById("hamburger");
@@ -94,12 +98,5 @@
         }
       });
     </script>
-
-    <main class="mx-auto justify-center">
-      <%= yield %>
-    </main>
-    <p class="notice"><%= notice %></p>
-    <p class="alert"><%= alert %></p>
-
   </body>
 </html>

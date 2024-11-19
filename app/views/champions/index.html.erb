@@ -1,5 +1,5 @@
 <% if @champions.present? %>
-  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-8 mx-4 xl:mx-64 my-8">
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-8 mx-6 xl:mx-64 my-8">
     <% @champions.each do |champion| %>
       <%= link_to champion_path(champion) do %>
         <div class="relative shadow-lg rounded-xl overflow-hidden group hover:scale-105 transition-all duration-500 ease-in-out">

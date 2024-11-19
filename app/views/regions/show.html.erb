@@ -13,7 +13,7 @@
 </div>
 </div>
       <!-- Lore Section -->
-      <div class="mt-12 bg-gradient-to-r from-[#0A1428]/20 to-[#0A0C14]/20 rounded-lg shadow-md border border-[#C8AA6E] mx-8 2xl:mx-32 p-10">
+      <div class="mt-12 bg-gradient-to-r from-[#0A1428]/20 to-[#0A0C14]/20 rounded-lg shadow-md border border-[#C8AA6E] mx-8 2xl:mx-32 p-6">
         <p class="text-base md:text-xl text-gray-300 mx-2">
           <%= @region.lore %>
         </p>
@@ -25,7 +25,7 @@
     <div class="mt-12">
       <h2 class="text-3xl font-semibold text-[#C8AA6E] mb-6">Champions from <%= @region.name %></h2>
       
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mb-8">
+      <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mb-8">
         <% @region.champions.each do |champion| %>
           <%= link_to champion_path(champion) do %>
             <div class="relative shadow-lg rounded-xl overflow-hidden group  transition-all duration-500 ease-in-out">
