@@ -13,7 +13,7 @@ class ChampionsController < ApplicationController
 
 
   def show
-    # @champion will be loaded with associated abilities and skins
+    @user_skin_ids = current_user&.skins&.pluck(:id) || []
   end
 
   private

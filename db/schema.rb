@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_11_19_154056) do
+ActiveRecord::Schema[7.2].define(version: 2024_11_20_171540) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -82,6 +82,15 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_19_154056) do
     t.index ["type_id"], name: "index_champions_types_on_type_id"
   end
 
+  create_table "collections", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "skin_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["skin_id"], name: "index_collections_on_skin_id"
+    t.index ["user_id"], name: "index_collections_on_user_id"
+  end
+
   create_table "regions", force: :cascade do |t|
     t.string "name", null: false
     t.datetime "created_at", null: false
@@ -114,6 +123,16 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_19_154056) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "user_skins", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "skin_id", null: false
+    t.datetime "unlocked_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["skin_id"], name: "index_user_skins_on_skin_id"
+    t.index ["user_id"], name: "index_user_skins_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -132,5 +151,9 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_19_154056) do
   add_foreign_key "champion_types", "champions"
   add_foreign_key "champion_types", "types"
   add_foreign_key "champions", "regions"
+  add_foreign_key "collections", "skins"
+  add_foreign_key "collections", "users"
   add_foreign_key "skins", "champions"
+  add_foreign_key "user_skins", "skins"
+  add_foreign_key "user_skins", "users"
 end

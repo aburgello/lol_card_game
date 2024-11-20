@@ -8,5 +8,12 @@ class User < ApplicationRecord
 def admin?
   self.admin
 end
-
+has_many :user_skins
+has_many :skins, through: :user_skins
+has_many :collections
+has_many :collected_skins, through: :collections, source: :skin
+# Check if a user owns a specific skin
+def owns_skin?(skin)
+  skins.include?(skin)
+end
 end
