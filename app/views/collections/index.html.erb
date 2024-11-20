@@ -103,7 +103,10 @@
 
 
  
-      <div class="my-12 p-4 max-w-7xl mx-auto w-full bg-gradient-to-r from-[#0A1428]/20 to-[#0A0C14]/20 pt-4 rounded-lg shadow-md border border-slate-900">
+<div class="lg:max-w-screen-2xl mx-4 lg:mx-32 2xl:mx-auto mb-12 my-8 rounded-lg">
+  <div class="grid grid-cols-1">
+    <div class="flex flex-col items-center relative mx-4 md:mx-0">
+      <div class="mt-8 p-4 w-full bg-gradient-to-r from-[#0A1428]/20 to-[#0A0C14]/20 pt-4 rounded-lg shadow-md border border-slate-900">
         <h3 class="text-3xl font-semibold mb-6 text-center text-[#C8AA6E] border-b pb-4 mx-6 border-[#C8AA6E]/20 cursor-default">Discovered Regions</h3>
         
         <% if @user_regions.empty? %>
@@ -113,34 +116,44 @@
             </svg>
             <h2 class="text-2xl font-bold text-[#C8AA6E] mb-2">No Regions Discovered Yet</h2>
             <p class="text-gray-400 mb-6">Explore Runeterra Prime and discover all the regions.</p>
-            <%= link_to "Explore Regions", regions_path, class: "bg-[#C8AA6E] text-[#0A1428] px-6 py-2 rounded-lg hover:bg-opacity-90 hover:text-white transition-all duration-100 ease-in-out" %>
+            <%= link_to "Explore Regions", regions_path, class: "bg-[#C8AA6E] text-[#0A1428] px-6 py-2 rounded-lg hover:bg-opacity-90 transition-colors" %>
           </div>
         <% else %>
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mx-auto lg:mx-24">
             <% @user_regions.each do |user_region| %>
               <% region = user_region.region %> <!-- Assuming user_region has a method to get the associated region -->
-              <div class="relative group bg-gray-800 rounded-lg shadow-lg cursor-pointer transition-all duration-300 ease-in-out overflow-hidden flex justify-center items-center">
-                <div class="relative w-full">
-                  <%= image_tag region.image_backdrop, 
-                      alt: "#{region.name} backdrop",  
-                      loading: "lazy",
-                      class: "w-full h-48 md:h-64 object-cover rounded-lg shadow-md group-hover:scale-110 saturate-[1.10] brightness-100 group-hover:brightness-[1.10] transition-all duration-500 ease-in-out" %>
-                  
-                  <div class="absolute bottom-0 left-0 w-full ">
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/10 to-transparent opacity-100 rounded-b-lg"></div>
-                    <div class="relative z-10 px-6 py-4">
-                      <div class="text-base md:text-2xl font-bold text-[#C8AA6E] text-left" style="cursor: default; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);">
-                        <%= region.name %>
-                      </div>
+              <%= link_to do %>
+                <div class="relative shadow-lg rounded-xl overflow-hidden group transition-all duration-300 ease-in-out">
+                  <!-- Region Image Backdrop -->
+                  <img 
+                    src="<%= image_path(region.image_backdrop) %>" 
+                    alt="<%= region.name %> Image Backdrop" 
+                    class="w-full h-48 md:h-64 object-cover saturate-[1] group-hover:saturate-[1.10] group-hover:brightness-110 rounded-xl group-hover:scale-125 transition-all duration-700 ease-in-out"
+                  >
 
-                    </div>
+                  <!-- Overlay Gradient -->
+                  <div class="absolute inset-0 bg-[#0A1428]/30 rounded-xl group-hover:border-[#C89B3C] group-hover:border transition-all duration-300 ease-in-out"></div>
+
+                  <!-- Region Info (Name) -->
+                  <div class="absolute bottom-1 left-6 text-white p-2 rounded-md">
+                    <h2 class="text-3xl font-bold capitalize text-[#C8AA6E] group-hover:text-[#C89B3C] group-hover:brightness-110 transition-all duration-300 ease-in-out" style="text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.4);">
+                      <%= region.name %>
+                    </h2>
                   </div>
+
+                  <!-- Region Logo (Appears in the center on hover) -->
+                <div class="absolute inset-0 flex items-center justify-center scale-75 opacity-100 brightness-150 group-hover:scale-100 transition-all duration-300 ease-in-out" style="text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.8);">
+                <%= image_tag region.logo, alt: "#{region.name} Logo", class: "w-24 h-24 md:w-32 md:h-32 object-contain shadow-sm" %>
                 </div>
-              </div>
+                </div>
+              <% end %>
             <% end %>
           </div>
         <% end %>
       </div>
+    </div>
+  </div>
+</div>
  
 
 
