@@ -90,3 +90,118 @@ body {
       transform: scale(1.1) rotate(-5deg);
   }
 }
+
+
+  
+  #splash-art-image {
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.75); /* Darker and more intense shadow */
+}
+.bg-mythic {
+  background: linear-gradient(to bottom, rgba(122, 62, 237, 0.5), rgba(58, 33, 105, 0.5));
+}
+
+.bg-ultimate {
+  background: linear-gradient(to bottom, rgba(255, 165, 0, 0.5), rgba(128, 74, 0, 0.5));
+}
+
+.bg-legendary {
+  background: linear-gradient(to bottom, rgba(255, 50, 50, 0.5), rgba(128, 22, 22, 0.5));
+}
+
+.bg-transcendent {
+  background: linear-gradient(to bottom, rgba(162, 162, 208, 0.5), rgba(82, 82, 140, 0.5));
+}
+
+.bg-common {
+  background: linear-gradient(to bottom, rgba(128, 128, 128, 0.5), rgba(64, 64, 64, 0.5));
+}
+.bg-rare {
+  background: linear-gradient(to bottom, rgba(200, 170, 110, 0.7), rgba(200, 170, 110, 0.7)); /* #C8AA6E */
+}
+
+.bg-epic {
+  background: linear-gradient(to bottom, rgba(0, 200, 255, 0.5), rgba(0, 102, 128, 0.5));
+}
+
+.bg-mythic-modal {
+  background-color: rgba(89, 50, 145, 0.3); /* Darker #7943ED with 0.3 opacity */
+}
+
+.bg-ultimate-modal {
+  background: rgba(204, 136, 0, 0.3); /* Darker #FFA500 with 0.3 opacity */
+}
+
+.bg-legendary-modal {
+  background: rgba(204, 0, 0, 0.1); /* Darker #FF3232 with 0.3 opacity */
+}
+.bg-rare-modal {
+  background: rgba(200, 170, 110, 0.3); /* Darker #C8AA6E with 0.3 opacity */
+}
+.bg-transcendent-modal {
+  background: rgba(129, 129, 163, 0.3); /* Darker #A2A2D0 with 0.3 opacity */
+}
+
+.bg-common-modal {
+  background: rgba(102, 102, 102, 0.3); /* Darker #808080 with 0.3 opacity */
+}
+
+.bg-epic-modal {
+  background: rgba(0, 153, 204, 0.3); /* Darker #00C8FF with 0.3 opacity */
+}
+
+
+
+
+.border-mythic {
+  border: 1px solid #7943ED;
+}
+
+.border-ultimate {
+  border:1px solid #FFA500;
+}
+
+.border-legendary {
+  border:1px solid #FF3232;
+}
+
+.border-rare {
+  border: 1px solid #C8AA6E; /* Updated border color */
+}
+
+.border-transcendent {
+  border:1px solid #A2A2D0;
+}
+
+.border-common {
+  border:1px solid #808080;
+}
+
+.border-epic {
+  border:1px solid #00C8FF;
+}
+
+/* Hover border classes */
+.group-hover\:border-mythic:hover {
+  border: solid #7943ED;
+}
+
+.group-hover\:border-ultimate:hover {
+  border:  solid #FFA500;
+}
+
+.group-hover\:border-legendary:hover {
+  border:  solid #FF3232;
+}
+
+.group-hover\:border-transcendent:hover {
+  border:  solid #A2A2D0;
+}
+
+.group-hover\:border-common:hover {
+  border: solid #808080;
+}
+
+.group-hover\:border-epic:hover {
+  border:  solid #00C8FF;
+}
+
