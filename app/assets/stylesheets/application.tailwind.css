@@ -50,3 +50,43 @@ body {
   background-color: #0A0C14; /* Darker Background */
 }
 /* Define rarity border classes */
+
+.img-rock {
+  -webkit-animation: rockAni 1s infinite;
+  animation: rockAni 1s infinite;
+}
+@-webkit-keyframes rockAni {
+  0%, 100% {
+      -webkit-transform: scale(1) rotate(0);
+  }
+
+  10%, 20% {
+      -webkit-transform: scale(0.9) rotate(-5deg);
+  }
+
+  30%, 50%, 70%, 90% {
+      -webkit-transform: scale(1.1) rotate(5deg);
+  }
+
+  40%, 60%, 80% {
+      -webkit-transform: scale(1.1) rotate(-5deg);
+  }
+}
+
+@keyframes rockAni {
+  0%, 100% {
+      transform: scale(1) rotate(0);
+  }
+
+  10%, 20% {
+      transform: scale(0.9) rotate(-5deg);
+  }
+
+  30%, 50%, 70%, 90% {
+      transform: scale(1.1) rotate(5deg);
+  }
+
+  40%, 60%, 80% {
+      transform: scale(1.1) rotate(-5deg);
+  }
+}
