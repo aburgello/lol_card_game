@@ -122,7 +122,7 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mx-auto lg:mx-24">
             <% @user_regions.each do |user_region| %>
               <% region = user_region.region %> <!-- Assuming user_region has a method to get the associated region -->
-              <%= link_to do %>
+              <%= link_to region_path(region) do %>
                 <div class="relative shadow-lg rounded-xl overflow-hidden group transition-all duration-300 ease-in-out">
                   <!-- Region Image Backdrop -->
                   <img 
