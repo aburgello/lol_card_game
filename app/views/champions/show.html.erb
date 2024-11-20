@@ -70,30 +70,38 @@
 
 
 
-
-      <!-- Champion Skins Section -->
-      <div class="mt-6 w-full bg-gradient-to-r from-[#0A1428]/20 to-[#0A0C14]/20 p-2 rounded-lg shadow-md">
-  <h3 class="text-3xl font-semibold mb-6 text-center text-[#C8AA6E]">Skins</h3>
+<!-- Champion Skins Section -->
+<div class="mt-8 w-full bg-gradient-to-r from-[#0A1428]/20 to-[#0A0C14]/20 p-2 rounded-lg shadow-md">
+  <h3 class="text-3xl font-semibold mb-6 text-center text-[#C8AA6E] border-b pb-6 mx-6 border-[#C8AA6E]/20">Skins</h3>
   
-  <% # Group skins by rarity and sort the groups by rarity order %>
   <% rarity_order = [ "common", "epic", "legendary", "mythic", "ultimate", "transcendent" ] %>
   <% grouped_skins = @champion.skins.group_by(&:rarity).sort_by { |rarity, _| rarity_order.index(rarity.downcase) || rarity_order.size } %>
   
   <% grouped_skins.each do |rarity, skins| %>
     <!-- Rarity Header -->
-    <div class="mt-2 mb-4 p-4">
-      <h4 class="text-2xl font-bold text-[#C8AA6E] px-4 mb-4"><%= rarity.capitalize %></h4>
+    <div class="mt-2 mb-6">
+      <div class="flex flex-col items-center">
+        <!-- Rarity Logo -->
+        <img src="<%= asset_path(rarity.capitalize + '_logo.webp') %>" alt="<%= rarity %> logo" class="mt-4 w-6 h-6 shadow-md">
+        <h4 class="text-2xl font-bold text-[#C8AA6E] mb-6"><%= rarity.capitalize %></h4>
+      </div>
       
-      <!-- Skins Grid -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-8 mx-4 justify-items-center">
+      <!-- Skins Grid - Dynamic columns based on number of skins -->
+      <% grid_class = case skins.length
+         when 1 then "grid-cols-1"
+         when 2 then "grid-cols-1 sm:grid-cols-2"
+         else "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
+         end %>
+      
+      <div class="grid <%= grid_class %> gap-8 mx-24">
         <% skins.each do |skin| %>
-          <div class="relative group bg-gray-800 rounded-lg shadow-lg cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out overflow-hidden">
-            <%= image_tag skin.splash_art_centered, alt: "#{skin.name} loading art", 
-                  class: "w-full h-full object-cover rounded-lg shadow-md group-hover:scale-110 saturate-0 brightness-100  group-hover:saturate-[1.20] group-hover:brightness-[1.25] transition-all duration-500 ease-in-out",
-                  data: { skin_splash: skin.splash_art, skin_name: skin.name, skin_id: skin.id, skin_description: skin.description } %>
+          <div class="relative group bg-gray-800 rounded-lg shadow-lg cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out overflow-hidden flex justify-center items-center <%= 'max-w-2xl mx-auto' if skins.length < 3 %>">
+            <%= image_tag skin.splash_art_centered, 
+                alt: "#{skin.name} loading art",  loading: "lazy",
+                class: "w-full h-full object-cover rounded-lg shadow-md group-hover:scale-110 saturate-[0.15] brightness-100 group-hover:saturate-[1.10] group-hover:brightness-[1.15] transition-all duration-500 ease-in-out",
+                data: { skin_splash: skin.splash_art, skin_name: skin.name, skin_id: skin.id, skin_description: skin.description, skin_rarity: skin.rarity } %>
 
-            <!-- Border only on hover -->
-            <div class="absolute inset-0 border group-hover:border-4 <%= 'border-' + skin.rarity.downcase %> group-hover:animate-pulse rounded-lg transition-all duration-300 ease-in-out" style="pointer-events: none;"></div>
+            <div class="absolute inset-0 border-0 group-hover:border-4 <%= 'border-' + skin.rarity.downcase %> group-hover:animate-pulse rounded-lg transition-all duration-300 ease-in-out" style="pointer-events: none;"></div>
           </div>
         <% end %>
       </div>
@@ -103,20 +111,22 @@
 
 
 
+
+
     </div>
   </div>
 </div>
 
 <!-- Modal to Show Full Splash Art -->
-<div id="splash-art-modal" class="fixed mx-2 inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 flex">
-  <div class="bg-gradient-to-b from-slate-950 to-gray-900 p-3 rounded-xl max-w-6xl w-full relative">
+<div id="splash-art-modal" class="fixed mx-2 inset-0 bg-black hidden bg-opacity-80 items-center justify-center z-50 flex">
+  <div id="splash-art-modal-bg" class="bg-slate-950 p-3 rounded-xl max-w-6xl w-full relative">
     <div class="relative group flex justify-center">
       <img id="splash-art-image" src="/api/placeholder/800/400" alt="Splash Art" 
-           class="max-w-full max-h-full object-contain rounded-xl shadow-md">
+           class="max-w-full max-h-full object-contain rounded-xl shadow-[0_4px_15px_rgba(0,0,0,0.75)]">
       <div class="absolute inset-0 flex flex-col justify-end items-start group-hover:bg-gradient-to-t from-slate-950 via-slate-900/10 to-transparent bg-opacity-0 group-hover:bg-opacity-100 transition-all duration-300 rounded-xl">
         <div class="w-full relative">
           <div id="modal-skin-name" 
-               class=" bottom-0 left-0 px-6 py-0 translate-y-6 group-hover:translate-y-0
+               class="bottom-0 left-0 px-6 py-0 translate-y-6 group-hover:translate-y-0
                       text-base md:text-2xl font-bold text-white text-center
                       transform transition-all duration-300 opacity-0 md:opacity-100 group-hover:opacity-100
                       group-hover:relative
@@ -125,7 +135,7 @@
           </div>
           <div id="modal-skin-description"
                class="px-6 pb-0 group-hover:pb-4 pt-2 text-sm md:text-lg text-white
-                      opacity-0 group-hover:opacity-100  text-center
+                      opacity-0 group-hover:opacity-100 text-center
                       transition-all duration-300">
             This is a longer description that might span multiple lines. We want to make sure our title adapts properly to however long this description might be. It could be quite extensive in some cases.
           </div>
@@ -135,32 +145,104 @@
   </div>
 </div>
 
-<script>
-  document.querySelectorAll('[data-skin-splash]').forEach(img => {
-    img.addEventListener('click', function() {
-      const splashArt = this.getAttribute('data-skin-splash');
-      const skinName = this.getAttribute('data-skin-name');
-      const skinDescription = this.getAttribute('data-skin-description');
-      const modal = document.getElementById('splash-art-modal');
-      const splashImage = document.getElementById('splash-art-image');
-      const modalSkinName = document.getElementById('modal-skin-name');
-      const modalSkinDescription = document.getElementById('modal-skin-description');
-      
-      splashImage.src = splashArt;
-      modalSkinName.textContent = skinName;  
-      modalSkinDescription.innerHTML = skinDescription || "No description available.";
-      modal.classList.remove('hidden');
-    });
-  });
 
-  document.getElementById('splash-art-modal').addEventListener('click', function(e) {
-    if (e.target === this) {
-      this.classList.add('hidden');
+<script>
+ document.querySelectorAll('[data-skin-splash]').forEach(img => {
+  img.addEventListener('click', function () {
+    const splashArt = this.getAttribute('data-skin-splash');
+    const skinName = this.getAttribute('data-skin-name');
+    const skinDescription = this.getAttribute('data-skin-description');
+    const rarity = this.getAttribute('data-skin-rarity'); // Get the rarity
+    const modal = document.getElementById('splash-art-modal');
+    const splashImage = document.getElementById('splash-art-image');
+    const modalSkinName = document.getElementById('modal-skin-name');
+    const modalSkinDescription = document.getElementById('modal-skin-description');
+    const modalBg = document.getElementById('splash-art-modal-bg');
+    
+    // Remove existing rarity classes for background and border
+    modalBg.classList.remove(
+      'bg-mythic', 'bg-ultimate', 'bg-legendary', 'bg-transcendent', 'bg-common', 'bg-epic',
+      'border-mythic', 'border-ultimate', 'border-legendary', 'border-transcendent', 'border-common', 'border-epic'
+    );
+    
+    // Add the new rarity classes based on the skin's rarity
+    if (rarity) {
+      modalBg.classList.add(`bg-${rarity.toLowerCase()}`);
+      modalBg.classList.add(`border-${rarity.toLowerCase()}`);
     }
+
+    // Update modal content
+    splashImage.src = splashArt;
+    modalSkinName.textContent = skinName;
+    modalSkinDescription.innerHTML = skinDescription || 'No description available.';
+    modal.classList.remove('hidden');
   });
+});
+
+document.getElementById('splash-art-modal').addEventListener('click', function (e) {
+  if (e.target === this) {
+    this.classList.add('hidden');
+  }
+});
+
+
 </script>
 
 <style>
+  #splash-art-image {
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.75); /* Darker and more intense shadow */
+}
+.bg-mythic {
+  background: linear-gradient(to bottom, rgba(122, 62, 237, 0.5), rgba(58, 33, 105, 0.5));
+}
+
+.bg-ultimate {
+  background: linear-gradient(to bottom, rgba(255, 165, 0, 0.5), rgba(128, 74, 0, 0.5));
+}
+
+.bg-legendary {
+  background: linear-gradient(to bottom, rgba(255, 50, 50, 0.5), rgba(128, 22, 22, 0.5));
+}
+
+.bg-transcendent {
+  background: linear-gradient(to bottom, rgba(162, 162, 208, 0.5), rgba(82, 82, 140, 0.5));
+}
+
+.bg-common {
+  background: linear-gradient(to bottom, rgba(128, 128, 128, 0.5), rgba(64, 64, 64, 0.5));
+}
+
+.bg-epic {
+  background: linear-gradient(to bottom, rgba(0, 200, 255, 0.5), rgba(0, 102, 128, 0.5));
+}
+
+.bg-mythic-modal {
+  background-color: rgba(89, 50, 145, 0.3); /* Darker #7943ED with 0.3 opacity */
+}
+
+.bg-ultimate-modal {
+  background: rgba(204, 136, 0, 0.3); /* Darker #FFA500 with 0.3 opacity */
+}
+
+.bg-legendary-modal {
+  background: rgba(204, 0, 0, 0.1); /* Darker #FF3232 with 0.3 opacity */
+}
+
+.bg-transcendent-modal {
+  background: rgba(129, 129, 163, 0.3); /* Darker #A2A2D0 with 0.3 opacity */
+}
+
+.bg-common-modal {
+  background: rgba(102, 102, 102, 0.3); /* Darker #808080 with 0.3 opacity */
+}
+
+.bg-epic-modal {
+  background: rgba(0, 153, 204, 0.3); /* Darker #00C8FF with 0.3 opacity */
+}
+
+
+
+
 .border-mythic {
   border: 1px solid #7943ED;
 }
