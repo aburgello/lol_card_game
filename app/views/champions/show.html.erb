@@ -74,7 +74,7 @@
 <div class="mt-8 w-full bg-gradient-to-r from-[#0A1428]/20 to-[#0A0C14]/20 p-2 rounded-lg shadow-md">
   <h3 class="text-3xl font-semibold mb-6 text-center text-[#C8AA6E] border-b pb-6 mx-6 border-[#C8AA6E]/20">Skins</h3>
   
-  <% rarity_order = [ "common", "epic", "legendary", "mythic", "ultimate", "transcendent" ] %>
+  <% rarity_order = [ "common", "rare", "epic", "legendary", "mythic", "ultimate", "transcendent" ] %>
   <% grouped_skins = @champion.skins.group_by(&:rarity).sort_by { |rarity, _| rarity_order.index(rarity.downcase) || rarity_order.size } %>
   
   <% grouped_skins.each do |rarity, skins| %>
@@ -211,6 +211,9 @@ document.getElementById('splash-art-modal').addEventListener('click', function (
 .bg-common {
   background: linear-gradient(to bottom, rgba(128, 128, 128, 0.5), rgba(64, 64, 64, 0.5));
 }
+.bg-rare {
+  background: linear-gradient(to bottom, rgba(200, 170, 110, 0.7), rgba(200, 170, 110, 0.7)); /* #C8AA6E */
+}
 
 .bg-epic {
   background: linear-gradient(to bottom, rgba(0, 200, 255, 0.5), rgba(0, 102, 128, 0.5));
@@ -227,7 +230,9 @@ document.getElementById('splash-art-modal').addEventListener('click', function (
 .bg-legendary-modal {
   background: rgba(204, 0, 0, 0.1); /* Darker #FF3232 with 0.3 opacity */
 }
-
+.bg-rare-modal {
+  background: rgba(200, 170, 110, 0.3); /* Darker #C8AA6E with 0.3 opacity */
+}
 .bg-transcendent-modal {
   background: rgba(129, 129, 163, 0.3); /* Darker #A2A2D0 with 0.3 opacity */
 }
@@ -253,6 +258,10 @@ document.getElementById('splash-art-modal').addEventListener('click', function (
 
 .border-legendary {
   border:1px solid #FF3232;
+}
+
+.border-rare {
+  border: 1px solid #C8AA6E; /* Updated border color */
 }
 
 .border-transcendent {
