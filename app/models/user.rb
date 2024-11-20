@@ -12,6 +12,9 @@ has_many :user_skins
 has_many :skins, through: :user_skins
 has_many :collections
 has_many :collected_skins, through: :collections, source: :skin
+has_many :user_regions, dependent: :destroy
+has_many :discovered_regions, through: :user_regions, source: :region
+
 # Check if a user owns a specific skin
 def owns_skin?(skin)
   skins.include?(skin)

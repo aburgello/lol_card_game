@@ -2,7 +2,18 @@
   <div class="grid grid-cols-1">
     <div class="flex flex-col items-center relative mx-4 md:mx-0">
       <div class="mt-8 p-4 w-full bg-gradient-to-r from-[#0A1428]/20 to-[#0A0C14]/20 pt-4 rounded-lg shadow-md border border-slate-900">
-        <h3 class="text-3xl font-semibold mb-6 text-center text-[#C8AA6E] border-b pb-4 mx-6 border-[#C8AA6E]/20 cursor-default">Your Skins</h3>
+  <h3 class="text-3xl font-semibold mb-6 text-center text-[#C8AA6E] border-b pb-4 mx-6 border-[#C8AA6E]/20 cursor-default">Your Skins</h3>
+  
+  <% if @user_skins.empty? %>
+    <div class="flex flex-col items-center justify-center py-12 text-center">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-24 w-24 text-[#C8AA6E] mb-4 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+      </svg>
+      <h2 class="text-2xl font-bold text-[#C8AA6E] mb-2">No Skins Unlocked Yet</h2>
+      <p class="text-gray-400 mb-6">Complete challenges to unlock all champions unique skins.</p>
+      <%= link_to "Browse Champions", champions_path, class: "bg-[#C8AA6E] text-[#0A1428] px-6 py-2 rounded-lg hover:bg-opacity-90 hover:text-white transition-all duration-100 ease-in-out" %>
+    </div>
+  <% else %>
         
         <% rarity_order = ["common", "rare", "epic", "legendary", "mythic", "ultimate", "transcendent"] %>
         <% grouped_skins = @user_skins.group_by(&:rarity).sort_by { |rarity, _| rarity_order.index(rarity.downcase) || rarity_order.size } %>
@@ -58,6 +69,8 @@
       </div>
     </div>
   </div>
+    <% end %>
+
 </div>
 
 <!-- Modal to Show Full Splash Art -->
@@ -87,6 +100,102 @@
     </div>
   </div>
 </div>
+
+
+ 
+      <div class="mt-8 p-4 w-full bg-gradient-to-r from-[#0A1428]/20 to-[#0A0C14]/20 pt-4 rounded-lg shadow-md border border-slate-900">
+        <h3 class="text-3xl font-semibold mb-6 text-center text-[#C8AA6E] border-b pb-4 mx-6 border-[#C8AA6E]/20 cursor-default">Discovered Regions</h3>
+        
+        <% if @user_regions.empty? %>
+          <div class="flex flex-col items-center justify-center py-12 text-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-24 w-24 text-[#C8AA6E] mb-4 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            <h2 class="text-2xl font-bold text-[#C8AA6E] mb-2">No Regions Discovered Yet</h2>
+            <p class="text-gray-400 mb-6">Explore Runeterra Prime and discover all the regions.</p>
+            <%= link_to "Explore Regions", regions_path, class: "bg-[#C8AA6E] text-[#0A1428] px-6 py-2 rounded-lg hover:bg-opacity-90 hover:text-white transition-all duration-100 ease-in-out" %>
+          </div>
+        <% else %>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mx-auto lg:mx-24">
+            <% @user_regions.each do |user_region| %>
+              <% region = user_region.region %> <!-- Assuming user_region has a method to get the associated region -->
+              <div class="relative group bg-gray-800 rounded-lg shadow-lg cursor-pointer transition-all duration-300 ease-in-out overflow-hidden flex justify-center items-center">
+                <div class="relative w-full">
+                  <%= image_tag region.image_backdrop, 
+                      alt: "#{region.name} backdrop",  
+                      loading: "lazy",
+                      class: "w-full h-full object-cover rounded-lg shadow-md group-hover:scale-110 saturate-[1.10] brightness-100 group-hover:brightness-[1.10] transition-all duration-500 ease-in-out" %>
+                  
+                  <div class="absolute bottom-0 left-0 w-full ">
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/10 to-transparent opacity-100 rounded-b-lg"></div>
+                    <div class="relative z-10 px-6 py-4">
+                      <div class="text-base md:text-2xl font-bold text-[#C8AA6E] text-left" style="cursor: default; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);">
+                        <%= region.name %>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+ 
+
+<!-- Modal to Show Region Details -->
+<div id="region-modal" class="fixed mx-2 inset-0 bg-black hidden bg-opacity-80 items-center justify-center z-50 flex">
+  <div id="region-modal-bg" class="bg-slate-950 p-3 rounded-xl max-w-6xl w-full relative">
+    <div class="relative group flex justify-center">
+      <img id="region-image" src="/api/placeholder/800/400" alt="Region" 
+           class="max-w-full max-h-full object-contain rounded-xl shadow-[0_4px_15px_rgba(0,0,0,0.75)]">
+      <div class="absolute inset-0 flex flex-col justify-end items-start bg-gradient-to-t from-slate-950 via-slate-900/10 to-transparent opacity-100 group-hover:opacity-0 transition-opacity duration-700 ease-in-out rounded-xl">
+        <div class="w-full relative">
+          <div id="modal-region-name" 
+               class="bottom-0 left-0 px-6 py-0 translate-y-0 group-hover:translate-y-6
+                      text-base md:text-2xl font-bold text-[#C8AA6E] text-center
+                      transform transition-all duration-500  md:opacity-100 group-hover:opacity-0
+                      group-hover:relative
+                      group-hover:text-white" style="cursor: default; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);">
+            Region Name
+          </div>
+          <div id="modal-region-description"
+               class="px-6 pb-4 group-hover:pb-0 pt-2 text-sm md:text-lg text-white
+                      opacity-100 group-hover:opacity-0 text-center
+                      transition-all duration-300 ease-in-out">
+            This is a longer description that might span multiple lines. We want to make sure our title adapts properly to however long this description might be. It could be quite extensive in some cases.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+ document.querySelectorAll('[data-region-name]').forEach(img => {
+  img.addEventListener('click', function () {
+    const regionImage = this.getAttribute('data-region-image');
+    const regionName = this.getAttribute('data-region-name');
+    const regionDescription = this.getAttribute('data-region-description');
+    const modal = document.getElementById('region-modal');
+    const regionImg = document.getElementById('region-image');
+    const modalRegionName = document.getElementById('modal-region-name');
+    const modalRegionDescription = document.getElementById('modal-region-description');
+    const modalBg = document.getElementById('region-modal-bg');
+
+    // Update modal content
+    regionImg.src = regionImage;
+    modalRegionName.textContent = regionName;
+    modalRegionDescription.innerHTML = regionDescription || 'No description available.';
+    modal.classList.remove('hidden');
+  });
+});
+
+document.getElementById('region-modal').addEventListener('click', function (e) {
+  if (e.target === this) {
+    this.classList.add('hidden');
+  }
+});
+</script>
 
 
 <script>

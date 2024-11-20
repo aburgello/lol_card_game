@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_11_20_171540) do
+ActiveRecord::Schema[7.2].define(version: 2024_11_20_173204) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -123,6 +123,17 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_20_171540) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "user_regions", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "region_id", null: false
+    t.datetime "discovered_at", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["region_id"], name: "index_user_regions_on_region_id"
+    t.index ["user_id", "region_id"], name: "index_user_regions_on_user_id_and_region_id", unique: true
+    t.index ["user_id"], name: "index_user_regions_on_user_id"
+  end
+
   create_table "user_skins", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "skin_id", null: false
@@ -154,6 +165,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_20_171540) do
   add_foreign_key "collections", "skins"
   add_foreign_key "collections", "users"
   add_foreign_key "skins", "champions"
+  add_foreign_key "user_regions", "regions"
+  add_foreign_key "user_regions", "users"
   add_foreign_key "user_skins", "skins"
   add_foreign_key "user_skins", "users"
 end
