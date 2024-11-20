@@ -7,7 +7,7 @@
           <img 
             src="<%= image_path(region.image_backdrop) %>" 
             alt="<%= region.name %> Image Backdrop" 
-            class="w-full h-72 object-cover rounded-xl group-hover:scale-125 transition-all duration-700 ease-in-out"
+            class="w-full h-48 md:h-64 object-cover rounded-xl group-hover:scale-125 transition-all duration-700 ease-in-out"
           >
 
           <!-- Overlay Gradient -->
@@ -22,7 +22,7 @@
 
           <!-- Region Logo (Appears in the center on hover) -->
           <div class="absolute inset-0 flex items-center justify-center scale-50 opacity-0 brightness-150 group-hover:opacity-100 group-hover:scale-105 transition-all duration-300 ease-in-out" style="text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.8);">
-            <%= image_tag region.logo, alt: "#{region.name} Logo", class: "w-32 h-32 object-contain shadow-sm" %>
+            <%= image_tag region.logo, alt: "#{region.name} Logo", class: "w-24 h-24 md:w-32 md:h-32 object-contain shadow-sm" %>
           </div>
 
           <!-- Light Overlay Below Logo on Hover -->
