@@ -41,8 +41,8 @@
 <div class="w-full bg-gradient-to-b from-[#0A1428] to-[#0A0C14]/20 pb-2  md:pt-4 md:pb-4 px-6 lg:px-8 rounded-b-lg shadow-md border-b border-slate-900">
   <div class="flex justify-between items-center space-x-8 mb-2">
     <!-- Displaying Champion Types -->
-    <p class="text-sm md:text-xl font-semibold text-gray-300 hover:text-[#C8AA6E] cursor-default">
-      <%= @champion.types.map(&:name).join(' | ') %>
+    <p class="text-sm md:text-xl font-semibold text-gray-300  cursor-default">
+      <%= @champion.types.map(&:name).join(' and ') %>
     </p>
   
     <!-- Displaying Champion Region with Logo Pop-Up on Hover -->
