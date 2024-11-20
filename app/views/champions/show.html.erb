@@ -11,8 +11,8 @@
   <div class="absolute inset-0 bg-gradient-to-t from-[#0A1428] via-[#091428]/30 to-transparent rounded-t-lg"></div>
 
   <!-- Name and Title -->
-  <div class="absolute -bottom-2 xl:-bottom-2 left-4 lg:left-6 text-white p-2 rounded-md w-full md:w-auto sm:text-left z-20">
-    <h2 class="text-xl md:text-4xl font-bold text-[#C8AA6E] cursor-default">
+  <div class="absolute -bottom-2 lg:-bottom-2 xl:-bottom-0 left-4 lg:left-6 text-white p-2 rounded-md w-full md:w-auto sm:text-left z-20">
+    <h2 class="text-xl md:text-4xl xl:text-5xl font-bold text-[#C8AA6E] cursor-default">
       <%= @champion.name %>, <%= @champion.title %>
     </h2>
   </div>
@@ -20,7 +20,7 @@
   <!-- Abilities Icons (Overlay on Splash Art) -->
   <div class="absolute top-2 md:top-auto md:bottom-0 right-4 sm:right-6 sm:flex sm:flex-col space-y-2 2xl:space-y-0 2xl:flex-row 2xl:space-x-4 flex-wrap justify-center z-20">
     <% @champion.abilities.each do |ability| %>
-      <div class="relative group w-6 h-6 sm:w-8 sm:h-8 md:h-12 md:w-12 xl:w-16 xl:h-16 rounded-lg shadow-lg cursor-pointer">
+      <div class="relative group w-5 h-5 sm:w-8 sm:h-8 md:h-12 md:w-12 xl:w-16 xl:h-16 rounded-lg shadow-lg cursor-pointer">
         <%= image_tag ability.image, alt: "#{ability.name} icon", class: "w-full h-full object-cover rounded-xl hover:scale-105 transition-all duration-300 ease-in-out" %>
         <div class="absolute -top-1 md:top-0 transform z-100 -translate-x-20 md:-translate-y-14 md:-translate-x-8 tooltip bg-[#0A1428] text-white text-xs md:text-base font-semibold w-20 md:w-32 px-2 py-2 rounded-md hidden text-center group-hover:block">
           <%= ability.name %>
@@ -38,7 +38,7 @@
     
 
 <!-- Types and Region Section -->
-<div class="w-full bg-gradient-to-b from-[#0A1428] to-[#0A0C14]/20 pb-2 pt-2 md:pt-6 md:pb-6 px-6 lg:px-8 rounded-b-lg shadow-md border-b border-slate-900">
+<div class="w-full bg-gradient-to-b from-[#0A1428] to-[#0A0C14]/20 pb-2  md:pt-4 md:pb-4 px-6 lg:px-8 rounded-b-lg shadow-md border-b border-slate-900">
   <div class="flex justify-between items-center space-x-8 mb-2">
     <!-- Displaying Champion Types -->
     <p class="text-sm md:text-xl font-semibold text-gray-300 hover:text-[#C8AA6E] cursor-default">
@@ -47,8 +47,8 @@
   
     <!-- Displaying Champion Region with Logo Pop-Up on Hover -->
     <div class="relative group text-xl font-semibold text-gray-300 text-right">
-      <p class="text-base md:text-xl font-semibold text-gray-300 text-right">
-            <span class="text-base md:text-xl font-medium text-gray-400 cursor-default">Region:</span> 
+      <p class="text-sm md:text-xl font-semibold text-gray-300 text-right">
+            <span class="text-sm md:text-xl font-medium text-gray-400 cursor-default">Region:</span> 
             <%= link_to @champion.region.name, region_path(@champion.region), class: "text-[#C8AA6E] hover:text-[#F0C808]" %>
           </p>
       
