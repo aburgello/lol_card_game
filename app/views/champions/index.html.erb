@@ -1,7 +1,7 @@
 <% if @regions.present? %>
   <!-- Region Icons Grid (Filter Champions by Region) -->
   <div class="mb-8">
-    <div class="flex flex-wrap justify-center gap-8 my-8 mx-4 md:mx-8 xl:mx-16">
+    <div class="flex flex-wrap justify-center gap-10 my-6 mx-8 md:mx-8 xl:mx-16">
       <% @regions.each do |region| %>
         <div class="flex flex-col items-center cursor-pointer group"
              data-region-id="<%= region.id %>" onclick="filterChampionsByRegion(<%= region.id %>)">

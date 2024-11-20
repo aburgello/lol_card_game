@@ -2,7 +2,7 @@ class ChampionsController < ApplicationController
   before_action :set_champion, only: [ :show ]
 
   def index
-    @regions = Region.all
+    @regions = Region.order(:name)
     @champions = Champion.order(:name)
 
     if params[:region_id].present?
