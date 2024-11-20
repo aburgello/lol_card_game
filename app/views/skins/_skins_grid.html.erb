@@ -1,0 +1,61 @@
+<!-- app/views/skins/_skins_grid.html.erb -->
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-4 mb-4">
+  <% skins.each_with_index do |skin, index| %> <!-- Local variable 'skins' -->
+    <!-- Apply hover translation to the entire card -->
+    <div class="relative group bg-gray-800 opacity-0 shadow-lg rounded-lg cursor-pointer transition-all duration-300 ease-in-out overflow-hidden flex justify-center items-center h-full fade-in-up"
+         style="animation-delay: <%= 0.3 * index %>s;">
+
+      <!-- The entire card will translate on hover -->
+      <div class="relative w-full h-full transition-all rounded-lg duration-300 ease-in-out overflow-hidden">
+        <!-- Image inside card -->
+        <%= image_tag skin.loading_art, 
+            data: { skin_splash: skin.splash_art, skin_name: skin.name, skin_description: skin.description, skin_rarity: skin.rarity },
+            alt: "#{skin.name} loading art",  
+            loading: "lazy",
+            class: "w-full h-full object-cover rounded-lg shadow-md" %>
+
+        <!-- Text and gradient overlay -->
+        <div class="absolute bottom-0 left-0 w-full">
+          <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/10 to-transparent opacity-100 rounded-lg"></div>
+          <div class="relative z-10 px-6 py-4">
+            <div class="text-base md:text-2xl font-bold text-[#C8AA6E] text-left" style="cursor: default; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);">
+              <%= skin.name %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Border effect on hover -->
+      <div class="absolute inset-0 border-0 group-hover:border <%= 'border-' + skin.rarity.downcase %> rounded-lg transition-all duration-300 ease-in-out" style="pointer-events: none;"></div>
+    </div>
+  <% end %>
+</div>
+<!-- Modal to Show Full Splash Art -->
+<div id="splash-art-modal" class="fixed inset-0 bg-black hidden bg-opacity-80 items-center justify-center z-50 flex">
+  <div id="splash-art-modal-bg" class="mx-4 bg-slate-950 p-3 rounded-xl opacity-0  max-w-6xl scale-up w-full relative">
+    <div class="relative group flex justify-center">
+      <img id="splash-art-image" src="/api/placeholder/800/400" alt="Splash Art" 
+           class="max-w-full max-h-full object-contain rounded-xl shadow-[0_4px_15px_rgba(0,0,0,0.75)]">
+<div class="absolute inset-0 flex flex-col justify-end items-start bg-gradient-to-t from-slate-950 via-slate-900/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 ease-in-out rounded-xl">
+        <div class="w-full relative">
+          <div id="modal-skin-name" 
+               class="bottom-0 left-0 px-6 py-0 translate-y-6 group-hover:translate-y-0
+                      text-base md:text-2xl font-bold text-[#C8AA6E] text-center
+                      transform transition-all duration-500  md:opacity-100 group-hover:opacity-100
+                      group-hover:relative
+                      group-hover:text-[#C8AA6E]" style="cursor: default; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);">
+            Skin Name
+          </div>
+          <div id="modal-skin-description"
+               class="px-6 pb-0 group-hover:pb-4 pt-2 text-xs md:text-lg text-white
+                      opacity-0 group-hover:opacity-100 text-center
+                      transition-all duration-300 ease-in-out">
+            This is a longer description that might span multiple lines. We want to make sure our title adapts properly to however long this description might be. It could be quite extensive in some cases.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+

@@ -15,6 +15,8 @@ Rails.application.routes.draw do
   get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
   root "champions#index"
 
+    get 'add_skins', to: 'skins#add_skins'
+
   # Defines the root path route ("/")
   # root "posts#index"
   resources :regions, only: [:index, :show]
