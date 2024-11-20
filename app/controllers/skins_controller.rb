@@ -1,4 +1,6 @@
 class SkinsController < ApplicationController
+  before_action :authenticate_user!, only: [:index]
+
   def index
     # Show the user's last 5 unlocked skins (sorted by created_at)
     @skins = current_user.skins.order('user_skins.created_at DESC').limit(5)
