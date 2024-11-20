@@ -1,27 +1,58 @@
+<% if @regions.present? %>
+  <!-- Region Icons Grid (Filter Champions by Region) -->
+  <div class="mb-8">
+    <div class="flex flex-wrap justify-center gap-8 my-8 mx-4 md:mx-8 xl:mx-16">
+      <% @regions.each do |region| %>
+        <div class="flex flex-col items-center cursor-pointer group"
+             data-region-id="<%= region.id %>" onclick="filterChampionsByRegion(<%= region.id %>)">
+          <%= image_tag(region.logo, alt: "#{region.name} icon", class: "w-8 h-8 md:w-12 md:h-12 xl:w-14 xl:h-14 hover:scale-125 hover:brightness-125 hover:saturate-[1.25] transition-all duration-300 ease-in-out") %>
+          <span class="text-sm md:text-base text-[#C8AA6E] mt-4 capitalize  group-hover:opacity-100 transition-opacity duration-300 ease-in-out"><%= region.name %></span>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>
+
 <% if @champions.present? %>
-  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-8 mx-6 xl:mx-72 my-8">
+  <!-- Champion Grid (Filtered by Region) -->
+  <div id="champion-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-8 mx-6 xl:mx-72 my-10">
     <% @champions.each do |champion| %>
-      <%= link_to champion_path(champion) do %>
-        <div class="relative shadow-lg rounded-xl overflow-hidden group hover:scale-105 transition-all duration-500 ease-in-out">
-          
-          <!-- Champion Image -->
-          <img 
-            src="<%= champion.splash_art %>/centered" 
-            alt="<%= champion.name %> Splash Art" 
-            class="w-full h-56 md:h-72 object-cover rounded-xl group-hover:scale-150 transition-all duration-500 ease-in-out"
-          >
-
-          <!-- Overlay Gradient with League Colors -->
-          <div class="absolute inset-0 bg-gradient-to-t from-[#0A1428]/95 via-[#091428]/40 to-transparent rounded-xl hover:border-[#C89B3C] hover:border-4 transition-all duration-100 ease-in-out"></div>
-
-          <!-- Champion Info (Name and Title) -->
-          <div class="absolute bottom-2 left-4 text-white p-2 rounded-md">
-            <h2 class="text-lg md:text-3xl font-bold capitalize text-[#C8AA6E] group-hover:text-[#C89B3C] transition-all duration-300 ease-out">
-              <%= champion.name %>
-            </h2>
-            <p class="text-sm md:text-base text-[#F0E6D2] italic"><%= champion.title %></p>
-          </div>
-
+      <% if champion.region.present? %>  <!-- Add this condition to check if the region exists -->
+        <div class="champion-card relative shadow-lg rounded-xl overflow-hidden group hover:scale-105 transition-all duration-500 ease-in-out"
+             data-region-id="<%= champion.region.id %>">
+          <%= link_to champion_path(champion) do %>
+            <div>
+              <!-- Champion Image -->
+              <img src="<%= champion.splash_art %>/centered" alt="<%= champion.name %> Splash Art" 
+                   class="w-full h-56 md:h-72 object-cover rounded-xl group-hover:scale-150 transition-all duration-500 ease-in-out">
+              <!-- Overlay Gradient -->
+              <div class="absolute inset-0 bg-gradient-to-t from-[#0A1428]/95 via-[#091428]/40 to-transparent rounded-xl hover:border-[#C89B3C] hover:border-4 transition-all duration-100 ease-in-out"></div>
+              <!-- Champion Info -->
+              <div class="absolute bottom-2 left-4 text-white p-2 rounded-md">
+                <h2 class="text-lg md:text-3xl font-bold capitalize text-[#C8AA6E] group-hover:text-[#C89B3C] transition-all duration-300 ease-out">
+                  <%= champion.name %>
+                </h2>
+                <p class="text-sm md:text-base text-[#F0E6D2] italic"><%= champion.title %></p>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <!-- Optionally, display something else if region is nil -->
+        <div class="champion-card relative shadow-lg rounded-xl overflow-hidden group hover:scale-105 transition-all duration-500 ease-in-out">
+          <%= link_to champion_path(champion) do %>
+            <div>
+              <img src="<%= champion.splash_art %>/centered" alt="<%= champion.name %> Splash Art" 
+                   class="w-full h-56 md:h-72 object-cover rounded-xl group-hover:scale-150 transition-all duration-500 ease-in-out">
+              <div class="absolute inset-0 bg-gradient-to-t from-[#0A1428]/95 via-[#091428]/40 to-transparent rounded-xl hover:border-[#C89B3C] hover:border-4 transition-all duration-100 ease-in-out"></div>
+              <div class="absolute bottom-2 left-4 text-white p-2 rounded-md">
+                <h2 class="text-lg md:text-3xl font-bold capitalize text-[#C8AA6E] group-hover:text-[#C89B3C] transition-all duration-300 ease-out">
+                  <%= champion.name %>
+                </h2>
+                <p class="text-sm md:text-base text-[#F0E6D2] italic"><%= champion.title %></p>
+              </div>
+            </div>
+          <% end %>
         </div>
       <% end %>
     <% end %>
@@ -29,3 +60,35 @@
 <% else %>
   <p class="text-center text-gray-500">No champions available.</p>
 <% end %>
+
+<script>
+let currentRegionId = null;
+
+function filterChampionsByRegion(regionId) {
+  // Get all the champion cards
+  const championCards = document.querySelectorAll('.champion-card');
+  
+  // Check if the clicked region is the same as the currently active one
+  if (currentRegionId === regionId) {
+    // Reset to showing all champions
+    currentRegionId = null;  // No active region
+    championCards.forEach(card => {
+      card.style.display = 'block';
+    });
+  } else {
+    // Filter champions by the selected region
+    currentRegionId = regionId;
+    championCards.forEach(card => {
+      if (card.dataset.regionId == regionId) {
+        card.style.display = 'block';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  }
+
+  // Adjust the grid layout after filtering
+  adjustGridLayout();
+}
+
+</script>
