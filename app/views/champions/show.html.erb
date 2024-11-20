@@ -67,7 +67,7 @@
 
 <!-- Champion Skins Section -->
 <div class="mt-8 p-4 w-full bg-gradient-to-r from-[#0A1428]/20 to-[#0A0C14]/20 pt-4 rounded-lg shadow-md border border-slate-900">
-  <h3 class="text-3xl font-semibold mb-6 text-center text-[#C8AA6E] border-b pb-6 mx-6 border-[#C8AA6E]/20 cursor-default">Skins</h3>
+  <h3 class="text-3xl font-semibold mb-6 text-center text-[#C8AA6E] border-b pb-4 mx-6 border-[#C8AA6E]/20 cursor-default">Skins</h3>
   
   <% rarity_order = [ "common", "rare", "epic", "legendary", "mythic", "ultimate", "transcendent" ] %>
   <% grouped_skins = @champion.skins.group_by(&:rarity).sort_by { |rarity, _| rarity_order.index(rarity.downcase) || rarity_order.size } %>
