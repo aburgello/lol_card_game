@@ -7,7 +7,7 @@
           <% @regions.each do |region| %>
             <div class="flex flex-col items-center cursor-pointer group"
                  data-region-id="<%= region.id %>" onclick="filterChampionsByRegion(<%= region.id %>)">
-              <%= image_tag(region.logo, alt: "#{region.name} icon", class: "w-8 h-8 md:w-12 md:h-12 xl:w-14 xl:h-14 group-hover:scale-125 group-hover:brightness-125 group-hover:saturate-[1.25] transition-all duration-200 ease-in-out") %>
+              <%= image_tag(region.logo, alt: "#{region.name} icon", class: "w-8 h-8 md:w-12 md:h-12 xl:w-14 xl:h-14 group-hover:scale-[1.05] group-hover:brightness-150 group-hover:saturate-[1.25] transition-all duration-200 ease-in-out") %>
               <span class="text-sm md:text-base text-[#C8AA6E] mt-4 capitalize group-hover:brightness-125 group-hover:saturate-[1.25] group-hover:opacity-100 transition-all duration-200 ease-in-out"><%= region.name %></span>
             </div>
           <% end %>
