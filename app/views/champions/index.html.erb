@@ -25,7 +25,7 @@
       <% if champion.region.present? %>  <!-- Add this condition to check if the region exists -->
         <div class="champion-card relative shadow-lg rounded-xl overflow-hidden group hover:scale-105 transition-all duration-500 ease-in-out"
              data-region-id="<%= champion.region.id %>">
-          <%= link_to champion_path(champion) do %>
+         <%= link_to champion_path(champion.name) do %>
             <div>
               <!-- Champion Image -->
               <img src="<%= champion.splash_art %>/centered" alt="<%= champion.name %> Splash Art" loading= "lazy"
@@ -45,10 +45,10 @@
       <% else %>
         <!-- Optionally, display something else if region is nil -->
         <div class="champion-card relative shadow-lg rounded-xl overflow-hidden group hover:scale-105 transition-all duration-500 ease-in-out">
-          <%= link_to champion_path(champion) do %>
-            <div>
-              <img src="<%= champion.splash_art %>/centered" alt="<%= champion.name %> Splash Art" 
-                   class="w-full h-56 md:h-72 object-cover rounded-xl group-hover:scale-150 transition-all duration-500 ease-in-out">
+         <%= link_to champion_path(champion.name) do %>
+  <div>
+    <img src="<%= champion.splash_art %>/centered" alt="<%= champion.name %> Splash Art" 
+         class="w-full h-56 md:h-72 object-cover rounded-xl group-hover:scale-150 transition-all duration-500 ease-in-out">
               <div class="absolute inset-0 bg-gradient-to-t from-[#0A1428]/95 via-[#091428]/40 to-transparent rounded-xl hover:border-[#C89B3C] hover:border-4 transition-all duration-100 ease-in-out"></div>
               <div class="absolute bottom-2 left-4 text-white p-2 rounded-md">
                 <h2 class="text-lg md:text-3xl font-bold capitalize text-[#C8AA6E] group-hover:text-[#C89B3C] transition-all duration-300 ease-out">

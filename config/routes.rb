@@ -20,8 +20,13 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "posts#index"
   resources :regions, only: [:index, :show]
+# config/routes.rb
+resources :champions, param: :name, only: [:show, :index]
 
-  resources :champions, only: [ :index, :show ]
+# Add a custom route for skin redirection
+get 'champions/skin/:skin_name', to: 'champions#redirect_skin'
+
+
   # other routes
   resources :skins, only: [:index, :show] do
     resources :user_skins, only: [:create]

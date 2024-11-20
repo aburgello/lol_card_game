@@ -117,6 +117,7 @@
 <div id="splash-art-modal" class="fixed inset-0 bg-black hidden bg-opacity-80 items-center justify-center z-50 flex">
   <div id="splash-art-modal-bg" class="bg-slate-950 mx-4 p-3 rounded-xl opacity-0  max-w-6xl scale-up w-full relative">
     <div class="relative group flex justify-center">
+      
       <img id="splash-art-image" src="/api/placeholder/800/400" alt="Splash Art" 
            class="max-w-full max-h-full object-contain rounded-xl shadow-[0_4px_15px_rgba(0,0,0,0.75)]">
 <div class="absolute inset-0 flex flex-col justify-end items-start bg-gradient-to-t from-slate-950 via-slate-900/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 ease-in-out rounded-xl">
@@ -143,24 +144,26 @@
 
 
 <script>
- document.querySelectorAll('[data-skin-splash]').forEach(img => {
+document.querySelectorAll('[data-skin-splash]').forEach(img => {
   img.addEventListener('click', function () {
     const splashArt = this.getAttribute('data-skin-splash');
     const skinName = this.getAttribute('data-skin-name');
     const skinDescription = this.getAttribute('data-skin-description');
-    const rarity = this.getAttribute('data-skin-rarity'); // Get the rarity
+    const rarity = this.getAttribute('data-skin-rarity');
     const modal = document.getElementById('splash-art-modal');
     const splashImage = document.getElementById('splash-art-image');
     const modalSkinName = document.getElementById('modal-skin-name');
     const modalSkinDescription = document.getElementById('modal-skin-description');
     const modalBg = document.getElementById('splash-art-modal-bg');
     
+    const championBySkinPath = (skinName) => `/champions/skin/${encodeURIComponent(skinName)}`;
+
     // Remove existing rarity classes for background and border
     modalBg.classList.remove(
       'bg-mythic', 'bg-ultimate', 'bg-legendary', 'bg-transcendent', 'bg-common', 'bg-epic',
       'border-mythic', 'border-ultimate', 'border-legendary', 'border-transcendent', 'border-common', 'border-epic'
     );
-    
+
     // Add the new rarity classes based on the skin's rarity
     if (rarity) {
       modalBg.classList.add(`bg-${rarity.toLowerCase()}`);
@@ -169,18 +172,20 @@
 
     // Update modal content
     splashImage.src = splashArt;
-    modalSkinName.textContent = skinName;
+
+    // Create a link for the skin name (Ensure that it doesn't redirect)
+    modalSkinName.innerHTML = `<a href="${championBySkinPath(skinName)}" class="text-[#C8AA6E] hover:brightness-150 transition-all duration-200 ease-in-out" target="_self">${skinName}</a>`;
     modalSkinDescription.innerHTML = skinDescription || 'No description available.';
     modal.classList.remove('hidden');
   });
 });
 
+// Hide the modal when clicking outside of the modal content
 document.getElementById('splash-art-modal').addEventListener('click', function (e) {
   if (e.target === this) {
     this.classList.add('hidden');
   }
 });
-
 
 </script>
 

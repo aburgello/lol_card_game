@@ -1,5 +1,5 @@
 class ChampionsController < ApplicationController
-  before_action :set_champion, only: [ :show ]
+  before_action :set_champion, only: [:show]
 
   def index
     @regions = Region.order(:name)
@@ -10,15 +10,34 @@ class ChampionsController < ApplicationController
     end
   end
 
-
-
   def show
+    puts "Champion: #{@champion.name}"  # Log the champion's name
     @user_skin_ids = current_user&.skins&.pluck(:id) || []
   end
 
+  def redirect_skin
+    # Find the skin by name (assuming the skin name is unique)
+    skin = Skin.find_by(name: params[:skin_name])
+
+    if skin
+      # Redirect to the champion's show page using the champion's name
+      redirect_to champion_path(skin.champion.name)
+    else
+      flash[:alert] = "Skin not found"
+      redirect_to champions_path
+    end
+  end
+  
   private
 
   def set_champion
-    @champion = Champion.includes(:abilities, :skins).find(params[:id])
+    puts "params[:name]: #{params[:name]}"  # Log the name parameter
+    
+    @champion = Champion.includes(:abilities, :skins).find_by(name: params[:name])
+  
+    if @champion.nil?
+      flash[:alert] = "Champion not found"
+      redirect_to champions_path  # Redirect back to the index if not found
+    end
   end
 end
