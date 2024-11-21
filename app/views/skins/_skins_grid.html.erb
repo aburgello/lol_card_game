@@ -1,13 +1,13 @@
-<div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-8 mt-6 mb-12">
+<div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-5 gap-12 mx-6 md:mx-6 lg:mx-6 2xl:mx-12 mt-6 mb-12">
   <% skins.each_with_index do |skin, index| %>
-    <div class="relative w-full <%= 
+    <div class="relative w-full  <%= 
       if skins.length % 2 == 1 && skins.length <= 6 && index == skins.length - 1
         'md:col-start-2 xl:col-auto'
       end
     %>">
            <!-- Video overlay for this specific card -->
 <div class="absolute inset-0 pointer-events-none z-50 transition-all opacity-0 duration-300 fade-in-up ease-in-out"
-     style="animation-delay: <%= 0.3 * index %>s;">
+     style="animation-delay: <%= 0.3 * index %>s;" >
   <video class="w-full h-full object-cover scale-[1.8] opacity-30" muted autoplay loop>
     <source src="https://raw.communitydragon.org/pbe/plugins/rcp-fe-lol-static-assets/global/default/videos/po-unrevealed-loop.webm" type="video/webm">
   </video>
@@ -15,14 +15,14 @@
 <!-- Outro video -->
 <div class="absolute inset-0 pointer-events-none z-50 transition-all opacity-0 duration-300 fade-in-up ease-in-out"
      style="animation-delay: <%= 0.3 * index %>s;" data-reveal-video>
-  <video class="w-full h-full object-cover rounded-lg scale-x-[2.40] scale-[2.01] opacity-0 transition-all duration-300 ease-in-out" muted>
+  <video class="w-full h-full object-cover rounded-lg scale-x-[2.45] scale-[2.01] opacity-0 transition-all duration-300 ease-in-out" muted>
     <source src="https://raw.communitydragon.org/pbe/plugins/rcp-fe-lol-static-assets/global/default/videos/po-reveal-outro.webm" type="video/webm">
   </video>
 </div>
 <!-- Intro video -->
 <div class="absolute inset-0 pointer-events-none z-50 transition-all opacity-0 duration-300 fade-in-up ease-in-out"
      style="animation-delay: <%= 0.3 * index %>s;" data-reveal-video>
-  <video class="w-full h-full object-cover rounded-lg scale-x-[2.40] scale-[2.01] opacity-0 transition-all duration-300 ease-in-out" muted>
+  <video class="w-full h-full object-cover rounded-lg scale-x-[2.45] scale-[2.01] opacity-0 transition-all duration-300 ease-in-out" muted>
     <source src="https://raw.communitydragon.org/pbe/plugins/rcp-fe-lol-static-assets/global/default/videos/po-reveal-intro.webm" type="video/webm">
   </video>
 </div>
@@ -42,8 +42,8 @@
           <div class="absolute bottom-0 left-0 w-full">
             <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/10 to-transparent opacity-0 rounded-lg"></div>
             <div class="relative z-10 px-6 py-4">
-              <div class="text-base md:text-2xl font-bold text-[#C8AA6E] text-left opacity-0 transition-opacity duration-300" 
-                   style="cursor: default; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);">
+              <div class="text-lg md:text-sm 2xl:text-base min-[1700px]:text-2xl font-bold text-[#C8AA6E] text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out" 
+                   style="cursor: default; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);">
                 <%= skin.name %>
               </div>
             </div>
@@ -99,7 +99,8 @@ document.querySelectorAll('.relative.group.bg-gradient-to-r').forEach((card) => 
   
   const outroVideo = outroContainer.querySelector('video');
   const introVideo = introContainer.querySelector('video');
-
+ introVideo.load();
+  outroVideo.load();
   if (!introVideo || !outroVideo) {
     console.warn('Could not find videos');
     return;
@@ -157,7 +158,6 @@ document.querySelectorAll('.relative.group.bg-gradient-to-r').forEach((card) => 
 
       // Optionally, if you have a separate element for the skin name, you can do this
       const skinNameElement = skinArtContainer.querySelector('.text-base.md\\:text-2xl');
-      skinNameElement.style.opacity = '0';
 
       document.querySelectorAll('[data-skin-splash]').forEach(img => {
         img.addEventListener('click', function (e) {
@@ -197,8 +197,7 @@ document.querySelectorAll('.relative.group.bg-gradient-to-r').forEach((card) => 
   card.addEventListener('click', playVideoSequence);
 
   // Preload videos and set initial frame
-  introVideo.load();
-  outroVideo.load();
+ 
   
   // Once intro video is loaded, ensure it shows first frame
   introVideo.addEventListener('loadeddata', () => {
