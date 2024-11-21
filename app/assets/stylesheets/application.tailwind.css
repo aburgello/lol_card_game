@@ -233,3 +233,94 @@ body {
   border:  solid #00C8FF;
 }
 
+
+.glow-mythic {
+  animation: pulse-text-mythic 2.5s infinite; /* Adjust duration as needed */
+}
+
+.glow-ultimate {
+  animation: pulse-text-ultimate 2.5s infinite; /* Adjust duration as needed */
+}
+
+.glow-legendary {
+  animation: pulse-text-legendary 2.5 s infinite; /* Adjust duration as needed */
+}
+
+.glow-transcendent {
+  animation: pulse-text-transcendent 2.5s infinite; /* Adjust duration as needed */
+}
+
+.glow-common {
+  animation: pulse-text-common 2.5s infinite; /* Adjust duration as needed */
+}
+
+.glow-rare {
+  animation: pulse-text-rare 2.5s infinite; /* Adjust duration as needed */
+}
+
+.glow-epic {
+  animation: pulse-text-epic 2.5s infinite; /* Adjust duration as needed */
+}
+
+@keyframes pulse-text-mythic {
+  0%, 100% {
+    text-shadow: 0 0 2px rgba(122, 62, 237, 2), 0 0 5px rgba(122, 62, 237, 2);
+  }
+  50% {
+    text-shadow: 0 0 12px rgba(122, 62, 237, 0.5), 0 0 20px rgba(122, 62, 237, 0.6);
+  }
+}
+
+@keyframes pulse-text-ultimate {
+  0%, 100% {
+    text-shadow: 0 0 5px rgba(255, 165, 0, 2.4), 0 0 7px rgba(255, 165, 0, 2);
+  }
+  50% {
+    text-shadow: 0 0 12px rgba(255, 165, 0, 1.3), 0 0 20px rgba(255, 165, 0, 0.8);
+  }
+}
+
+@keyframes pulse-text-legendary {
+  0%, 100% {
+    text-shadow: 0 0 5px rgba(255, 50, 50, 1.1), 0 0 10px rgba(255, 50, 50, 0.7);
+  }
+  50% {
+    text-shadow: 0 0 10px rgba(255, 50, 50, 1.1), 0 0 20px rgba(255, 50, 50, 0.7);
+  }
+}
+
+@keyframes pulse-text-transcendent {
+  0%, 100% {
+    text-shadow: 0 0 3px rgba(162, 162, 208, 2.4), 0 0 7px rgba(162, 162, 208, 1);
+  }
+  50% {
+    text-shadow: 0 0 14px rgba(162, 162, 208, 1.5), 0 0 20px rgba(162, 162, 208, 0.8);
+  }
+}
+
+@keyframes pulse-text-common {
+  0%, 100% {
+    text-shadow: 0 0 5px rgb(29, 29, 29), 0 0 10px rgba(128, 128, 128, 1);
+  }
+  50% {
+    text-shadow: 0 0 10px rgb(50, 50, 50), 0 0 20px rgba(128, 128, 128, 1);
+  }
+}
+
+@keyframes pulse-text-rare {
+  0%, 100% {
+    text-shadow: 0 0 5px rgba(200, 170, 110, 1), 0 0 10px rgba(200, 170, 110, 0.5);
+  }
+  50% {
+    text-shadow: 0 0 10px rgba(200, 170, 110, 1), 0 0 20px rgba(200, 170, 110, 0.5);
+  }
+}
+
+@keyframes pulse-text-epic {
+  0%, 100% {
+    text-shadow: 0 0 5px rgba(0, 200, 255, 1), 0 0 10px rgba(0, 200, 255, 0.5);
+  }
+  50% {
+    text-shadow: 0 0 10px rgba(0, 200, 255, 1), 0 0 20px rgba(0, 200, 255, 0.5);
+  }
+}
