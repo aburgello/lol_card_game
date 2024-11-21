@@ -8,21 +8,21 @@
            <!-- Video overlay for this specific card -->
 <div class="absolute inset-0 pointer-events-none z-50 transition-all opacity-0 duration-300 fade-in-up ease-in-out"
      style="animation-delay: <%= 0.3 * index %>s;">
-  <video class="w-full h-full object-cover rounded-lg scale-[1.8] opacity-30" muted autoplay loop>
+  <video class="w-full h-full object-cover scale-[1.8] opacity-30" muted autoplay loop>
     <source src="https://raw.communitydragon.org/pbe/plugins/rcp-fe-lol-static-assets/global/default/videos/po-unrevealed-loop.webm" type="video/webm">
   </video>
 </div>
 <!-- Outro video -->
 <div class="absolute inset-0 pointer-events-none z-50 transition-all opacity-0 duration-300 fade-in-up ease-in-out"
      style="animation-delay: <%= 0.3 * index %>s;" data-reveal-video>
-  <video class="w-full h-full object-cover rounded-lg scale-x-[2.33] scale-[2.03] opacity-0 transition-all duration-300 ease-in-out" muted>
+  <video class="w-full h-full object-cover rounded-lg scale-x-[2.40] scale-[2.01] opacity-0 transition-all duration-300 ease-in-out" muted>
     <source src="https://raw.communitydragon.org/pbe/plugins/rcp-fe-lol-static-assets/global/default/videos/po-reveal-outro.webm" type="video/webm">
   </video>
 </div>
 <!-- Intro video -->
 <div class="absolute inset-0 pointer-events-none z-50 transition-all opacity-0 duration-300 fade-in-up ease-in-out"
      style="animation-delay: <%= 0.3 * index %>s;" data-reveal-video>
-  <video class="w-full h-full object-cover rounded-lg scale-x-[2.33] scale-[2.03] opacity-0 transition-all duration-300 ease-in-out" muted>
+  <video class="w-full h-full object-cover rounded-lg scale-x-[2.40] scale-[2.01] opacity-0 transition-all duration-300 ease-in-out" muted>
     <source src="https://raw.communitydragon.org/pbe/plugins/rcp-fe-lol-static-assets/global/default/videos/po-reveal-intro.webm" type="video/webm">
   </video>
 </div>
@@ -85,6 +85,8 @@
 // Select each card's clickable area
 document.querySelectorAll('.relative.group.bg-gradient-to-r').forEach((card) => {
   // Get all video divs that are siblings before this card
+    let hasBeenClicked = false;
+
   const videoContainers = card.parentElement.querySelectorAll('[data-reveal-video]');
   
   if (videoContainers.length < 2) {
@@ -131,6 +133,8 @@ document.querySelectorAll('.relative.group.bg-gradient-to-r').forEach((card) => 
   // Function to handle the video sequence
   const playVideoSequence = async () => {
     // Play intro video from its first frame
+    if (hasBeenClicked) return; // Exit if already clicked
+    hasBeenClicked = true; // Set the flag to true
     await safePlayVideo(introVideo);
     
     // When intro ends, play outro
@@ -153,7 +157,7 @@ document.querySelectorAll('.relative.group.bg-gradient-to-r').forEach((card) => 
 
       // Optionally, if you have a separate element for the skin name, you can do this
       const skinNameElement = skinArtContainer.querySelector('.text-base.md\\:text-2xl');
-      skinNameElement.style.opacity = '1';
+      skinNameElement.style.opacity = '0';
 
       document.querySelectorAll('[data-skin-splash]').forEach(img => {
         img.addEventListener('click', function (e) {
