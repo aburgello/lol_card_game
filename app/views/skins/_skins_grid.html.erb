@@ -1,42 +1,57 @@
-<div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-5 gap-12 mx-6 md:mx-6 lg:mx-6 2xl:mx-12 mt-6 mb-12">
+<div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-5 gap-20 mx-6 md:mx-6 lg:mx-6 2xl:mx-20 mt-6 mb-12">
+  <% rarity_videos = {
+      'Common' => { intro: 'Common-Intro.webm', outro: 'Common-Outro.webm', smoke: 'Common-Smoke.webm' },
+      'Rare' => { intro: 'Rare-Intro.webm', outro: 'Rare-Outro.webm', smoke: 'Rare-Smoke.webm' },
+      'Epic' => { intro: 'Epic-Intro.webm', outro: 'Epic-Outro.webm', smoke: 'Epic-Smoke.webm' },
+      'Legendary' => { intro: 'Legendary-Intro.webm', outro: 'Legendary-Outro.webm', smoke: 'Legendary-Smoke.webm' },
+      'Mythic' => { intro: 'Mythic-Intro.webm', outro: 'Mythic-Outro.webm', smoke: 'Mythic-Smoke.webm' },
+      'Trascendent' => { intro: 'Trascendent-Intro.webm', outro: 'Trascendent-Outro.webm', smoke: 'Trascendent-Smoke.webm' }
+  } %>
+
   <% skins.each_with_index do |skin, index| %>
     <div class="relative w-full <%= 
       if skins.length % 2 == 1 && skins.length <= 6 && index == skins.length - 1
         'md:col-start-2 xl:col-auto'
       end
-    %> "> <!-- Apply glow class based on rarity -->
+    %> "> 
+
+      <% rarity = skin.rarity %> <!-- Assuming skin has a `rarity` attribute -->
+      <% videos = rarity_videos[rarity] %> <!-- Get the corresponding videos for the rarity -->
+
       <!-- Video overlay for this specific card -->
       <div class="absolute inset-0 pointer-events-none z-50 transition-all opacity-0 duration-300 fade-in-up ease-in-out"
            style="animation-delay: <%= 0.3 * index %>s;">
-        <video class="w-full h-full object-cover scale-[1.8] opacity-30" muted autoplay loop>
-          <source src="https://raw.communitydragon.org/pbe/plugins/rcp-fe-lol-static-assets/global/default/videos/po-unrevealed-loop.webm" type="video/webm">
+        <video class="w-full h-full object-cover scale-x-[3] scale-[2] opacity-50" muted autoplay loop>
+          <source src="<%= asset_path(videos[:smoke]) %>" type="video/webm">
         </video>
       </div>
+
       <!-- Outro video -->
       <div class="absolute inset-0 pointer-events-none z-50 transition-all opacity-0 duration-300 fade-in-up ease-in-out"
            style="animation-delay: <%= 0.3 * index %>s;" data-reveal-video>
-        <video class="w-full h-full object-cover rounded-lg scale-x-[2.45] scale-[2.01] opacity-0 transition-all duration-300 ease-in-out" muted>
-          <source src="https://raw.communitydragon.org/pbe/plugins/rcp-fe-lol-static-assets/global/default/videos/po-reveal-outro.webm" type="video/webm">
+        <video class="w-full h-full object-cover rounded-lg scale-x-[2.45] scale-[2.01] saturate-100 opacity-0 transition-all duration-300 ease-in-out" muted>
+          <source src="<%= asset_path(videos[:outro]) %>" type="video/webm">
         </video>
       </div>
+
       <!-- Intro video -->
       <div class="absolute inset-0 pointer-events-none z-50 transition-all opacity-0 duration-300 fade-in-up ease-in-out"
            style="animation-delay: <%= 0.3 * index %>s;" data-reveal-video>
-        <video class="w-full h-full object-cover rounded-lg scale-x-[2.45] scale-[2.01] opacity-0 transition-all duration-300 ease-in-out" muted>
-          <source src="https://raw.communitydragon.org/pbe/plugins/rcp-fe-lol-static-assets/global/default/videos/po-reveal-intro.webm" type="video/webm">
+        <video class="w-full h-full object-cover rounded-lg scale-x-[2.45] scale-[2.01] saturate-50 opacity-0 transition-all duration-300 ease-in-out" muted>
+          <source src="<%= asset_path(videos[:intro]) %>" type="video/webm">
         </video>
       </div>
 
       <div class="relative group bg-gradient-to-r from-[#0A1428]/20 to-[#0A0C14]/20 shadow-lg rounded-xl opacity-0 cursor-pointer transition-all duration-300 ease-in-out flex justify-center items-center h-full fade-in-up"
            style="animation-delay: <%= 0.3 * index %>s; ">
         <!-- Card content -->
-        <div class="relative w-full h-full transition-all rounded-xl opacity-0 duration-300 ease-in-out ">
+        <div class="relative w-full h-full transition-all rounded-xl opacity-0 duration-300 ease-in-out overflow-hidden">
           <!-- Splash art -->
           <%= image_tag skin.loading_art, 
               data: { skin_splash: skin.splash_art, skin_name: skin.name, skin_description: skin.description, skin_rarity: skin.rarity },
               alt: "#{skin.name} loading art",  
               loading: "lazy",
-              class: "w-full h-full object-cover rounded-xl shadow-md transition-opacity duration-300" %>
+              class: "w-full h-full object-cover rounded-xl shadow-md transition-all duration-300 group-hover:brightness-[1.2] group-hover:saturate-[1.10] ease-in-out" %>
 
           <!-- Skin name with fade-in -->
           <div class="absolute bottom-0 left-0 w-full">
@@ -85,8 +100,8 @@
     
 // Select each card's clickable area
 document.querySelectorAll('.relative.group.bg-gradient-to-r').forEach((card) => {
-  // Get all video divs that are siblings before this card
-    let hasBeenClicked = false;
+  let hasBeenClicked = false; // Flag to track if the card has been clicked
+  let isPlaying = false; // Flag to track if a video is currently playing
 
   const videoContainers = card.parentElement.querySelectorAll('[data-reveal-video]');
   
@@ -100,8 +115,10 @@ document.querySelectorAll('.relative.group.bg-gradient-to-r').forEach((card) => 
   
   const outroVideo = outroContainer.querySelector('video');
   const introVideo = introContainer.querySelector('video');
- introVideo.load();
+
+  introVideo.load();
   outroVideo.load();
+
   if (!introVideo || !outroVideo) {
     console.warn('Could not find videos');
     return;
@@ -122,8 +139,6 @@ document.querySelectorAll('.relative.group.bg-gradient-to-r').forEach((card) => 
         // Wait for video to load enough data
         await new Promise((resolve) => {
           video.addEventListener('canplay', resolve, { once: true });
-          // Set timeout in case video fails to load
-          setTimeout(resolve, 5000);
         });
         await video.play();
       }
@@ -134,75 +149,67 @@ document.querySelectorAll('.relative.group.bg-gradient-to-r').forEach((card) => 
 
   // Function to handle the video sequence
   const playVideoSequence = async () => {
-    // Play intro video from its first frame
-    if (hasBeenClicked) return; // Exit if already clicked
+    if (hasBeenClicked || isPlaying) return; // Exit if already clicked or if a video is playing
     hasBeenClicked = true; // Set the flag to true
+    isPlaying = true; // Set the flag to indicate that a video is playing
+
     await safePlayVideo(introVideo);
     
     // When intro ends, play outro
     introVideo.addEventListener('ended', async () => {
       introContainer.style.opacity = '0';
+      introVideo.style.opacity = '0';
       outroContainer.style.opacity = '1';
       outroVideo.style.opacity = '1';
-      await safePlayVideo(outroVideo);
-    }, { once: true });
+      await safePlayVideo(outroVideo);      
 
-    // When outro ends, hide both videos and show the skin loading art and name
-    outroVideo.addEventListener('ended', () => {
-      introContainer.style.opacity = '0';
-      introVideo.style.opacity = '0';
-      outroContainer.style.opacity = '0'; // Optionally hide the outro video container
-
-      // Show the skin loading art and skin name
       const skinArtContainer = card.querySelector('.relative.group.bg-gradient-to-r .relative.w-full');
       skinArtContainer.style.opacity = '1'; // Make the skin loading art visible
 
-      // Optionally, if you have a separate element for the skin name, you can do this
-      const skinNameElement = skinArtContainer.querySelector('.text-base.md\\:text-2xl');
-
-      document.querySelectorAll('[data-skin-splash]').forEach(img => {
-        img.addEventListener('click', function (e) {
-        // Open modal functionality
-        const splashArt = this.getAttribute('data-skin-splash');
-        const skinName = this.getAttribute('data-skin-name');
-        const skinDescription = this.getAttribute('data-skin-description');
-        const rarity = this.getAttribute('data-skin-rarity');
-        const modal = document.getElementById('splash-art-modal');
-        const splashImage = document.getElementById('splash-art-image');
-        const modalSkinName = document.getElementById('modal-skin-name');
-        const modalSkinDescription = document.getElementById('modal-skin-description');
-        const modalBg = document.getElementById('splash-art-modal-bg');
-        
-        const championBySkinPath = (skinName) => `/champions/skin/${encodeURIComponent(skinName)}`;
-
-        modalBg.classList.remove(
-        'bg-mythic', 'bg-ultimate', 'bg-legendary', 'bg-transcendent', 'bg-common', 'bg-epic',
-        'border-mythic', 'border-ultimate', 'border-legendary', 'border-transcendent', 'border-common', 'border-epic'
-        );
-
-        if (rarity) {
-        modalBg.classList.add(`bg-${rarity.toLowerCase()}`);
-        modalBg.classList.add(`border-${rarity.toLowerCase()}`);
-        }
-
-        splashImage.src = splashArt;
-        modalSkinName.innerHTML = `<a href="${championBySkinPath(skinName)}" class="text-[#C8AA6E] hover:brightness-125 hover:saturate-[1.25] transition-all duration-200 ease-in-out" target="_self">${skinName}</a>`;
-        modalSkinDescription.innerHTML = skinDescription || 'No description available.';
-        modal.classList.remove('hidden');
-    });
-    }); // Make the skin name visible
+      // When outro ends, hide both videos and show the skin loading art and name
+      outroVideo.addEventListener('ended', () => {
+        introContainer.style.opacity = '0';
+        introVideo.style.opacity = '0';
+        isPlaying = false; // Reset the flag to allow future clicks
+      }, { once: true });
     }, { once: true });
   };
 
   // Add click handler to the card
   card.addEventListener('click', playVideoSequence);
 
-  // Preload videos and set initial frame
- 
-  
-  // Once intro video is loaded, ensure it shows first frame
-  introVideo.addEventListener('loadeddata', () => {
-    introVideo.currentTime = 0;
+  // Handle skin art click for opening the modal
+  const skinArtContainer = card.querySelector('.relative.group.bg-gradient-to-r .relative.w-full');
+  skinArtContainer.addEventListener('click', function (e) {
+    if (!hasBeenClicked) return; // Prevent opening modal if video hasn't been played
+
+    // Proceed to open the modal
+    const splashArt = this.querySelector('img').getAttribute('data-skin-splash');
+    const skinName = this.querySelector('img').getAttribute('data-skin-name');
+    const skinDescription = this.querySelector('img').getAttribute('data-skin-description');
+    const rarity = this.querySelector('img').getAttribute('data-skin-rarity');
+    const modal = document.getElementById('splash-art-modal');
+    const splashImage = document.getElementById('splash-art-image');
+    const modalSkinName = document.getElementById('modal-skin-name');
+    const modalSkinDescription = document.getElementById('modal-skin-description');
+    const modalBg = document.getElementById('splash-art-modal-bg');
+
+    const championBySkinPath = (skinName) => `/champions/skin/${encodeURIComponent(skinName)}`;
+
+    modalBg.classList.remove(
+      'bg-mythic', 'bg-ultimate', 'bg-legendary', 'bg-transcendent', 'bg-common', 'bg-epic',
+      'border-mythic', 'border-ultimate', 'border-legendary', 'border-transcendent', 'border-common', 'border-epic'
+    );
+
+    if (rarity) {
+      modalBg.classList.add(`bg-${rarity.toLowerCase()}`);
+      modalBg.classList.add(`border-${rarity.toLowerCase()}`);
+    }
+
+    splashImage.src = splashArt;
+    modalSkinName.innerHTML = `<a href="${championBySkinPath(skinName)}" class="text-[#C8AA6E] hover:brightness-125 hover:saturate-[1.25] transition-all duration-200 ease-in-out" target="_self">${skinName}</a>`;
+    modalSkinDescription.innerHTML = skinDescription || 'No description available.';
+    modal.classList.remove('hidden');
   });
 });
 
