@@ -1,10 +1,8 @@
-<!-- app/views/skins/_skins_grid.html.erb -->
-<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-4 mb-4">
-  <% skins.each_with_index do |skin, index| %> <!-- Local variable 'skins' -->
-    <!-- Apply hover translation to the entire card -->
-    <div class="relative group bg-gray-800 opacity-0 shadow-lg rounded-lg cursor-pointer transition-all duration-300 ease-in-out overflow-hidden flex justify-center items-center h-full fade-in-up"
-         style="animation-delay: <%= 0.3 * index %>s;">
-
+<div class="flex justify-center">
+  <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-4 mb-4 place-items-center max-w-[1400px] w-full">
+    <% skins.each_with_index do |skin, index| %>
+      <div class="relative group bg-gray-800 opacity-0 shadow-lg rounded-lg cursor-pointer transition-all duration-300 ease-in-out overflow-hidden flex justify-center items-center h-full fade-in-up"
+      style="animation-delay: <%= 0.3 * index %>s;">
       <!-- The entire card will translate on hover -->
       <div class="relative w-full h-full transition-all rounded-lg duration-300 ease-in-out overflow-hidden">
         <!-- Image inside card -->
@@ -30,6 +28,8 @@
     </div>
   <% end %>
 </div>
+
+
 <!-- Modal to Show Full Splash Art -->
 <div id="splash-art-modal" class="fixed inset-0 bg-black hidden bg-opacity-80 items-center justify-center z-50 flex">
   <div id="splash-art-modal-bg" class="mx-4 bg-slate-950 p-3 rounded-xl opacity-0  max-w-6xl scale-up w-full relative">
