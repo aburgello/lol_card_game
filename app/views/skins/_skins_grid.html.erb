@@ -1,4 +1,4 @@
-<div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-8 mb-4">
+<div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-8 mt-6 mb-12">
   <% skins.each_with_index do |skin, index| %>
     <div class="relative w-full <%= 
       if skins.length % 2 == 1 && skins.length <= 6 && index == skins.length - 1
@@ -6,27 +6,26 @@
       end
     %>">
            <!-- Video overlay for this specific card -->
-      <div class="absolute inset-0 pointer-events-none z-50 transition-all opacity-0 duration-300 fade-in-up ease-in-out"
-      style="animation-delay: <%= 0.3 * index %>s;"
-           >
-        <video class="w-full h-full object-cover rounded-lg scale-[1.8] opacity-30 " muted  autoplay loop>
-          <source src="https://raw.communitydragon.org/pbe/plugins/rcp-fe-lol-static-assets/global/default/videos/po-unrevealed-loop.webm" type="video/webm">
-        </video>
-      </div>
-      <!-- Outro video -->
-      <div class="absolute inset-0 pointer-events-none z-50 transition-all duration-300 ease-in-out opacity-0 fade-in-up"
-           style="animation-delay: <%= 0.3 * index %>s;" data-reveal-video>
-        <video class="w-full h-full object-cover rounded-lg scale-x-[2.33] scale-[2.03] opacity-0 transition-all duration-300 ease-in-out" muted >
-          <source src="https://raw.communitydragon.org/pbe/plugins/rcp-fe-lol-static-assets/global/default/videos/po-reveal-outro.webm" type="video/webm">
-        </video>
-      </div>
-      <!-- Intro video -->
-      <div class="absolute inset-0 pointer-events-none z-50 transition-all opacity-0 duration-300 fade-in-up"
-           style="animation-delay: <%= 0.3 * index %>s;" data-reveal-video>
-        <video class="w-full h-full object-cover rounded-lg scale-x-[2.33] scale-[2.03] opacity-0 transition-all duration-300 ease-in-out" muted >
-          <source src="https://raw.communitydragon.org/pbe/plugins/rcp-fe-lol-static-assets/global/default/videos/po-reveal-intro.webm" type="video/webm">
-        </video>
-      </div>
+<div class="absolute inset-0 pointer-events-none z-50 transition-all opacity-0 duration-300 fade-in-up ease-in-out"
+     style="animation-delay: <%= 0.3 * index %>s;">
+  <video class="w-full h-full object-cover rounded-lg scale-[1.8] opacity-30" muted autoplay loop>
+    <source src="https://raw.communitydragon.org/pbe/plugins/rcp-fe-lol-static-assets/global/default/videos/po-unrevealed-loop.webm" type="video/webm">
+  </video>
+</div>
+<!-- Outro video -->
+<div class="absolute inset-0 pointer-events-none z-50 transition-all opacity-0 duration-300 fade-in-up ease-in-out"
+     style="animation-delay: <%= 0.3 * index %>s;" data-reveal-video>
+  <video class="w-full h-full object-cover rounded-lg scale-x-[2.33] scale-[2.03] opacity-0 transition-all duration-300 ease-in-out" muted>
+    <source src="https://raw.communitydragon.org/pbe/plugins/rcp-fe-lol-static-assets/global/default/videos/po-reveal-outro.webm" type="video/webm">
+  </video>
+</div>
+<!-- Intro video -->
+<div class="absolute inset-0 pointer-events-none z-50 transition-all opacity-0 duration-300 fade-in-up ease-in-out"
+     style="animation-delay: <%= 0.3 * index %>s;" data-reveal-video>
+  <video class="w-full h-full object-cover rounded-lg scale-x-[2.33] scale-[2.03] opacity-0 transition-all duration-300 ease-in-out" muted>
+    <source src="https://raw.communitydragon.org/pbe/plugins/rcp-fe-lol-static-assets/global/default/videos/po-reveal-intro.webm" type="video/webm">
+  </video>
+</div>
 
       <div class="relative group bg-gradient-to-r from-[#0A1428]/20 to-[#0A0C14]/20 shadow-lg rounded-lg opacity-0 cursor-pointer transition-all duration-300 ease-in-out overflow-hidden flex justify-center items-center h-full fade-in-up"
            style="animation-delay: <%= 0.3 * index %>s;">
@@ -82,6 +81,7 @@
   </div>
 </div>
 <script>
+    
 // Select each card's clickable area
 document.querySelectorAll('.relative.group.bg-gradient-to-r').forEach((card) => {
   // Get all video divs that are siblings before this card
@@ -104,7 +104,6 @@ document.querySelectorAll('.relative.group.bg-gradient-to-r').forEach((card) => 
   }
 
   // Set up initial state
-  introContainer.style.opacity = '1';
   introVideo.style.opacity = '1';
   introVideo.currentTime = 0; // Show first frame
   outroContainer.style.opacity = '0';
@@ -155,37 +154,38 @@ document.querySelectorAll('.relative.group.bg-gradient-to-r').forEach((card) => 
       // Optionally, if you have a separate element for the skin name, you can do this
       const skinNameElement = skinArtContainer.querySelector('.text-base.md\\:text-2xl');
       skinNameElement.style.opacity = '1';
+
       document.querySelectorAll('[data-skin-splash]').forEach(img => {
-  img.addEventListener('click', function (e) {
-    // Open modal functionality
-    const splashArt = this.getAttribute('data-skin-splash');
-    const skinName = this.getAttribute('data-skin-name');
-    const skinDescription = this.getAttribute('data-skin-description');
-    const rarity = this.getAttribute('data-skin-rarity');
-    const modal = document.getElementById('splash-art-modal');
-    const splashImage = document.getElementById('splash-art-image');
-    const modalSkinName = document.getElementById('modal-skin-name');
-    const modalSkinDescription = document.getElementById('modal-skin-description');
-    const modalBg = document.getElementById('splash-art-modal-bg');
-    
-    const championBySkinPath = (skinName) => `/champions/skin/${encodeURIComponent(skinName)}`;
+        img.addEventListener('click', function (e) {
+        // Open modal functionality
+        const splashArt = this.getAttribute('data-skin-splash');
+        const skinName = this.getAttribute('data-skin-name');
+        const skinDescription = this.getAttribute('data-skin-description');
+        const rarity = this.getAttribute('data-skin-rarity');
+        const modal = document.getElementById('splash-art-modal');
+        const splashImage = document.getElementById('splash-art-image');
+        const modalSkinName = document.getElementById('modal-skin-name');
+        const modalSkinDescription = document.getElementById('modal-skin-description');
+        const modalBg = document.getElementById('splash-art-modal-bg');
+        
+        const championBySkinPath = (skinName) => `/champions/skin/${encodeURIComponent(skinName)}`;
 
-    modalBg.classList.remove(
-      'bg-mythic', 'bg-ultimate', 'bg-legendary', 'bg-transcendent', 'bg-common', 'bg-epic',
-      'border-mythic', 'border-ultimate', 'border-legendary', 'border-transcendent', 'border-common', 'border-epic'
-    );
+        modalBg.classList.remove(
+        'bg-mythic', 'bg-ultimate', 'bg-legendary', 'bg-transcendent', 'bg-common', 'bg-epic',
+        'border-mythic', 'border-ultimate', 'border-legendary', 'border-transcendent', 'border-common', 'border-epic'
+        );
 
-    if (rarity) {
-      modalBg.classList.add(`bg-${rarity.toLowerCase()}`);
-      modalBg.classList.add(`border-${rarity.toLowerCase()}`);
-    }
+        if (rarity) {
+        modalBg.classList.add(`bg-${rarity.toLowerCase()}`);
+        modalBg.classList.add(`border-${rarity.toLowerCase()}`);
+        }
 
-    splashImage.src = splashArt;
-    modalSkinName.innerHTML = `<a href="${championBySkinPath(skinName)}" class="text-[#C8AA6E] hover:brightness-125 hover:saturate-[1.25] transition-all duration-200 ease-in-out" target="_self">${skinName}</a>`;
-    modalSkinDescription.innerHTML = skinDescription || 'No description available.';
-    modal.classList.remove('hidden');
-  });
-}); // Make the skin name visible
+        splashImage.src = splashArt;
+        modalSkinName.innerHTML = `<a href="${championBySkinPath(skinName)}" class="text-[#C8AA6E] hover:brightness-125 hover:saturate-[1.25] transition-all duration-200 ease-in-out" target="_self">${skinName}</a>`;
+        modalSkinDescription.innerHTML = skinDescription || 'No description available.';
+        modal.classList.remove('hidden');
+    });
+    }); // Make the skin name visible
     }, { once: true });
   };
 
@@ -214,6 +214,6 @@ document.getElementById('splash-art-modal').addEventListener('click', function (
 <style>
     .relative.group.bg-slate-950 .relative.w-full {
   opacity: 0; /* Hide initially */
-  transition: opacity 0.5s ease-in; /* Smooth transition */
+  transition: opacity 0.3s ease-in; /* Smooth transition */
 }
 </style>
