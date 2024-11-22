@@ -2,13 +2,18 @@
   <!-- Region Icons Grid (Filter Champions by Region) -->
   <div class="mb-8">
     <div class="flex flex-wrap justify-center gap-2 my-6 mx-8 md:mx-8 xl:mx-16">
-      <div class="regions-wrapper overflow-x-auto xl:overflow-x-visible max-w-full py-4">
+      <div class="regions-wrapper overflow-x-auto xl:overflow-x-visible max-w-full  py-4">
         <div class="flex gap-4 md:gap-10">
           <% @regions.each do |region| %>
-            <div class="flex flex-col items-center cursor-pointer group"
-                 data-region-id="<%= region.id %>" onclick="filterChampionsByRegion(<%= region.id %>)">
-              <%= image_tag(region.logo, alt: "#{region.name} icon", class: "w-8 h-8 md:w-12 md:h-12 xl:w-14 xl:h-14 group-hover:scale-[1.05] group-hover:brightness-150 group-hover:saturate-[1.25] transition-all duration-200 ease-in-out") %>
-              <span class="text-sm md:text-base text-[#C8AA6E] mt-4 capitalize group-hover:brightness-125 group-hover:saturate-[1.25] group-hover:opacity-100 transition-all duration-200 ease-in-out"><%= region.name %></span>
+            <div 
+              class="flex flex-col items-center cursor-pointer group region-item"
+              data-region-id="<%= region.id %>"
+              onclick="filterChampionsByRegion(<%= region.id %>, this)">
+              <%= image_tag(region.logo, alt: "#{region.name} icon", class: "w-8 h-8 md:w-12 md:h-12 xl:w-14 xl:h-14 group-hover:scale-[1.05]  group-hover:saturate-[1.25] transition-all duration-200 ease-in-out") %>
+              <span 
+                class="text-sm md:text-base text-[#C8AA6E] mt-4 mb-2 text-center capitalize group-hover:brightness-125 group-hover:saturate-[1.25] group-hover:opacity-100 transition-all duration-200 ease-in-out">
+                <%= region.name %>
+              </span>
             </div>
           <% end %>
         </div>
@@ -16,6 +21,7 @@
     </div>
   </div>
 <% end %>
+
 
 
 <% if @champions.present? %>
@@ -69,32 +75,39 @@
 <script>
 let currentRegionId = null;
 
-function filterChampionsByRegion(regionId) {
+function filterChampionsByRegion(regionId, element) {
   // Get all the champion cards
   const championCards = document.querySelectorAll('.champion-card');
-  
-  // Check if the clicked region is the same as the currently active one
+  const regionItems = document.querySelectorAll('.region-item');
+
   if (currentRegionId === regionId) {
     // Reset to showing all champions
-    currentRegionId = null;  // No active region
+    currentRegionId = null; // No active region
     championCards.forEach(card => {
-      card.style.display = 'block';
+      card.style.display = 'block'; // Show all champions
     });
+
+    // Remove active class from all region items
+    regionItems.forEach(item => item.classList.remove('active'));
   } else {
     // Filter champions by the selected region
     currentRegionId = regionId;
     championCards.forEach(card => {
       if (card.dataset.regionId == regionId) {
-        card.style.display = 'block';
+        card.style.display = 'block'; // Show champions of the selected region
       } else {
-        card.style.display = 'none';
+        card.style.display = 'none'; // Hide other champions
       }
     });
+
+    // Update active state for region items
+    regionItems.forEach(item => item.classList.remove('active')); // Remove active class from all
+    element.classList.add('active'); // Add active class to the clicked region
   }
 
   // Adjust the grid layout after filtering
-  adjustGridLayout();
 }
+
 
 </script>
 <style>
@@ -107,13 +120,13 @@ function filterChampionsByRegion(regionId) {
   }
 
   .regions-wrapper .flex {
-    min-width: 80px;
+    min-width: 60px;
      /* Control the size of each region */
   }
 
   .regions-wrapper::-webkit-scrollbar {
-    height: 8px;
-    
+    height: 6px;
+    border-radius: 10px;
   }
 
   .regions-wrapper::-webkit-scrollbar-thumb {
@@ -125,4 +138,12 @@ function filterChampionsByRegion(regionId) {
     background-color: #B98739; /* Customize scrollbar thumb hover */
   }
 }
+
+/* If you're using a custom CSS file */
+.region-item.active {
+  transform: scale(1.05);
+  filter: brightness(1.5);
+}
+
 </style>
+
