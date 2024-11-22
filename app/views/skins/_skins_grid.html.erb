@@ -22,7 +22,7 @@
 
       <!-- Video overlay for this specific card -->
       <div class="absolute inset-0 pointer-events-none z-50 transition-all opacity-0 duration-300 fade-in-up ease-in-out"
-           style="animation-delay: <%= 0.3 * index %>s;">
+           style="animation-delay: <%= 0.3 * index %>s;" data-reveal-video>
         <video class="w-full h-full object-cover scale-x-[3] scale-[2] opacity-70" muted autoplay loop>
           <source src="<%= asset_path(videos[:smoke]) %>" type="video/webm">
         </video>
@@ -31,7 +31,7 @@
       <!-- Outro video -->
       <div class="absolute inset-0 pointer-events-none z-50 transition-all opacity-0 duration-300 fade-in-up ease-in-out"
            style="animation-delay: <%= 0.3 * index %>s;" data-reveal-video>
-        <video class="w-full h-full object-cover rounded-lg scale-x-[2.45] scale-[2.01] saturate-100 opacity-0 transition-all duration-300 ease-in-out" muted>
+        <video class="w-full h-full object-cover rounded-lg scale-x-[2.45] scale-[2.01] saturate-[1.18] opacity-0 transition-all duration-300 ease-in-out" muted>
           <source src="<%= asset_path(videos[:outro]) %>" type="video/webm">
         </video>
       </div>
@@ -107,14 +107,16 @@ document.querySelectorAll('.relative.group.bg-gradient-to-r').forEach((card) => 
 
   const videoContainers = card.parentElement.querySelectorAll('[data-reveal-video]');
   
-  if (videoContainers.length < 2) {
+  if (videoContainers.length < 3) {
     console.warn('Could not find both video containers');
     return;
   }
 
-  const outroContainer = videoContainers[0];
-  const introContainer = videoContainers[1];
-  
+  const shadowContainer = videoContainers[0];
+  const outroContainer = videoContainers[1];
+  const introContainer = videoContainers[2];
+
+  const shadowVideo = shadowContainer.querySelector('video');
   const outroVideo = outroContainer.querySelector('video');
   const introVideo = introContainer.querySelector('video');
 
@@ -163,6 +165,8 @@ document.querySelectorAll('.relative.group.bg-gradient-to-r').forEach((card) => 
       introVideo.style.opacity = '0';
       outroContainer.style.opacity = '1';
       outroVideo.style.opacity = '1';
+             shadowContainer.style.opacity = '0';
+        shadowVideo.style.opacity = '0';
       await safePlayVideo(outroVideo);      
 
       const skinArtContainer = card.querySelector('.relative.group.bg-gradient-to-r .relative.w-full');
@@ -172,6 +176,7 @@ document.querySelectorAll('.relative.group.bg-gradient-to-r').forEach((card) => 
       outroVideo.addEventListener('ended', () => {
         introContainer.style.opacity = '0';
         introVideo.style.opacity = '0';
+ 
         isPlaying = false; // Reset the flag to allow future clicks
       }, { once: true });
     }, { once: true });
