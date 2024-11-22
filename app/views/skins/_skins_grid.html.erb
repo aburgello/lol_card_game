@@ -1,4 +1,4 @@
-<div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-5 gap-12 lg:gap-20 mx-6 md:mx-6 lg:mx-2 2xl:mx-28 mt-6 mb-12">
+<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-5 gap-12 lg:gap-20 mx-6 lg:mx-2 2xl:mx-28 mt-6 mb-12">
   <% rarity_videos = {
       'Common' => { intro: 'Common-Intro.webm', outro: 'Common-Outro.webm', smoke: 'Common-Smoke.webm' },
       'Rare' => { intro: 'Rare-Intro.webm', outro: 'Rare-Outro.webm', smoke: 'Rare-Smoke.webm' },
@@ -59,7 +59,7 @@
           <div class="absolute bottom-0 opacity-0 group-hover:opacity-100 left-0 w-full transition-opacity duration-300 ease-in-out">
             <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/10 to-transparent opacity-0 rounded-lg"></div>
             <div class="relative z-10 px-6 py-4">
-              <div class="text-sm md:text-sm 2xl:text-base min-[1700px]:text-lg font-bold <%= "glow-#{skin.rarity.downcase}"%> text-white text-center transition-opacity duration-300 ease-in-out" 
+              <div class="text-[0.5rem] sm:text-xs 2xl:text-base min-[1700px]:text-lg font-bold <%= "glow-#{skin.rarity.downcase}"%> text-white text-center transition-opacity duration-300 ease-in-out" 
                    style="cursor: pointer; user-select: none;">
                 <%= skin.name %>
               </div>
