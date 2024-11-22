@@ -1,4 +1,4 @@
-<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-5 gap-12 lg:gap-20 mx-6 lg:mx-2 2xl:mx-28 mt-6 mb-12">
+<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-5 gap-12 lg:gap-14 2xl:gap-20 mx-6 lg:mx-2 2xl:mx-24 mt-6 mb-12">
   <% rarity_videos = {
       'Common' => { intro: 'Common-Intro.webm', outro: 'Common-Outro.webm', smoke: 'Common-Smoke.webm' },
       'Rare' => { intro: 'Rare-Intro.webm', outro: 'Rare-Outro.webm', smoke: 'Rare-Smoke.webm' },
@@ -31,7 +31,7 @@
       <!-- Outro video -->
       <div class="absolute inset-0 pointer-events-none z-50 transition-all opacity-0 duration-300 fade-in-up ease-in-out"
            style="animation-delay: <%= 0.3 * index %>s;" data-reveal-video>
-        <video class="w-full h-full object-cover rounded-lg scale-x-[2.45] scale-[2.01] saturate-[1.18] opacity-0 transition-all duration-300 ease-in-out" muted>
+        <video class="w-full h-full object-cover rounded-lg scale-x-[2.4] scale-[2.01] saturate-[1.18] opacity-0 transition-all duration-300 ease-in-out" muted>
           <source src="<%= asset_path(videos[:outro]) %>" type="video/webm">
         </video>
       </div>
@@ -39,12 +39,12 @@
       <!-- Intro video -->
       <div class="absolute inset-0 pointer-events-none z-50 transition-all opacity-0 duration-300 fade-in-up ease-in-out"
            style="animation-delay: <%= 0.3 * index %>s;" data-reveal-video>
-        <video class="w-full h-full object-cover rounded-lg scale-x-[2.45] scale-[2.01] saturate-50 opacity-0 transition-all duration-300 ease-in-out" muted>
+        <video class="w-full h-full object-cover rounded-lg scale-x-[2.4] scale-[2.01] saturate-50 opacity-0 transition-all duration-300 ease-in-out" muted>
           <source src="<%= asset_path(videos[:intro]) %>" type="video/webm">
         </video>
       </div>
 
-      <div class="relative group bg-gradient-to-r from-[#0A1428]/20 to-[#0A0C14]/20 shadow-lg rounded-xl opacity-0 cursor-pointer transition-all duration-300 ease-in-out flex justify-center items-center h-full fade-in-up"
+      <div class="relative group bg-gradient-to-r from-[#0A1428]/20 to-[#0A0C14]/20 shadow-lg rounded-xl  cursor-pointer transition-all duration-300 ease-in-out flex justify-center items-center h-full fade-in-up"
            style="animation-delay: <%= 0.3 * index %>s; ">
         <!-- Card content -->
         <div id="card-collect" class="relative <%= "#{skin.rarity.downcase}" %> w-full h-full rounded-xl opacity-0 duration-300 ease-in-out animate-pulse-low overflow-hidden transition-all" style="animation-delay: <%= 0.3 * index %>s; ">
@@ -53,10 +53,10 @@
               data: { skin_splash: skin.splash_art, skin_name: skin.name, skin_description: skin.description, skin_rarity: skin.rarity },
               alt: "#{skin.name} loading art",  
               loading: "lazy",
-              class: "w-full h-full object-cover rounded-xl shadow-md transition-all duration-300 group-hover:brightness-[1.1] group-hover:saturate-[1.10] ease-in-out" %>
+              class: "w-full h-full object-cover rounded-xl shadow-md scale-[1.07] inner-glow transition-all duration-300 group-hover:brightness-[1.1] group-hover:saturate-[1.10] ease-in-out" %>
 
           <!-- Skin name with fade-in -->
-          <div class="absolute bottom-0 opacity-0 group-hover:opacity-100 left-0 w-full transition-opacity duration-300 ease-in-out">
+          <div class="absolute bottom-0 opacity-100 sm:opacity-0 group-hover:opacity-100 left-0 w-full transition-opacity duration-300 ease-in-out">
             <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/10 to-transparent opacity-0 rounded-lg"></div>
             <div class="relative z-10 px-6 py-4">
               <div class="text-[0.5rem] sm:text-xs 2xl:text-base min-[1700px]:text-lg font-bold <%= "glow-#{skin.rarity.downcase}"%> text-white text-center transition-opacity duration-300 ease-in-out" 
@@ -238,5 +238,7 @@ document.getElementById('splash-art-modal').addEventListener('click', function (
   opacity: 0; /* Hide initially */
   transition: opacity 0.3s ease-in; /* Smooth transition */
 }
-
+.inner-glow {
+  box-shadow: inset 0 0 15px 15px rgba(255, 255, 255, 1); /* Customize the values as needed */
+}
 </style>

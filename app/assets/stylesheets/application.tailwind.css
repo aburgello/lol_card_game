@@ -326,7 +326,7 @@ body {
 }
 
 .animate-pulse-low {
-animation: pulse-low 2s cubic-bezier(0.4, 0, 0.6, 1) 1;
+animation: pulse-low 0.8s cubic-bezier(0.4, 0, 0.6, 1) 1;
 
 }
 @keyframes pulse-low {
@@ -334,7 +334,7 @@ animation: pulse-low 2s cubic-bezier(0.4, 0, 0.6, 1) 1;
     opacity: 0;
   }
   50% {
-    opacity: 0.4;
+    opacity: 0.1;
   }
 }
 
