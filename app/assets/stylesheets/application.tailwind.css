@@ -324,3 +324,73 @@ body {
     text-shadow: 0 0 10px rgba(0, 200, 255, 1), 0 0 20px rgba(0, 200, 255, 0.5);
   }
 }
+
+.animate-pulse-low {
+animation: pulse-low 2s cubic-bezier(0.4, 0, 0.6, 1) 1;
+
+}
+@keyframes pulse-low {
+  0%, 100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
+
+/* Rarity-specific shimmer colors */
+.mythic {
+  --shimmer-color: rgba(121, 67, 237, 0.5); /* Purple */
+}
+
+.ultimate {
+  --shimmer-color: rgba(255, 165, 0, 0.5); /* Orange */
+}
+
+.legendary {
+  --shimmer-color: rgba(255, 50, 50, 0.4); /* Red */
+}
+
+.transcendent {
+  --shimmer-color: rgba(162, 162, 208, 0.5); /* Light Purple */
+}
+
+.common {
+  --shimmer-color: rgba(128, 128, 128, 0.2); /* Gray */
+}
+
+.epic {
+  --shimmer-color: rgba(0, 200, 255, 0.3); /* Cyan */
+}
+
+.shimmer {
+  position: relative;
+  overflow: hidden;
+  background: #ddd; /* Base background color */
+}
+
+.shimmer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -150%; /* Start well outside the element */
+  width: 140%;
+  height: 120%;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    var(--shimmer-color) 50%, /* Default if not set */
+    rgba(255, 255, 255, 0) 100%
+  );
+  animation: shimmer 1.4s cubic-bezier(0.4, 0, 0.6, 1) 0.6s 3;
+}
+
+@keyframes shimmer {
+  0% {
+    left: -200%; /* Start from outside */
+  }
+  100% {
+    left: 200%; /* Move fully across */
+  }
+}

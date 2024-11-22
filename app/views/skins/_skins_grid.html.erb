@@ -47,20 +47,20 @@
       <div class="relative group bg-gradient-to-r from-[#0A1428]/20 to-[#0A0C14]/20 shadow-lg rounded-xl opacity-0 cursor-pointer transition-all duration-300 ease-in-out flex justify-center items-center h-full fade-in-up"
            style="animation-delay: <%= 0.3 * index %>s; ">
         <!-- Card content -->
-        <div class="relative w-full h-full transition-all rounded-xl opacity-0 duration-300 ease-in-out overflow-hidden">
+        <div id="card-collect" class="relative <%= "#{skin.rarity.downcase}" %> w-full h-full rounded-xl opacity-0 duration-300 ease-in-out animate-pulse-low overflow-hidden transition-all" style="animation-delay: <%= 0.3 * index %>s; ">
           <!-- Splash art -->
           <%= image_tag skin.loading_art, 
               data: { skin_splash: skin.splash_art, skin_name: skin.name, skin_description: skin.description, skin_rarity: skin.rarity },
               alt: "#{skin.name} loading art",  
               loading: "lazy",
-              class: "w-full h-full object-cover rounded-xl shadow-md transition-all duration-300 group-hover:brightness-[1.2] group-hover:saturate-[1.10] ease-in-out" %>
+              class: "w-full h-full object-cover rounded-xl shadow-md transition-all duration-300 group-hover:brightness-[1.1] group-hover:saturate-[1.10] ease-in-out" %>
 
           <!-- Skin name with fade-in -->
-          <div class="absolute bottom-0 left-0 w-full">
+          <div class="absolute bottom-0 opacity-0 group-hover:opacity-100 left-0 w-full transition-opacity duration-300 ease-in-out">
             <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/10 to-transparent opacity-0 rounded-lg"></div>
             <div class="relative z-10 px-6 py-4">
-              <div class="text-sm md:text-sm 2xl:text-base min-[1700px]:text-lg font-bold  <%= "glow-#{skin.rarity.downcase}"%> text-white text-center transition-opacity duration-300 ease-in-out" 
-                   style="cursor: pointer;">
+              <div class="text-sm md:text-sm 2xl:text-base min-[1700px]:text-lg font-bold <%= "glow-#{skin.rarity.downcase}"%> text-white text-center transition-opacity duration-300 ease-in-out" 
+                   style="cursor: pointer; user-select: none;">
                 <%= skin.name %>
               </div>
             </div>
@@ -119,6 +119,7 @@ document.querySelectorAll('.relative.group.bg-gradient-to-r').forEach((card) => 
   const shadowVideo = shadowContainer.querySelector('video');
   const outroVideo = outroContainer.querySelector('video');
   const introVideo = introContainer.querySelector('video');
+  const cardCollect = card.querySelector('#card-collect');
 
   introVideo.load();
   outroVideo.load();
@@ -165,8 +166,11 @@ document.querySelectorAll('.relative.group.bg-gradient-to-r').forEach((card) => 
       introVideo.style.opacity = '0';
       outroContainer.style.opacity = '1';
       outroVideo.style.opacity = '1';
-             shadowContainer.style.opacity = '0';
-        shadowVideo.style.opacity = '0';
+      shadowContainer.style.opacity = '0';
+      shadowVideo.style.opacity = '0';
+      cardCollect.classList.remove('animate-pulse-low');
+      cardCollect.classList.add('shimmer');
+
       await safePlayVideo(outroVideo);      
 
       const skinArtContainer = card.querySelector('.relative.group.bg-gradient-to-r .relative.w-full');
@@ -234,4 +238,5 @@ document.getElementById('splash-art-modal').addEventListener('click', function (
   opacity: 0; /* Hide initially */
   transition: opacity 0.3s ease-in; /* Smooth transition */
 }
+
 </style>
