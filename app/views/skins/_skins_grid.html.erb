@@ -106,9 +106,10 @@
 <script>
     
 // Select each card's clickable area
-document.querySelectorAll('.relative.group.bg-gradient-to-r').forEach((card) => {
-  let hasBeenClicked = false; // Flag to track if the card has been clicked
-  let isPlaying = false; // Flag to track if a video is currently playing
+// Select each card's clickable area
+document.querySelectorAll('.relative.group.bg-gradient-to-r').forEach((card, index) => {
+  let hasBeenClicked = false;
+  let isPlaying = false;
 
   const videoContainers = card.parentElement.querySelectorAll('[data-reveal-video]');
   
@@ -127,12 +128,14 @@ document.querySelectorAll('.relative.group.bg-gradient-to-r').forEach((card) => 
   const cardCollect = card.querySelector('#card-collect');
   const cardOverlay = card.querySelector('#card-overlay');
   
- 
+  // Get the skin name from the card for matching with pull results
+  const skinName = card.querySelector('img').getAttribute('data-skin-name');
+  
   introVideo.load();
   outroVideo.load();
   shadowVideo.load();
-    shadowVideo.style.opacity = '0';
-    cardCollect.classList.remove('animate-pulse-low');
+  shadowVideo.style.opacity = '0';
+  cardCollect.classList.remove('animate-pulse-low');
 
   if (!introVideo || !outroVideo) {
     console.warn('Could not find videos');
@@ -140,41 +143,51 @@ document.querySelectorAll('.relative.group.bg-gradient-to-r').forEach((card) => 
   }
 
   // Set up initial state
-  
   introVideo.style.opacity = '1';
-  introVideo.currentTime = 0; // Show first frame
+  introVideo.currentTime = 0;
   outroContainer.style.opacity = '0';
-  outroVideo.style.opacity = '0';shadowVideo.style.opacity = '1';
+  outroVideo.style.opacity = '0';
+  shadowVideo.style.opacity = '1';
   cardCollect.classList.add('animate-pulse-low');
 
-  // Function to safely play a video with error handling
   const safePlayVideo = async (video) => {
     try {
-      if (video.readyState >= 2) { // Have enough data to play
+      if (video.readyState >= 2) {
         await video.play();
       } else {
-        // Wait for video to load enough data
         await new Promise((resolve) => {
           video.addEventListener('canplay', resolve, { once: true });
         });
         await video.play();
-
       }
     } catch (error) {
       console.error('Error playing video:', error);
     }
   };
 
-  // Function to handle the video sequence
+    const unblurMatchingPullResult = () => {
+    setTimeout(() => {
+      const pullCards = document.querySelectorAll('#pulls');
+      pullCards.forEach(pullCard => {
+        const pullSkinName = pullCard.querySelector('h5').textContent;
+        if (pullSkinName === skinName) {
+          // Add a transition class for smoother unblur effect
+          pullCard.classList.remove('blur-[6px]');
+        }
+      });
+    }, 3000); // 1 second delay
+  };
+
   const playVideoSequence = async () => {
-    if (hasBeenClicked || isPlaying) return; // Exit if already clicked or if a video is playing
+    if (hasBeenClicked || isPlaying) return;
     hasBeenClicked = true;
-     // Set the flag to true
-    isPlaying = true; // Set the flag to indicate that a video is playing
+    isPlaying = true;
+
+    // Unblur the corresponding pull result as soon as the animation starts
+    unblurMatchingPullResult();
 
     await safePlayVideo(introVideo);
     
-    // When intro ends, play outro
     introVideo.addEventListener('ended', async () => {
       introContainer.style.opacity = '0';
       introVideo.style.opacity = '0';
@@ -188,14 +201,12 @@ document.querySelectorAll('.relative.group.bg-gradient-to-r').forEach((card) => 
       cardOverlay.classList.add('opacity-[0.3]');
 
       const skinArtContainer = card.querySelector('.relative.group.bg-gradient-to-r .relative.w-full');
-      skinArtContainer.style.opacity = '1'; // Make the skin loading art visible
+      skinArtContainer.style.opacity = '1';
 
-      // When outro ends, hide both videos and show the skin loading art and name
       outroVideo.addEventListener('ended', () => {
         introContainer.style.opacity = '0';
         introVideo.style.opacity = '0';
- 
-        isPlaying = false; // Reset the flag to allow future clicks
+        isPlaying = false;
       }, { once: true });
     }, { once: true });
   };
@@ -203,12 +214,11 @@ document.querySelectorAll('.relative.group.bg-gradient-to-r').forEach((card) => 
   // Add click handler to the card
   card.addEventListener('click', playVideoSequence);
     
-  // Handle skin art click for opening the modal
+  // Handle skin art click for modal
   const skinArtContainer = card.querySelector('.relative.group.bg-gradient-to-r .relative.w-full');
   skinArtContainer.addEventListener('click', function (e) {
-    if (!hasBeenClicked) return; // Prevent opening modal if video hasn't been played
+    if (!hasBeenClicked) return;
 
-    // Proceed to open the modal
     const splashArt = this.querySelector('img').getAttribute('data-skin-splash');
     const skinName = this.querySelector('img').getAttribute('data-skin-name');
     const skinDescription = this.querySelector('img').getAttribute('data-skin-description');
@@ -243,6 +253,11 @@ document.getElementById('splash-art-modal').addEventListener('click', function (
   if (e.target === this) {
     this.classList.add('hidden');
   }
+});
+
+// Remove the separate click handlers for pull cards since they're now handled automatically
+document.querySelectorAll('#pulls').forEach((pullCard) => {
+  pullCard.removeEventListener('click', () => {});
 });
 
 </script>

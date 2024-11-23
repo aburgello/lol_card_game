@@ -38,4 +38,23 @@ module ApplicationHelper
       'text-slate-400'
     end
   end
+
+  def progress_bar_color(percentage)
+    case percentage
+    when 0..20
+      '#C8AA6E'  # Original gold
+    when 21..40
+      '#B8B36B'  # Gold-lime mix
+    when 41..60
+      '#A8BC68'  # Lighter lime
+    when 61..75
+      '#98C565'  # Lime
+    when 76..85
+      '#88CE62'  # Lime-green
+    when 86..95
+      '#78D75F'  # Light green
+    else
+      '#68E05C'  # Full green
+    end
+  end
 end
