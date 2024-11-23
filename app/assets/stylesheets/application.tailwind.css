@@ -154,10 +154,10 @@ body {
 @keyframes fadeInUp {
   0% {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(30px);
   }
   100% {
-    opacity: 1;
+    opacity:1;
     transform: translateY(0);
   }
 }
@@ -326,25 +326,26 @@ body {
 }
 
 .animate-pulse-low {
-animation: pulse-low 1s cubic-bezier(0.4, 0, 0.6, 1) 1;
-
+  animation: pulse-low 1.3s cubic-bezier(0.4, 0, 0.6, 1) forwards;
+  animation-iteration-count: 1;
+  opacity: 0;
 }
+
 @keyframes pulse-low {
   0%, 100% {
     opacity: 0;
   }
   50% {
-    opacity: 0.15;
+    opacity: 0.18;
   }
 }
 
-/* Rarity-specific shimmer colors with 5 opacity levels */
 .mythic {
-  --shimmer-color-1: rgba(121, 67, 237, 0.1);  /* Faintest */
-  --shimmer-color-2: rgba(121, 67, 237, 0.2);
-  --shimmer-color-3: rgba(121, 67, 237, 0.3);
-  --shimmer-color-4: rgba(121, 67, 237, 0.4);
-  --shimmer-color-5: rgba(121, 67, 237, 0.5);  /* Strongest */
+  --shimmer-color-1: rgba(121, 67, 237, 0.34);
+  --shimmer-color-2: rgba(121, 67, 237, 0.1);
+  --shimmer-color-3: rgba(121, 67, 237, 0.2);
+  --shimmer-color-4: rgba(121, 67, 237, 0.28);
+  --shimmer-color-5: rgba(121, 67, 237, 0.34); 
 }
 
 .ultimate {
@@ -356,23 +357,29 @@ animation: pulse-low 1s cubic-bezier(0.4, 0, 0.6, 1) 1;
 }
 
 .legendary {
-  --shimmer-color-1: rgba(255, 50, 50, 0.08);
-  --shimmer-color-2: rgba(255, 50, 50, 0.16);
-  --shimmer-color-3: rgba(255, 50, 50, 0.24);
-  --shimmer-color-4: rgba(255, 50, 50, 0.32);
-  --shimmer-color-5: rgba(255, 50, 50, 0.4);
+  --shimmer-color-1: rgba(255, 50, 50, 0.36);
+  --shimmer-color-2: rgba(255, 50, 50, 0.10);
+  --shimmer-color-3: rgba(255, 50, 50, 0.16);
+  --shimmer-color-4: rgba(255, 50, 50, 0.24);
+  --shimmer-color-5: rgba(255, 50, 50, 0.36);
 }
 
 .transcendent {
-  --shimmer-color-1: rgba(162, 162, 208, 0.1);
+  --shimmer-color-1: rgba(162, 162, 208, 0.5);
   --shimmer-color-2: rgba(162, 162, 208, 0.2);
   --shimmer-color-3: rgba(162, 162, 208, 0.3);
   --shimmer-color-4: rgba(162, 162, 208, 0.4);
   --shimmer-color-5: rgba(162, 162, 208, 0.5);
 }
-
+.rare {
+  --shimmer-color-1: rgba(255, 255, 0, 0.3); 
+  --shimmer-color-2: rgba(255, 255, 0, 0.06); 
+  --shimmer-color-3: rgba(255, 255, 0, 0.12); 
+  --shimmer-color-4: rgba(255, 255, 0, 0.18); 
+  --shimmer-color-5: rgba(255, 255, 0, 0.28);
+}
 .common {
-  --shimmer-color-1: rgba(128, 128, 128, 0.04);
+  --shimmer-color-1: rgba(128, 128, 128, 0.2);
   --shimmer-color-2: rgba(128, 128, 128, 0.08);
   --shimmer-color-3: rgba(128, 128, 128, 0.12);
   --shimmer-color-4: rgba(128, 128, 128, 0.16);
@@ -380,7 +387,7 @@ animation: pulse-low 1s cubic-bezier(0.4, 0, 0.6, 1) 1;
 }
 
 .epic {
-  --shimmer-color-1: rgba(0, 200, 255, 0.06);
+  --shimmer-color-1: rgba(0, 200, 255, 0.3);
   --shimmer-color-2: rgba(0, 200, 255, 0.12);
   --shimmer-color-3: rgba(0, 200, 255, 0.18);
   --shimmer-color-4: rgba(0, 200, 255, 0.24);
@@ -400,9 +407,9 @@ animation: pulse-low 1s cubic-bezier(0.4, 0, 0.6, 1) 1;
   position: absolute;
   top: 0;
   left: -100%;
-  width: 110%;
-  height: 600%;
-  transform: rotate(30deg);
+  width: 100%;
+  height: 650%;
+  transform: rotate(45deg);
   background: linear-gradient(
     90deg,
     rgba(255, 255, 255, 0) 0%,
@@ -417,17 +424,17 @@ animation: pulse-low 1s cubic-bezier(0.4, 0, 0.6, 1) 1;
     var(--shimmer-color-1) 90%,
     rgba(255, 255, 255, 0) 100%
   );
-  animation: shimmerAnimation 3s ease-out 0.5s 5;
+  animation: shimmerAnimation 4s cubic-bezier(0.4, 0, 0.6, 1) 1s 3;
   pointer-events: none;
   z-index: 10;
 }
 
 @keyframes shimmerAnimation {
   0% {
-    transform: translate(-100%, -100%) rotate(30deg);
+    transform: translate(-100%, -100%) rotate(45deg);
   }
   100% {
-    transform: translate(100%, 100%) rotate(30deg);
+    transform: translate(100%, 100%) rotate(45deg);
   }
 }
 

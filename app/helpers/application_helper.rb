@@ -17,4 +17,25 @@ module ApplicationHelper
       "background: linear-gradient(to bottom, #0A1428, #091428);" # Default
     end
   end
+
+  def rarity_color_class(rarity)
+    case rarity.downcase
+    when 'common'
+      'text-gray-400'
+    when 'epic'
+      'text-blue-400'
+    when 'rare'
+      'text-yellow-400'
+    when 'legendary'
+      'text-red-400'
+    when 'mythic'
+      'text-purple-400'
+    when 'ultimate'
+      'text-orange-400'
+    when 'transcendent'
+      'text-slate-400'
+    else
+      'text-slate-400'
+    end
+  end
 end

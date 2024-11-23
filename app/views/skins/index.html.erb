@@ -1,23 +1,65 @@
-<div class="lg:max-w-full mt-8 mb-12 rounded-lg overflow-hidden">
+<div class="lg:max-w-full mt-8 mb-12 rounded-lg">
   <div class="grid grid-cols-1">
     <div class="flex flex-col items-center relative mx-4 md:mx-0">
       <div class="mt-4 p-4 max-w-[85vw] md:max-w-[70vw] min-[1280px]:max-w-[85vw] min-[2000px]:max-w-[70vw] mx-auto bg-gradient-to-r from-[#0A1428]/20 to-[#0A0C14]/20 pt-4 rounded-lg shadow-md border border-slate-900">
-        <h3 class="text-3xl font-semibold mb-6 text-center text-[#C8AA6E] border-b pb-4 mx-6 border-[#C8AA6E]/20 cursor-default">Your Skins</h3>
+        <h3 class="text-3xl font-semibold mb-6 text-center text-[#C8AA6E] border-b pb-4 mx-6 border-[#C8AA6E]/20 cursor-default">Skin Shop</h3>
         
-<!-- app/views/skins/index.html.erb -->
-<div class="flex justify-center mt-8 mb-8">
-  <%= button_to 'Get 5 Random Skins', add_skins_path, method: :get, remote: true, class: "bg-[#C8AA6E] text-[#0A1428] px-6 py-2 rounded-lg hover:bg-opacity-90 transition-all duration-100 ease-in-out" %>
-</div>
-
-
-        <!-- Skins grid container, will be replaced by Turbo Stream -->
-        <div id="skins-container" class="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 mx-6 gap-12 lg:mx-12 min-[1600px]:mx-24 min-[2000px]:mx-48 mt-4">
-<!-- app/views/skins/index.html.erb -->
-<%= render 'skins/skins_grid', skins: @skins %>
+        <div class="flex justify-center mt-8 mb-8">
+          <%= button_to 'Get Your Skins', add_skins_path, method: :get, remote: true, 
+              class: "bg-[#C8AA6E] text-[#0A1428] px-6 py-2 rounded-lg hover:bg-opacity-90 transition-all duration-100 ease-in-out" %>
         </div>
+
+        <div id="skins-container" class="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 mx-6 gap-12 lg:mx-12 min-[1600px]:mx-24 min-[2000px]:mx-48 mt-4">
+          <%= render 'skins/skins_grid', skins: @skins %>
+        </div>
+      </div>
+
+      <% if @skins.present? %>
+        <div class="mt-8 w-full max-w-[85vw] md:max-w-[70vw] min-[1280px]:max-w-[85vw] min-[2000px]:max-w-[70vw]">
+          <div class="bg-gradient-to-r from-[#0A1428]/20 to-[#0A0C14]/20 rounded-lg border border-slate-900 p-6">
+            <h4 class="text-2xl text-center text-[#C8AA6E] font-semibold mb-4">Your Last Pull Results</h4>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <% @skins.each do |skin| %>
+                <div  class="bg-slate-800/30 rounded-lg p-4 border border-slate-700/30">
+                  <div id="pulls" class="flex items-center gap-4 cursor-pointer blur-[6px] transition-all duration-500 ease-in-out">
+                    <div class="flex-grow">
+                      <h5 class="text-[#C8AA6E] font-medium"><%= skin.name %></h5>
+                      <p class="text-sm">
+                        <span class="<%= rarity_color_class(skin.rarity) %>"><%= skin.rarity.titleize %></span>
+                      </p>
+                      <% owned_skins_count = current_user.skins.where(champion: skin.champion).count %>
+                      <% total_skins = skin.champion.skins.count %>
+                      <p class="text-sm text-slate-400 mt-1">
+                        <%= skin.champion.name %> Collection: <%= owned_skins_count %>/<%= total_skins %>
+                      </p>
+                      <div class="w-full bg-slate-700/30 rounded-full h-2 mt-2">
+                        <div class="bg-[#C8AA6E] h-2 rounded-full" style="width: <%= (owned_skins_count.to_f / total_skins * 100).round %>%"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+
+      <!-- Buttons Section -->
+      <div class="flex justify-between w-full max-w-[70vw] md:max-w-[70vw] mt-8 mx-auto">
+        <%= button_to 'Back to Shop', skins_path, class: "bg-[#C8AA6E] text-[#0A1428] px-6 py-2 rounded-lg hover:bg-opacity-90 transition-all duration-100 ease-in-out" %>
+        
+<%= button_to 'Your Collection', '/collections', class: "bg-[#C8AA6E] text-[#0A1428] px-6 py-2 rounded-lg hover:bg-opacity-90 transition-all duration-100 ease-in-out" %>
       </div>
     </div>
   </div>
 </div>
 
+<script>
+  document.querySelectorAll('#pulls').forEach((pullCard) => {
 
+    pullCard.addEventListener('click', function () {
+        pullCard.classList.remove('blur-[6px]');
+    });
+  });
+</script>

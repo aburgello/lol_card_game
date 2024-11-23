@@ -31,7 +31,7 @@
       <!-- Outro video -->
       <div class="absolute inset-0 pointer-events-none z-50 transition-all opacity-0 duration-300 fade-in-up ease-in-out"
            style="animation-delay: <%= 0.3 * index %>s;" data-reveal-video>
-        <video class="w-full h-full object-cover rounded-lg scale-x-[2.4] scale-[2.01] saturate-[1.18] opacity-0 transition-all duration-300 ease-in-out" muted>
+        <video class="w-full h-full object-cover rounded-lg scale-x-[2.4] scale-[2.01] saturate-[1.18] opacity-0" muted>
           <source src="<%= asset_path(videos[:outro]) %>" type="video/webm">
         </video>
       </div>
@@ -39,34 +39,39 @@
       <!-- Intro video -->
       <div class="absolute inset-0 pointer-events-none z-50 transition-all opacity-0 duration-300 fade-in-up ease-in-out"
            style="animation-delay: <%= 0.3 * index %>s;" data-reveal-video>
-        <video class="w-full h-full object-cover rounded-lg scale-x-[2.4] scale-[2.01] saturate-50 opacity-0 transition-all duration-300 ease-in-out" muted>
+        <video class="w-full h-full object-cover rounded-lg scale-x-[2.4] scale-[2.01] saturate-50 opacity-0" muted>
           <source src="<%= asset_path(videos[:intro]) %>" type="video/webm">
         </video>
       </div>
 
-      <div class="relative group bg-gradient-to-r from-[#0A1428]/20 to-[#0A0C14]/20 shadow-lg rounded-xl cursor-pointer transition-all duration-300 ease-in-out flex justify-center items-center h-full fade-in-up"
-           style="animation-delay: <%= 0.3 * index %>s; ">
-        <!-- Card content -->
-        <div id="card-collect" class="relative <%= "#{skin.rarity.downcase}" %> w-full h-full rounded-xl opacity-0 duration-300 ease-in-out animate-pulse-low overflow-hidden transition-all" style="animation-delay: <%= 0.3 * index %>s; ">
-          <!-- Splash art -->
-          <%= image_tag skin.loading_art, 
-              data: { skin_splash: skin.splash_art, skin_name: skin.name, skin_description: skin.description, skin_rarity: skin.rarity },
-              alt: "#{skin.name} loading art",  
-              loading: "lazy",
-              class: "w-full h-full object-cover shadow-md scale-[1.07] inner-glow transition-all duration-300 group-hover:brightness-[1.1] group-hover:saturate-[1.10] ease-in-out" %>
+<div class="relative group bg-gradient-to-r from-[#0A1428]/20 to-[#0A1428]/20 rounded-xl cursor-pointer overflow-hidden transition-all duration-300 ease-in-out flex justify-center items-center h-full fade-in-up"
+     style="animation-delay: <%= 0.3 * index %>s; ">
+  <!-- Overlay based on rarity -->
 
-          <!-- Skin name with fade-in -->
-          <div class="absolute bottom-0 opacity-100 sm:opacity-0 group-hover:opacity-100 left-0 w-full transition-opacity duration-300 ease-in-out">
-            <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/10 to-transparent opacity-0 rounded-lg"></div>
-            <div class="relative z-10 px-6 py-4">
-              <div class="text-[0.5rem] sm:text-xs 2xl:text-base min-[1700px]:text-lg font-bold <%= "glow-#{skin.rarity.downcase}"%> text-white text-center transition-opacity duration-300 ease-in-out" 
-                   style="cursor: pointer; user-select: none;">
-                <%= skin.name %>
-              </div>
-            </div>
-            </div>
-          </div>
+  <!-- Card content -->
+  <div id="card-collect" style="animation-delay: <%= 0.3 * index %>s;"
+       class="relative <%= "#{skin.rarity.downcase}" %> w-full h-full rounded-xl opacity-0 duration-300 ease-in-out animate-pulse-low overflow-hidden transition-all" style="animation-delay: <%= 0.3 * index %>s; ">
+    <!-- Splash art -->
+    <%= image_tag skin.loading_art, 
+        data: { skin_splash: skin.splash_art, skin_name: skin.name, skin_description: skin.description, skin_rarity: skin.rarity },
+        alt: "#{skin.name} loading art",  
+        loading: "lazy",
+        class: "w-full h-full object-cover shadow-md scale-[1.07] inner-glow transition-all duration-300 group-hover:brightness-[1.1] group-hover:saturate-[1.10] ease-in-out" %>
+
+    <!-- Skin name with fade-in -->
+    <div class="absolute bottom-0 opacity-100 sm:opacity-0 group-hover:opacity-100 left-0 w-full transition-opacity duration-300 ease-in-out">
+      <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/10 to-transparent opacity-0 rounded-lg"></div>
+      <div class="relative z-10 px-6 py-4 overflow-hidden">
+        <div class="text-[0.5rem] sm:text-xs 2xl:text-base min-[1700px]:text-lg font-bold <%= "glow-#{skin.rarity.downcase}"%> text-white text-center transition-opacity duration-300 ease-in-out" 
+             style="cursor: pointer; user-select: none;">
+          <%= skin.name %>
+        </div>
       </div>
+    </div>
+  </div>
+    <div id="card-overlay" class="absolute inset-0 bg-<%= rarity.downcase %>-overlay opacity-0 pointer-events-none z-60"></div>
+
+</div>
     </div>
   <% end %>
 </div>
@@ -120,9 +125,14 @@ document.querySelectorAll('.relative.group.bg-gradient-to-r').forEach((card) => 
   const outroVideo = outroContainer.querySelector('video');
   const introVideo = introContainer.querySelector('video');
   const cardCollect = card.querySelector('#card-collect');
-
+  const cardOverlay = card.querySelector('#card-overlay');
+  
+ 
   introVideo.load();
   outroVideo.load();
+  shadowVideo.load();
+    shadowVideo.style.opacity = '0';
+    cardCollect.classList.remove('animate-pulse-low');
 
   if (!introVideo || !outroVideo) {
     console.warn('Could not find videos');
@@ -130,10 +140,12 @@ document.querySelectorAll('.relative.group.bg-gradient-to-r').forEach((card) => 
   }
 
   // Set up initial state
+  
   introVideo.style.opacity = '1';
   introVideo.currentTime = 0; // Show first frame
   outroContainer.style.opacity = '0';
-  outroVideo.style.opacity = '0';
+  outroVideo.style.opacity = '0';shadowVideo.style.opacity = '1';
+  cardCollect.classList.add('animate-pulse-low');
 
   // Function to safely play a video with error handling
   const safePlayVideo = async (video) => {
@@ -146,6 +158,7 @@ document.querySelectorAll('.relative.group.bg-gradient-to-r').forEach((card) => 
           video.addEventListener('canplay', resolve, { once: true });
         });
         await video.play();
+
       }
     } catch (error) {
       console.error('Error playing video:', error);
@@ -155,7 +168,8 @@ document.querySelectorAll('.relative.group.bg-gradient-to-r').forEach((card) => 
   // Function to handle the video sequence
   const playVideoSequence = async () => {
     if (hasBeenClicked || isPlaying) return; // Exit if already clicked or if a video is playing
-    hasBeenClicked = true; // Set the flag to true
+    hasBeenClicked = true;
+     // Set the flag to true
     isPlaying = true; // Set the flag to indicate that a video is playing
 
     await safePlayVideo(introVideo);
@@ -170,8 +184,8 @@ document.querySelectorAll('.relative.group.bg-gradient-to-r').forEach((card) => 
       shadowVideo.style.opacity = '0';
       cardCollect.classList.remove('animate-pulse-low');
       cardCollect.classList.add('shimmer');
-
       await safePlayVideo(outroVideo);      
+      cardOverlay.classList.add('opacity-[0.3]');
 
       const skinArtContainer = card.querySelector('.relative.group.bg-gradient-to-r .relative.w-full');
       skinArtContainer.style.opacity = '1'; // Make the skin loading art visible
@@ -188,7 +202,7 @@ document.querySelectorAll('.relative.group.bg-gradient-to-r').forEach((card) => 
 
   // Add click handler to the card
   card.addEventListener('click', playVideoSequence);
-
+    
   // Handle skin art click for opening the modal
   const skinArtContainer = card.querySelector('.relative.group.bg-gradient-to-r .relative.w-full');
   skinArtContainer.addEventListener('click', function (e) {
@@ -236,9 +250,31 @@ document.getElementById('splash-art-modal').addEventListener('click', function (
 <style>
     .relative.group.bg-slate-950 .relative.w-full {
   opacity: 0; /* Hide initially */
-  transition: opacity 0.3s ease-in; /* Smooth transition */
+  transition: opacity ease-in; /* Smooth transition */
 }
-.inner-glow {
-  box-shadow: inset 0 0 15px 15px rgba(255, 255, 255, 1); /* Customize the values as needed */
-}
+
+
+  .bg-common-overlay {
+    background-color: rgba(128, 128, 128, 0.3);
+  }
+  .bg-rare-overlay {
+    background-color: rgba(200, 170, 110, 0.3);
+  }
+  .bg-epic-overlay {
+    background-color: rgba(0, 200, 255, 0.3);
+  }
+  .bg-legendary-overlay {
+    background-color: rgba(255, 50, 50, 0.3);
+  }
+  .bg-mythic-overlay {
+    background-color: rgba(122, 62, 237, 0.3);
+  }
+  .bg-ultimate-overlay {
+    background-color: rgba(255, 165, 0, 0.3);
+  }
+  .bg-transcendent-overlay {
+    background-color: rgba(162, 162, 208, 0.3);
+  }
+
+
 </style>
