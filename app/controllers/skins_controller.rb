@@ -11,21 +11,36 @@ class SkinsController < ApplicationController
     rarity_counts = Hash.new(0)
     
     5.times do
-      roll = rand(1..3000)
-      rarity = determine_rarity(roll)
-      rarity_counts[rarity] += 1
-      
-      Rails.logger.info "Roll: #{roll}, Selected Rarity: #{rarity}"
-      
-      # Pass both current user's skins AND currently selected skins to avoid duplicates
-      available_skin = find_available_skin(rarity, selected_skin_ids)
-      
-      if available_skin
-        selected_skins << available_skin
-        selected_skin_ids << available_skin.id  # Track this skin as selected
-        Rails.logger.info "Added skin: #{available_skin.name} (#{available_skin.rarity})"
-      else
-        Rails.logger.info "No available skin found for rarity: #{rarity}"
+      # Keep rolling until we find an available skin
+      skin = nil
+      attempts = 0
+      max_attempts = 10  # Prevent infinite loops
+
+      while skin.nil? && attempts < max_attempts
+        roll = rand(1..3000)
+        rarity = determine_rarity(roll)
+        rarity_counts[rarity] += 1
+        
+        Rails.logger.info "Roll #{attempts + 1}: #{roll}, Selected Rarity: #{rarity}"
+        
+        # Try to find an available skin of the rolled rarity
+        available_skins = Skin.where(rarity: rarity)
+                            .where.not(id: current_user.skin_ids)
+                            .where.not(id: selected_skin_ids)
+
+        if available_skin = available_skins.order('RANDOM()').first
+          skin = available_skin
+          selected_skins << skin
+          selected_skin_ids << skin.id
+          Rails.logger.info "Added skin: #{skin.name} (#{skin.rarity})"
+        else
+          Rails.logger.info "No available skin found for rarity: #{rarity}, rerolling..."
+          attempts += 1
+        end
+      end
+
+      if attempts >= max_attempts
+        Rails.logger.warn "Max reroll attempts reached for one slot"
       end
     end
 
@@ -45,14 +60,12 @@ class SkinsController < ApplicationController
     respond_to do |format|
       format.turbo_stream
       format.html { redirect_to skins_path }
-      
     end
   end
 
   private
 
   def determine_rarity(roll)
-    # Use a single random roll between 1 and 3000
     case roll
     when 1..1500    # 50% chance (1500/3000)
       'Common'
@@ -60,9 +73,9 @@ class SkinsController < ApplicationController
       'Epic'
     when 2251..2700 # 15% chance (450/3000)
       'Rare'
-    when 2701..2900 # 6.67% chance (200/3000)
+    when 2701..2916 # 6.67% chance (200/3000)
       'Legendary'
-    when 2901..2970 # 2.33% chance (70/3000)
+    when 2917..2970 # 2.33% chance (70/3000)
       'Mythic'
     when 2971..2995 # 0.83% chance (25/3000)
       'Ultimate'
@@ -71,34 +84,11 @@ class SkinsController < ApplicationController
     end
   end
 
-  def find_available_skin(target_rarity, selected_skin_ids)
-    rarities = ['Transcendent', 'Ultimate', 'Mythic', 'Legendary', 'Rare', 'Epic', 'Common']
-    current_rarity_index = rarities.index(target_rarity)
-    return nil unless current_rarity_index
-
-    # Try each rarity from the target down to common
-    current_rarity_index.downto(0) do |index|
-      rarity = rarities[index]
-      
-      # Exclude both user's existing skins AND skins selected in this batch
-      available_skins = Skin.where(rarity: rarity)
-                           .where.not(id: current_user.skin_ids)
-                           .where.not(id: selected_skin_ids)
-
-      if available_skin = available_skins.order('RANDOM()').first
-        Rails.logger.info "Found skin in rarity: #{rarity} (originally tried: #{target_rarity})"
-        return available_skin
-      end
-    end
-
-    nil
-  end
-
   def self.test_probabilities(iterations = 3000)
     results = Hash.new(0)
     
     iterations.times do
-      roll = rand(1..3000)  # Use the same range as determine_rarity
+      roll = rand(1..3000)
       rarity = case roll
       when 1..1500 then 'Common'     # 50.00%
       when 1501..2250 then 'Epic'    # 25.00%
@@ -111,7 +101,6 @@ class SkinsController < ApplicationController
       results[rarity] += 1
     end
     
-    # Calculate and display percentages
     results.each do |rarity, count|
       percentage = (count.to_f / iterations * 100).round(3)
       puts "#{rarity}: #{count} times (#{percentage}%)"
