@@ -44,10 +44,10 @@
         </video>
       </div>
 
-      <div class="relative group bg-gradient-to-r from-[#0A1428]/20 to-[#0A0C14]/20 shadow-lg rounded-xl  cursor-pointer transition-all duration-300 ease-in-out flex justify-center items-center h-full fade-in-up"
+      <div class="relative group bg-gradient-to-r from-[#0A1428]/20 to-[#0A0C14]/20 shadow-lg rounded-xl cursor-pointer transition-all duration-300 ease-in-out flex justify-center items-center h-full fade-in-up"
            style="animation-delay: <%= 0.3 * index %>s; ">
         <!-- Card content -->
-        <div id="card-collect" class="relative <%= "#{skin.rarity.downcase}" %> w-full h-full rounded-xl  opacity-0 duration-300 ease-in-out animate-pulse-low overflow-hidden transition-all" style="animation-delay: <%= 0.3 * index %>s; ">
+        <div id="card-collect" class="relative <%= "#{skin.rarity.downcase}" %> w-full h-full rounded-xl opacity-0 duration-300 ease-in-out animate-pulse-low overflow-hidden transition-all" style="animation-delay: <%= 0.3 * index %>s; ">
           <!-- Splash art -->
           <%= image_tag skin.loading_art, 
               data: { skin_splash: skin.splash_art, skin_name: skin.name, skin_description: skin.description, skin_rarity: skin.rarity },

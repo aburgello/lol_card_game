@@ -338,59 +338,96 @@ animation: pulse-low 1s cubic-bezier(0.4, 0, 0.6, 1) 1;
   }
 }
 
-
-/* Rarity-specific shimmer colors */
+/* Rarity-specific shimmer colors with 5 opacity levels */
 .mythic {
-  --shimmer-color: rgba(121, 67, 237, 0.5); /* Purple */
+  --shimmer-color-1: rgba(121, 67, 237, 0.1);  /* Faintest */
+  --shimmer-color-2: rgba(121, 67, 237, 0.2);
+  --shimmer-color-3: rgba(121, 67, 237, 0.3);
+  --shimmer-color-4: rgba(121, 67, 237, 0.4);
+  --shimmer-color-5: rgba(121, 67, 237, 0.5);  /* Strongest */
 }
 
 .ultimate {
-  --shimmer-color: rgba(255, 165, 0, 0.5); /* Orange */
+  --shimmer-color-1: rgba(255, 165, 0, 0.1);
+  --shimmer-color-2: rgba(255, 165, 0, 0.2);
+  --shimmer-color-3: rgba(255, 165, 0, 0.3);
+  --shimmer-color-4: rgba(255, 165, 0, 0.4);
+  --shimmer-color-5: rgba(255, 165, 0, 0.5);
 }
 
 .legendary {
-  --shimmer-color: rgba(255, 50, 50, 0.4); /* Red */
+  --shimmer-color-1: rgba(255, 50, 50, 0.08);
+  --shimmer-color-2: rgba(255, 50, 50, 0.16);
+  --shimmer-color-3: rgba(255, 50, 50, 0.24);
+  --shimmer-color-4: rgba(255, 50, 50, 0.32);
+  --shimmer-color-5: rgba(255, 50, 50, 0.4);
 }
 
 .transcendent {
-  --shimmer-color: rgba(162, 162, 208, 0.5); /* Light Purple */
+  --shimmer-color-1: rgba(162, 162, 208, 0.1);
+  --shimmer-color-2: rgba(162, 162, 208, 0.2);
+  --shimmer-color-3: rgba(162, 162, 208, 0.3);
+  --shimmer-color-4: rgba(162, 162, 208, 0.4);
+  --shimmer-color-5: rgba(162, 162, 208, 0.5);
 }
 
 .common {
-  --shimmer-color: rgba(128, 128, 128, 0.2); /* Gray */
+  --shimmer-color-1: rgba(128, 128, 128, 0.04);
+  --shimmer-color-2: rgba(128, 128, 128, 0.08);
+  --shimmer-color-3: rgba(128, 128, 128, 0.12);
+  --shimmer-color-4: rgba(128, 128, 128, 0.16);
+  --shimmer-color-5: rgba(128, 128, 128, 0.2);
 }
 
 .epic {
-  --shimmer-color: rgba(0, 200, 255, 0.3); /* Cyan */
+  --shimmer-color-1: rgba(0, 200, 255, 0.06);
+  --shimmer-color-2: rgba(0, 200, 255, 0.12);
+  --shimmer-color-3: rgba(0, 200, 255, 0.18);
+  --shimmer-color-4: rgba(0, 200, 255, 0.24);
+  --shimmer-color-5: rgba(0, 200, 255, 0.3);
 }
+
+
 
 .shimmer {
   position: relative;
-  overflow: hidden;
-  background: #ddd; /* Base background color */
+  overflow: hidden !important;
+  background: transparent !important;
 }
 
 .shimmer::before {
   content: '';
   position: absolute;
   top: 0;
-  left: -150%; /* Start well outside the element */
-  width: 140%;
-  height: 120%;
+  left: -100%;
+  width: 110%;
+  height: 600%;
+  transform: rotate(30deg);
   background: linear-gradient(
     90deg,
     rgba(255, 255, 255, 0) 0%,
-    var(--shimmer-color) 50%, /* Default if not set */
+    var(--shimmer-color-1) 10%,
+    var(--shimmer-color-2) 20%,
+    var(--shimmer-color-3) 30%,
+    var(--shimmer-color-4) 40%,
+    var(--shimmer-color-5) 50%,
+    var(--shimmer-color-4) 60%,
+    var(--shimmer-color-3) 70%,
+    var(--shimmer-color-2) 80%,
+    var(--shimmer-color-1) 90%,
     rgba(255, 255, 255, 0) 100%
   );
-  animation: shimmer 1.4s cubic-bezier(0.4, 0, 0.6, 1) 0.6s 3;
+  animation: shimmerAnimation 3s ease-out 0.5s 5;
+  pointer-events: none;
+  z-index: 10;
 }
 
-@keyframes shimmer {
+@keyframes shimmerAnimation {
   0% {
-    left: -200%; /* Start from outside */
+    transform: translate(-100%, -100%) rotate(30deg);
   }
   100% {
-    left: 200%; /* Move fully across */
+    transform: translate(100%, 100%) rotate(30deg);
   }
 }
+

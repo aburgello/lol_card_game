@@ -42,7 +42,7 @@
         class: "w-full h-full object-cover rounded-lg shadow-md group-hover:scale-110 saturate-[1.10] brightness-100  group-hover:brightness-[1.10] transition-all duration-500 ease-in-out",
         data: { 
           skin_splash: skin.splash_art, 
-          skin_name: "#{skin.champion.name} - #{skin.name}", 
+          skin_name: "#{skin.champion.name} - #{skin.name}",
           skin_description: skin.description, 
           skin_rarity: skin.rarity 
         } %>
@@ -73,13 +73,12 @@
 
 </div>
 
-<!-- Modal to Show Full Splash Art -->
-<div id="splash-art-modal" class="fixed inset-0 bg-black hidden bg-opacity-80 items-center justify-center z-50 flex">
-  <div id="splash-art-modal-bg" class="mx-4 bg-slate-950 p-3 rounded-xl opacity-0 max-w-6xl scale-up w-full relative">
+<div id="splash-art-modal" class="fixed inset-0 bg-black hidden bg-opacity-90 items-center justify-center z-50 flex">
+  <div id="splash-art-modal-bg" class="bg-slate-950 mx-4 p-3 rounded-xl opacity-0 max-w-6xl scale-up w-full relative">
     <div class="relative group flex justify-center">
       <img id="splash-art-image" src="/api/placeholder/800/400" alt="Splash Art" 
            class="max-w-full max-h-full object-contain rounded-xl shadow-[0_4px_15px_rgba(0,0,0,0.75)]">
-      <div class="absolute inset-0 flex flex-col justify-end items-start bg-gradient-to-t from-slate-950 via-slate-900/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 ease-in-out rounded-lg">
+      <div class="absolute inset-0 flex flex-col justify-end items-start bg-gradient-to-t from-slate-950 via-slate-900/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 ease-in-out rounded-xl">
         <div class="w-full relative">
           <div id="modal-skin-name" 
                class="bottom-0 left-0 px-6 py-0 translate-y-6 group-hover:translate-y-0
@@ -100,6 +99,8 @@
     </div>
   </div>
 </div>
+
+
  
 <div class="lg:max-w-screen-2xl mx-4 lg:mx-32 2xl:mx-auto mb-12 my-8 rounded-lg">
   <div class="grid grid-cols-1">
@@ -119,27 +120,23 @@
         <% else %>
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mx-auto lg:mx-24">
             <% @user_regions.each do |user_region| %>
-              <% region = user_region.region %> <!-- Assuming user_region has a method to get the associated region -->
+              <% region = user_region.region %> 
               <%= link_to region_path(region) do %>
                 <div class="relative shadow-lg rounded-xl overflow-hidden group transition-all duration-300 ease-in-out">
-                  <!-- Region Image Backdrop -->
                   <img 
                     src="<%= image_path(region.image_backdrop) %>" 
                     alt="<%= region.name %> Image Backdrop" 
                     class="w-full h-48 md:h-64 object-cover saturate-[1] group-hover:saturate-[1.10] group-hover:brightness-110 rounded-xl group-hover:scale-125 transition-all duration-700 ease-in-out"
                   >
 
-                  <!-- Overlay Gradient -->
                   <div class="absolute inset-0 bg-[#0A1428]/30 rounded-xl group-hover:border-[#C89B3C] group-hover:border transition-all duration-300 ease-in-out"></div>
 
-                  <!-- Region Info (Name) -->
                   <div class="absolute bottom-1 left-6 text-white p-2 rounded-md">
                     <h2 class="text-3xl font-bold capitalize text-[#C8AA6E] group-hover:text-[#C89B3C] group-hover:brightness-110 transition-all duration-300 ease-in-out" style="text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.4);">
                       <%= region.name %>
                     </h2>
                   </div>
 
-                  <!-- Region Logo (Appears in the center on hover) -->
                 <div class="absolute inset-0 flex items-center justify-center scale-75 opacity-100 brightness-150 group-hover:scale-100 transition-all duration-300 ease-in-out" style="text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.8);">
                 <%= image_tag region.logo, alt: "#{region.name} Logo", class: "w-24 h-24 md:w-32 md:h-32 object-contain shadow-sm" %>
                 </div>
@@ -156,36 +153,36 @@
 
 
 <script>
- document.querySelectorAll('[data-skin-splash]').forEach(img => {
-        img.addEventListener('click', function (e) {
-        // Open modal functionality
-        const splashArt = this.getAttribute('data-skin-splash');
-        const skinName = this.getAttribute('data-skin-name');
-        const skinDescription = this.getAttribute('data-skin-description');
-        const rarity = this.getAttribute('data-skin-rarity');
-        const modal = document.getElementById('splash-art-modal');
-        const splashImage = document.getElementById('splash-art-image');
-        const modalSkinName = document.getElementById('modal-skin-name');
-        const modalSkinDescription = document.getElementById('modal-skin-description');
-        const modalBg = document.getElementById('splash-art-modal-bg');
-        
-        const championBySkinPath = (skinName) => `/champions/skin/${encodeURIComponent(skinName)}`;
+document.querySelectorAll('[data-skin-splash]').forEach(img => {
+  img.addEventListener('click', function () {
+    const splashArt = this.getAttribute('data-skin-splash');
+    const fullSkinName = this.getAttribute('data-skin-name');
+    const skinDescription = this.getAttribute('data-skin-description');
+    const rarity = this.getAttribute('data-skin-rarity');
+    const modal = document.getElementById('splash-art-modal');
+    const splashImage = document.getElementById('splash-art-image');
+    const modalSkinName = document.getElementById('modal-skin-name');
+    const modalSkinDescription = document.getElementById('modal-skin-description');
+    const modalBg = document.getElementById('splash-art-modal-bg');
+    
+    const [championName, skinName] = fullSkinName.split(' - ');
+    const championPath = `/champions/${encodeURIComponent(championName)}`;
 
-        modalBg.classList.remove(
-        'bg-mythic', 'bg-ultimate', 'bg-legendary', 'bg-transcendent', 'bg-common', 'bg-epic',
-        'border-mythic', 'border-ultimate', 'border-legendary', 'border-transcendent', 'border-common', 'border-epic'
-        );
+    modalBg.classList.remove(
+      'bg-mythic', 'bg-ultimate', 'bg-legendary', 'bg-transcendent', 'bg-common', 'bg-epic',
+      'border-mythic', 'border-ultimate', 'border-legendary', 'border-transcendent', 'border-common', 'border-epic'
+    );
 
-        if (rarity) {
-        modalBg.classList.add(`bg-${rarity.toLowerCase()}`);
-        modalBg.classList.add(`border-${rarity.toLowerCase()}`);
-        }
+    if (rarity) {
+      modalBg.classList.add(`bg-${rarity.toLowerCase()}`);
+      modalBg.classList.add(`border-${rarity.toLowerCase()}`);
+    }
 
-        splashImage.src = splashArt;
-        modalSkinName.innerHTML = `<a href="${championBySkinPath(skinName)}" class="text-[#C8AA6E] hover:brightness-125 hover:saturate-[1.25] transition-all duration-200 ease-in-out" target="_self">${skinName}</a>`;
-        modalSkinDescription.innerHTML = skinDescription || 'No description available.';
-        modal.classList.remove('hidden');
-    });
+    splashImage.src = splashArt;
+    modalSkinName.innerHTML = `<a href="${championPath}" class="text-[#C8AA6E] hover:brightness-150 transition-all duration-200 ease-in-out" target="_self">${skinName}</a>`;
+    modalSkinDescription.innerHTML = skinDescription || 'No description available.';
+    modal.classList.remove('hidden');
+  });
 });
 
 document.getElementById('splash-art-modal').addEventListener('click', function (e) {
@@ -193,123 +190,5 @@ document.getElementById('splash-art-modal').addEventListener('click', function (
     this.classList.add('hidden');
   }
 });
-
-
 </script>
 
-<style>
-
-  
-  #splash-art-image {
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.75); /* Darker and more intense shadow */
-}
-.bg-mythic {
-  background: linear-gradient(to bottom, rgba(122, 62, 237, 0.5), rgba(58, 33, 105, 0.5));
-}
-
-.bg-ultimate {
-  background: linear-gradient(to bottom, rgba(255, 165, 0, 0.5), rgba(128, 74, 0, 0.5));
-}
-
-.bg-legendary {
-  background: linear-gradient(to bottom, rgba(255, 50, 50, 0.5), rgba(128, 22, 22, 0.5));
-}
-
-.bg-transcendent {
-  background: linear-gradient(to bottom, rgba(162, 162, 208, 0.5), rgba(82, 82, 140, 0.5));
-}
-
-.bg-common {
-  background: linear-gradient(to bottom, rgba(128, 128, 128, 0.5), rgba(64, 64, 64, 0.5));
-}
-.bg-rare {
-  background: linear-gradient(to bottom, rgba(200, 170, 110, 0.7), rgba(200, 170, 110, 0.7)); /* #C8AA6E */
-}
-
-.bg-epic {
-  background: linear-gradient(to bottom, rgba(0, 200, 255, 0.5), rgba(0, 102, 128, 0.5));
-}
-
-.bg-mythic-modal {
-  background-color: rgba(89, 50, 145, 0.3); /* Darker #7943ED with 0.3 opacity */
-}
-
-.bg-ultimate-modal {
-  background: rgba(204, 136, 0, 0.3); /* Darker #FFA500 with 0.3 opacity */
-}
-
-.bg-legendary-modal {
-  background: rgba(204, 0, 0, 0.1); /* Darker #FF3232 with 0.3 opacity */
-}
-.bg-rare-modal {
-  background: rgba(200, 170, 110, 0.3); /* Darker #C8AA6E with 0.3 opacity */
-}
-.bg-transcendent-modal {
-  background: rgba(129, 129, 163, 0.3); /* Darker #A2A2D0 with 0.3 opacity */
-}
-
-.bg-common-modal {
-  background: rgba(102, 102, 102, 0.3); /* Darker #808080 with 0.3 opacity */
-}
-
-.bg-epic-modal {
-  background: rgba(0, 153, 204, 0.3); /* Darker #00C8FF with 0.3 opacity */
-}
-
-
-
-
-.border-mythic {
-  border: 1px solid #7943ED;
-}
-
-.border-ultimate {
-  border:1px solid #FFA500;
-}
-
-.border-legendary {
-  border:1px solid #FF3232;
-}
-
-.border-rare {
-  border: 1px solid #C8AA6E; /* Updated border color */
-}
-
-.border-transcendent {
-  border:1px solid #A2A2D0;
-}
-
-.border-common {
-  border:1px solid #808080;
-}
-
-.border-epic {
-  border:1px solid #00C8FF;
-}
-
-/* Hover border classes */
-.group-hover\:border-mythic:hover {
-  border: solid #7943ED;
-}
-
-.group-hover\:border-ultimate:hover {
-  border:  solid #FFA500;
-}
-
-.group-hover\:border-legendary:hover {
-  border:  solid #FF3232;
-}
-
-.group-hover\:border-transcendent:hover {
-  border:  solid #A2A2D0;
-}
-
-.group-hover\:border-common:hover {
-  border: solid #808080;
-}
-
-.group-hover\:border-epic:hover {
-  border:  solid #00C8FF;
-}
-
-</style>
