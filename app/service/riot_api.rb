@@ -17,7 +17,7 @@ class RiotApi
 
   def self.fetch_champions
     response = Faraday.get(CHAMPION_SUMMARY_URL)
-
+  
     if response.status == 200
       champions_data = JSON.parse(response.body) rescue nil
       return if champions_data.nil? || champions_data.empty?
@@ -25,41 +25,45 @@ class RiotApi
       puts "Error: Failed to fetch champions data. HTTP Status: #{response.status}"
       return
     end
-
+  
     champions_data.each do |champion_data|
       next if champion_data['id'] == -1
-      champion_details = RiotApi.fetch_champion_details(champion_data['id'])
-
+  
+      # Fetch champion details for additional data
+      champion_details = fetch_champion_details(champion_data['id'])
+  
+      # Find or initialize the champion
       champion = Champion.find_or_initialize_by(id: champion_data['id'])
+  
+      # Update champion attributes
       champion.name = champion_data['name']
       champion.title = champion_details['title'].presence || 'Untitled'
       champion.lore = champion_details['shortBio']
-      champion.save!
-
-      puts "Champion seeded: #{champion.name}"
-
-      if champion_details
-        champion.splash_art = "https://cdn.communitydragon.org/latest/champion/#{champion.id}/splash-art"
-        
-        self.create_skins(champion, champion_details['skins']) if champion_details['skins'].present?
-        self.create_abilities(champion, champion_details['spells'], champion_details['passive']) if champion_details['spells'].present? || champion_details['passive'].present?
-
-        self.create_types(champion, champion_data['roles']) if champion_data['roles'].present?
-      else
-        puts "Failed to fetch details for champion #{champion_data['name']}, skipping additional data."
-      end
-
+      champion.splash_art = "https://cdn.communitydragon.org/latest/champion/#{champion.id}/splash-art"
+  
+      # Handle assets
       if champion_data['squarePortraitPath']
         champion.square_art = map_asset_path(champion_data['squarePortraitPath'])
       end
-
-      if champion_data['passive']
+  
+      if champion_data.dig('passive', 'abilityIconPath')
         champion.passive_image = map_asset_path(champion_data['passive']['abilityIconPath'])
       end
-
-      champion.save!
+  
+      # Save champion and log the status
+      if champion.save
+        puts "#{champion.new_record? ? 'Created' : 'Updated'} champion: #{champion.name}"
+        
+        # Seed additional related data (skins, abilities, types)
+        create_skins(champion, champion_details['skins']) if champion_details['skins'].present?
+        create_abilities(champion, champion_details['spells'], champion_details['passive']) if champion_details['spells'].present? || champion_details['passive'].present?
+        create_types(champion, champion_data['roles']) if champion_data['roles'].present?
+      else
+        puts "Failed to save champion #{champion.name}: #{champion.errors.full_messages.join(', ')}"
+      end
     end
   end
+  
 
   def self.fetch_champion_details(champion_id)
     url = CHAMPION_DETAILS_URL % { champion_id: champion_id }

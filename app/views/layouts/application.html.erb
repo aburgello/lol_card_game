@@ -30,6 +30,7 @@
 
        <!-- Navbar Links (Hidden on mobile, shown on medium+ screens) -->
 <div class="hidden md:flex space-x-4">
+  <a href="/challenges" class="text-lg transition-all duration-200 ease-in-out <%= 'text-[#C8AA6E]' if request.path == '/challenges' %> <%= 'text-[#A09B8C] hover:text-[#C8AA6E]' unless request.path == '/challenges' %>">Challenges</a>
   <a href="/skins" class="text-lg transition-all duration-200 ease-in-out <%= 'text-[#C8AA6E]' if request.path == '/skins' %> <%= 'text-[#A09B8C] hover:text-[#C8AA6E]' unless request.path == '/skins' %>">Hextech Shop</a>
   <a href="/collections" class="text-lg transition-all duration-200 ease-in-out <%= 'text-[#C8AA6E]' if request.path == '/collections' %> <%= 'text-[#A09B8C] hover:text-[#C8AA6E]' unless request.path == '/collections' %>">Collection</a>
   <a href="/champions" class="text-lg transition-all duration-200 ease-in-out <%= 'text-[#C8AA6E]' if request.path == '/champions' %> <%= 'text-[#A09B8C] hover:text-[#C8AA6E]' unless request.path == '/champions' %>">Champions</a>
@@ -65,6 +66,7 @@
     <!-- Mobile Menu -->
 <div id="mobile-menu" class="md:hidden hidden bg-gradient-to-r from-[#0A0C14] to-[#0A1428] text-[#A09B8C] w-full mr-4">
   <div class="space-y-4 p-4 text-right px-6">
+    <a href="/challenges" class="block text-lg pb-4  border-b border-[#C8AA6E]/40 <%= 'text-[#C8AA6E]' if request.path == '/skins' %> <%= 'hover:text-[#C8AA6E] ' unless request.path == '/skins' %>">Challenges</a>
     <a href="/skins" class="block text-lg pb-4  border-b border-[#C8AA6E]/40 <%= 'text-[#C8AA6E]' if request.path == '/skins' %> <%= 'hover:text-[#C8AA6E] ' unless request.path == '/skins' %>">Hextech Shop</a>
     <a href="/collections" class="block text-lg pb-4 border-b border-[#C8AA6E]/40 <%= 'text-[#C8AA6E]' if request.path == '/collections' %> <%= 'hover:text-[#C8AA6E] ' unless request.path == '/collections' %>">Collection</a>
     <a href="/champions" class="block text-lg pb-4 border-b border-[#C8AA6E]/40 <%= 'text-[#C8AA6E]' if request.path == '/champions' %> <%= 'hover:text-[#C8AA6E] ' unless request.path == '/champions' %>">Champions</a>

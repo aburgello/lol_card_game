@@ -26,6 +26,7 @@ resources :champions, param: :name, only: [:show, :index]
 # Add a custom route for skin redirection
 get 'champions/skin/:skin_name', to: 'champions#redirect_skin'
 
+resources :challenges, only: [:index, :show]
 
   # other routes
   resources :skins, only: [:index, :show] do
