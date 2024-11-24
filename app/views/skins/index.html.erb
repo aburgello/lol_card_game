@@ -34,10 +34,11 @@
                         <%= skin.champion.name %> Collection: <%= owned_skins_count %>/<%= total_skins %>
                       </p>
                       <div class="w-full bg-slate-700/30 rounded-full h-2 mt-2">
-<% percentage = (owned_skins_count.to_f / total_skins * 100).round %>
-<div class="h-2 rounded-full" 
-     style="width: <%= percentage %>%; background-color: <%= progress_bar_color(percentage) %>; transition: all 0.3s;">
-</div>                      </div>
+                        <% percentage = (owned_skins_count.to_f / total_skins * 100).round %>
+                        <div class="h-2 rounded-full" 
+                            style="width: <%= percentage %>%; background-color: <%= progress_bar_color(percentage) %>; transition: all 0.3s;">
+                        </div>                      
+                      </div>
                     </div>
                   </div>
                 </div>
