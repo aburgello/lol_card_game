@@ -23,7 +23,7 @@
       <!-- Video overlay for this specific card -->
       <div class="absolute inset-0 pointer-events-none z-50 transition-all opacity-0 duration-300 fade-in-up ease-in-out"
            style="animation-delay: <%= 0.3 * index %>s;" data-reveal-video>
-        <video class="w-full h-full object-cover scale-x-[3] scale-[2] opacity-70" muted autoplay loop>
+        <video class="w-full h-full object-cover scale-x-[3] scale-[2] saturate-[0.8]" muted autoplay loop>
           <source src="<%= asset_path(videos[:smoke]) %>" type="video/webm">
         </video>
       </div>
@@ -39,7 +39,7 @@
       <!-- Intro video -->
       <div class="absolute inset-0 pointer-events-none z-50 transition-all opacity-0 duration-300 fade-in-up ease-in-out"
            style="animation-delay: <%= 0.3 * index %>s;" data-reveal-video>
-        <video class="w-full h-full object-cover rounded-lg scale-x-[2.4] scale-[2.01] saturate-50 opacity-0" muted>
+        <video class="w-full h-full object-cover rounded-lg scale-x-[2.4] scale-[2.01] saturate-[0.8] opacity-0" muted>
           <source src="<%= asset_path(videos[:intro]) %>" type="video/webm">
         </video>
       </div>
