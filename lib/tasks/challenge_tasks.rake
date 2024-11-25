@@ -153,6 +153,7 @@ Champion.select(:region_id).distinct.each do |champion|
         challenge.skins << skin unless challenge.skins.include?(skin)
       end
     end
+
     
     puts "Created challenge: #{challenge.name} with required count #{challenge.required_count}"
   else
@@ -163,3 +164,4 @@ end
     puts "Type, rarity, and region challenges creation completed!"
   end
 end
+

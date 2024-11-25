@@ -2,8 +2,8 @@ class ChallengesController < ApplicationController
   before_action :authenticate_user!, only: [:show] # Ensure the user is authenticated before accessing the show page
 
   def index
-    @challenges = Challenge.all
-    @user_progress = @challenges.map do |challenge|
+    @challenges = Challenge.includes(:region).all 
+    @user_progress = @challenges.map do |challenge| 
       progress = challenge.progress_for_user(current_user)
       
       # Logging for debugging
@@ -46,6 +46,5 @@ class ChallengesController < ApplicationController
     unless current_user
       redirect_to new_user_session_path, alert: "You need to sign in first."
     end
-end
-
+  end
 end
