@@ -1,39 +1,46 @@
 <% if @region.present? %>
   <!-- Full-width Video Backdrop Banner -->
   <div class="relative w-full">
-    <video autoplay loop muted class="w-full  h-[40vh] 2xl:h-[60vh] object-cover">
+    <video autoplay loop muted class="w-full h-[40vh] 2xl:h-[60vh] object-cover">
       <source src="<%= @region.video_backdrop %>" type="video/webm">
       Your browser does not support the video tag.
     </video>
-<!-- Region Name Overlay -->
-<div class="absolute inset-0 bg-gradient-to-b from-transparent group via-transparent to-[#0A101E] flex items-center justify-center">
-  <h1 class="text-5xl font-bold text-[#C8AA6E] group-hover:brightness-125 group-hover:saturate-[1.15] transition-all duration-200 ease-in-out capitalize text-center" style="cursor: default; text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6);">
-    <%= @region.name %>
-  </h1>
-</div>
-</div>
-      <!-- Lore Section -->
-      <div class="mt-12 bg-gradient-to-r from-[#0A1428]/20 to-[#0A0C14]/20 rounded-lg shadow-md border border-[#C8AA6E] mx-8 2xl:mx-32 p-6">
-        <p class="text-base md:text-xl text-gray-300 mx-2">
-          <%= @region.lore %>
-        </p>
-      </div>
+    <!-- Region Name Overlay -->
+    <div class="absolute inset-0 bg-gradient-to-b from-transparent group via-transparent to-[#0A101E] flex items-center justify-center">
+      <h1 class="text-5xl font-bold text-[#C8AA6E] group-hover:brightness-125 group-hover:saturate-[1.15] transition-all duration-200 ease-in-out capitalize text-center" style="cursor: default; text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6);">
+        <%= @region.name %>
+      </h1>
+    </div>
+  </div>
+
+  <!-- Lore Section -->
+  <div class="mt-12 bg-gradient-to-r from-[#0A1428]/20 to-[#0A0C14]/20 rounded-lg shadow-md border border-[#C8AA6E] mx-8 2xl:mx-32 p-6">
+    <p class="text-base md:text-xl text-gray-300 mx-2">
+      <%= @region.lore %>
+    </p>
+  </div>
 
   <!-- Region Details Section -->
   <div class="max-w-full mx-6 2xl:mx-32 p-4">
     <!-- Champions List -->
     <div class="mt-12">
       <h2 class="text-3xl font-semibold text-[#C8AA6E] mb-6">Champions from <%= @region.name %></h2>
-      
+
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-8 mb-8">
         <% @region.champions.each do |champion| %>
-         <%= link_to champion_path(champion.name) do %>
-            <div class="relative shadow-lg rounded-xl overflow-hidden group  transition-all duration-500 ease-in-out">
+          <% total_skins = champion.skins.count %>
+          <% owned_skins = current_user.skins.where(champion_id: champion.id).count %>
+          <% fully_collected = owned_skins == total_skins && total_skins.positive? %>
+          
+          <%= link_to champion_path(champion.name) do %>
+            <div class="relative shadow-lg rounded-xl overflow-hidden group transition-all duration-500 ease-in-out">
               <!-- Champion Image -->
               <img 
                 src="<%= champion.splash_art %>/centered" 
                 alt="<%= champion.name %> Splash Art" 
-                class="w-full h-64 md:h-72 object-cover saturate-[0.10] group-hover:saturate-100 scale-125 rounded-xl group-hover:scale-150 transition-all duration-500 ease-in-out"
+                class="w-full h-64 md:h-72 object-cover 
+                       <%= fully_collected ? 'saturate-100' : 'saturate-[0.10] group-hover:saturate-100' %> 
+                       scale-125 rounded-xl group-hover:scale-150 transition-all duration-500 ease-in-out"
               >
 
               <!-- Overlay Gradient with League Colors -->
@@ -41,7 +48,7 @@
 
               <!-- Champion Info (Name and Title) -->
               <div class="absolute bottom-1 left-2 md:left-4 text-white p-2 rounded-md">
-                <h2 class="text-2xl md:text-3xl font-bold capitalize text-[#C8AA6E] group-hover:text-[#C89B3C] transition-all duration-300 ease-out">
+                <h2 class="text-2xl md:text-3xl font-bold capitalize text-[#C8AA6E] <%= fully_collected ? 'text-[#C89B3C]' : '' %> transition-all duration-300 ease-out">
                   <%= champion.name %>
                 </h2>
                 <p class="text-sm md:text-base text-[#F0E6D2] italic"><%= champion.title %></p>
@@ -52,7 +59,6 @@
       </div>
     </div>
   </div>
-
 <% else %>
   <p class="text-center text-gray-500">Region not found.</p>
 <% end %>

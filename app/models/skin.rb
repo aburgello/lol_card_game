@@ -4,6 +4,9 @@ class Skin < ApplicationRecord
   has_many :users, through: :user_skins
   has_many :collections
   has_many :users, through: :collections
+  has_and_belongs_to_many :challenges
+
+
   def self.ransackable_attributes(auth_object = nil)
     ["champion_id", "created_at", "id", "loading_art", "name", "num", "splash_art", "updated_at"]
   end

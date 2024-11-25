@@ -1,31 +1,43 @@
 <% if @regions.present? %>
   <div class="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-8 mx-8 xl:mx-64 my-8">
-    <% @regions.each do |region| %>
+<% @regions.each do |region| %>
+  <% progress = calculate_region_progress(current_user, "Collect all #{region.name} Champions") %>
+  <% total_champions = progress[:total] %>
+  <% completed_champions = progress[:current] %>
+  <% fully_collected = completed_champions == total_champions && total_champions > 0 %>
+
       <%= link_to region_path(region) do %>
         <div class="relative shadow-lg rounded-xl overflow-hidden group transition-all duration-300 ease-in-out">
           <!-- Region Image Backdrop -->
           <img 
             src="<%= image_path(region.image_backdrop) %>" 
             alt="<%= region.name %> Image Backdrop" 
-            class="w-full h-48 md:h-64 object-cover saturate-[0.10] group-hover:saturate-[0.80] rounded-xl group-hover:scale-125 transition-all duration-700 ease-in-out"
+            class="w-full h-48 md:h-64 object-cover 
+                   <%= fully_collected ? 'saturate-100' : 'saturate-[0.10] group-hover:saturate-[0.80]' %> 
+                   rounded-xl group-hover:scale-125 transition-all duration-700 ease-in-out"
           >
 
           <!-- Overlay Gradient -->
-          <div class="absolute inset-0 group-hover:bg-[#0A1428]/50 rounded-xl group-hover:border-[#C89B3C] group-hover:border transition-all duration-300 ease-in-out"></div>
+          <div class="absolute inset-0 
+                      <%= fully_collected ? 'bg-[#0A1428]/50 border-[#C89B3C] border' : 'group-hover:bg-[#0A1428]/50 group-hover:border-[#C89B3C] group-hover:border' %> 
+                      rounded-xl transition-all duration-300 ease-in-out">
+          </div>
 
           <!-- Region Info (Name) -->
           <div class="absolute bottom-1 left-4 text-white p-2 rounded-md">
-            <h2 class="text-3xl font-bold capitalize text-[#C8AA6E] group-hover:text-[#C89B3C] group-hover:brightness-110 transition-all duration-300 ease-in-out" style="text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.4);">
+            <h2 class="text-3xl font-bold capitalize text-[#C8AA6E] 
+                       <%= fully_collected ? 'text-[#C89B3C] brightness-110' : 'group-hover:text-[#C89B3C] group-hover:brightness-110' %> 
+                       transition-all duration-300 ease-in-out" style="text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.4);">
               <%= region.name %>
             </h2>
           </div>
 
           <!-- Region Logo (Appears in the center on hover) -->
-          <div class="absolute inset-0 flex items-center justify-center scale-50 opacity-0 brightness-150 group-hover:opacity-100 group-hover:scale-105 transition-all duration-300 ease-in-out" style="text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.8);">
+          <div class="absolute inset-0 flex items-center justify-center 
+                      <%= fully_collected ? 'opacity-100 scale-105' : 'scale-50 opacity-0 group-hover:opacity-100 group-hover:scale-105' %> 
+                      brightness-150 transition-all duration-300 ease-in-out" style="text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.8);">
             <%= image_tag region.logo, alt: "#{region.name} Logo", class: "w-24 h-24 md:w-32 md:h-32 object-contain shadow-sm" %>
           </div>
-
-          <!-- Light Overlay Below Logo on Hover -->
         </div>
       <% end %>
     <% end %>

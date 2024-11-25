@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_11_24_191442) do
+ActiveRecord::Schema[7.2].define(version: 2024_11_25_002619) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -59,6 +59,15 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_24_191442) do
     t.integer "required_count"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "region_id"
+    t.index ["region_id"], name: "index_challenges_on_region_id"
+  end
+
+  create_table "challenges_skins", id: false, force: :cascade do |t|
+    t.bigint "challenge_id"
+    t.bigint "skin_id"
+    t.index ["challenge_id"], name: "index_challenges_skins_on_challenge_id"
+    t.index ["skin_id"], name: "index_challenges_skins_on_skin_id"
   end
 
   create_table "champion_types", force: :cascade do |t|
@@ -144,6 +153,15 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_24_191442) do
     t.index ["user_id"], name: "index_user_challenges_on_user_id"
   end
 
+  create_table "user_champions", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "champion_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["champion_id"], name: "index_user_champions_on_champion_id"
+    t.index ["user_id"], name: "index_user_champions_on_user_id"
+  end
+
   create_table "user_regions", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "region_id", null: false
@@ -180,6 +198,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_24_191442) do
   end
 
   add_foreign_key "abilities", "champions"
+  add_foreign_key "challenges", "regions"
   add_foreign_key "champion_types", "champions"
   add_foreign_key "champion_types", "types"
   add_foreign_key "champions", "regions"
@@ -188,6 +207,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_24_191442) do
   add_foreign_key "skins", "champions"
   add_foreign_key "user_challenges", "challenges"
   add_foreign_key "user_challenges", "users"
+  add_foreign_key "user_champions", "champions"
+  add_foreign_key "user_champions", "users"
   add_foreign_key "user_regions", "regions"
   add_foreign_key "user_regions", "users"
   add_foreign_key "user_skins", "skins"

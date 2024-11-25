@@ -1,0 +1,111 @@
+<div class="lg:max-w-screen-2xl mx-4 lg:mx-32 2xl:mx-auto mb-12 my-8 rounded-lg">
+  <div class="grid grid-cols-1">
+
+    <!-- Challenge Title and Description -->
+      <h2 class="text-4xl font-bold text-[#C8AA6E] text-center"><%= @challenge.name %></h2>
+    </div>
+
+    <!-- Skins Section -->
+    <div class="mt-8 p-4 bg-gradient-to-r from-[#0A1428]/20 to-[#0A0C14]/20 rounded-lg shadow-md border border-slate-900">
+      <h3 class="text-3xl font-semibold mb-6 text-center text-[#C8AA6E] border-b pb-4 mx-6 border-[#C8AA6E]/20 cursor-default">Skins</h3>
+      
+      <% rarity_order = ["common", "rare", "epic", "legendary", "mythic", "ultimate", "transcendent"] %>
+      <% grouped_skins = @skins.group_by(&:rarity).sort_by { |rarity, _| rarity_order.index(rarity.downcase) || rarity_order.size } %>
+      
+      <% grouped_skins.each do |rarity, skins| %>
+        <div class="mt-4 mb-2">
+          <div class="flex flex-col items-center">
+            <img src="<%= asset_path(rarity.capitalize + '_logo.webp') %>" alt="<%= rarity %> logo" class="cursor-default hover:brightness-125 w-6 h-6 shadow-md transition-all duration-200 ease-in-out">
+            <h4 class="text-2xl font-bold text-[#C8AA6E] mb-6 cursor-default"><%= rarity.capitalize %></h4>
+          </div>
+          
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mx-auto lg:mx-24">
+            <% skins.each do |skin| %>
+              <div class="relative group bg-gray-800 rounded-lg shadow-lg cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out overflow-hidden flex justify-center items-center">
+                <%= image_tag skin.splash_art_centered, 
+                    alt: "#{skin.name} loading art",  
+                    loading: "lazy",
+                    class: "w-full h-full object-cover rounded-lg shadow-md group-hover:scale-110 #{@user_skin_ids.include?(skin.id) ? 'saturate-[1]' : 'saturate-[0.10]'} brightness-100  group-hover:saturate-[1.10] group-hover:brightness-[1.15] transition-all duration-500 ease-in-out",
+                    data: { skin_splash: skin.splash_art, skin_name: skin.name, skin_id: skin.id, skin_description: skin.description, skin_rarity: skin.rarity } %>
+                <div class="absolute inset-0 border-0 group-hover:border-4 <%= 'border-' + skin.rarity.downcase %> group-hover:animate-pulse rounded-lg transition-all duration-300 ease-in-out" style="pointer-events: none;"></div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<!-- Modal for Splash Art -->
+<div id="splash-art-modal" class="fixed inset-0 bg-black hidden bg-opacity-90 items-center justify-center z-50 flex">
+  <div id="splash-art-modal-bg" class="bg-slate-950 mx-4 p-3 rounded-xl opacity-0 max-w-6xl scale-up w-full relative">
+    <div class="relative group flex justify-center">
+      <img id="splash-art-image" src="/api/placeholder/800/400" alt="Splash Art" 
+           class="max-w-full max-h-full object-contain rounded-xl shadow-[0_4px_15px_rgba(0,0,0,0.75)]">
+      <div class="absolute inset-0 flex flex-col justify-end items-start bg-gradient-to-t from-slate-950 via-slate-900/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 ease-in-out rounded-xl">
+        <div class="w-full relative">
+          <div id="modal-skin-name" 
+               class="bottom-0 left-0 px-6 py-0 translate-y-6 group-hover:translate-y-0
+                      text-base md:text-2xl font-bold text-[#C8AA6E] text-center
+                      transform transition-all duration-500  md:opacity-100 group-hover:opacity-100
+                      group-hover:relative
+                      group-hover:text-[#C8AA6E]" style="cursor: default; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);">
+            Skin Name
+          </div>
+          <div id="modal-skin-description"
+               class="px-6 pb-0 group-hover:pb-4 pt-2 text-xs md:text-lg text-white
+                      opacity-0 group-hover:opacity-100 text-center
+                      transition-all duration-300 ease-in-out">
+            This is a longer description that might span multiple lines. We want to make sure our title adapts properly to however long this description might be. It could be quite extensive in some cases.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.querySelectorAll('[data-skin-splash]').forEach(img => {
+  img.addEventListener('click', function () {
+    const splashArt = this.getAttribute('data-skin-splash');
+    const skinName = this.getAttribute('data-skin-name');
+    const skinDescription = this.getAttribute('data-skin-description');
+    const rarity = this.getAttribute('data-skin-rarity');
+    const modal = document.getElementById('splash-art-modal');
+    const splashImage = document.getElementById('splash-art-image');
+    const modalSkinName = document.getElementById('modal-skin-name');
+    const modalSkinDescription = document.getElementById('modal-skin-description');
+    const modalBg = document.getElementById('splash-art-modal-bg');
+    
+    const championBySkinPath = (skinName) => `/champions/skin/${encodeURIComponent(skinName)}`;
+
+    // Remove existing rarity classes for background and border
+    modalBg.classList.remove(
+      'bg-mythic', 'bg-ultimate', 'bg-legendary', 'bg-transcendent', 'bg-common', 'bg-epic',
+      'border-mythic', 'border-ultimate', 'border-legendary', 'border-transcendent', 'border-common', 'border-epic'
+    );
+
+    // Add the new rarity classes based on the skin's rarity
+    if (rarity) {
+      modalBg.classList.add(`bg-${rarity.toLowerCase()}`);
+      modalBg.classList.add(`border-${rarity.toLowerCase()}`);
+    }
+
+    // Update modal content
+    splashImage.src = splashArt;
+
+    // Create a link for the skin name (Ensure that it doesn't redirect)
+    modalSkinName.innerHTML = `<a href="${championBySkinPath(skinName)}" class="text-[#C8AA6E] hover:brightness-150 transition-all duration-200 ease-in-out" target="_self">${skinName}</a>`;
+    modalSkinDescription.innerHTML = skinDescription || 'No description available.';
+    modal.classList.remove('hidden');
+  });
+});
+
+// Hide the modal when clicking outside of the modal content
+document.getElementById('splash-art-modal').addEventListener('click', function (e) {
+  if (e.target === this) {
+    this.classList.add('hidden');
+  }
+});
+</script>

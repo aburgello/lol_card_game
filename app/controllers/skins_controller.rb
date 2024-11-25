@@ -56,6 +56,7 @@ class SkinsController < ApplicationController
         end
       end
     end
+    UnlockChampionsJob.set(wait: 1.second).perform_later(current_user.id)
 
     respond_to do |format|
       format.turbo_stream

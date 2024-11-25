@@ -3,6 +3,7 @@ class Region < ApplicationRecord
   has_many :user_regions, dependent: :destroy
   has_many :users, through: :user_regions
   validates :name, presence: true, uniqueness: true
+  has_many :challenges
 
   regions = [
   { name: "Bandle City", 
