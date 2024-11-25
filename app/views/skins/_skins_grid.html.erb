@@ -11,7 +11,7 @@
   } %>
 
   <% skins.each_with_index do |skin, index| %>
-    <div class="relative w-full <%= 
+    <div class="relative w-full  hover:scale-105 transition-all duration-700 ease-in-out <%= 
       if skins.length % 2 == 1 && skins.length <= 6 && index == skins.length - 1
         'md:col-start-2 xl:col-auto'
       end
@@ -50,7 +50,7 @@
 
   <!-- Card content -->
   <div id="card-collect" style="animation-delay: <%= 0.3 * index %>s;"
-       class="relative <%= "#{skin.rarity.downcase}" %> w-full h-full rounded-xl opacity-0 duration-300 ease-in-out animate-pulse-low overflow-hidden transition-all" style="animation-delay: <%= 0.3 * index %>s; ">
+       class="relative <%= "#{skin.rarity.downcase}" %> w-full h-full rounded-xl opacity-0 duration-300 ease-in-out animate-pulse-low  overflow-hidden transition-all" style="animation-delay: <%= 0.3 * index %>s; ">
     <!-- Splash art -->
     <%= image_tag skin.loading_art, 
         data: { skin_splash: skin.splash_art, skin_name: skin.name, skin_description: skin.description, skin_rarity: skin.rarity },
