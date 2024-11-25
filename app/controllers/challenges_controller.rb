@@ -1,5 +1,5 @@
 class ChallengesController < ApplicationController
-  before_action :authenticate_user!, only: [:show] # Ensure the user is authenticated before accessing the show page
+  before_action :authenticate_user!
 
   def index
     @challenges = Challenge.includes(:region).all 
