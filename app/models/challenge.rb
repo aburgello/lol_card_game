@@ -2,7 +2,7 @@ class Challenge < ApplicationRecord
   has_many :user_challenges
   has_many :users, through: :user_challenges
   has_and_belongs_to_many :skins
-  belongs_to :region
+  belongs_to :region, optional: true
 
   enum progress_type: {
     skin_set: 'skin_set',

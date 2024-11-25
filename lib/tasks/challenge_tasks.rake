@@ -1,9 +1,24 @@
 namespace :challenges do
-  desc "Create challenges for each champion type, skin rarity, and region"
+  desc "Create challenges for champion types, skin rarities, and regions"
   task create_type_challenges: :environment do
     puts "Creating challenges for champion types, skin rarities, and regions..."
 
-    # Create challenges for each champion type
+    # Step 1: Ensure all champions without a region are assigned to "Runeterra"
+    runeterra_region = Region.find_or_create_by(name: 'Runeterra')  # Make sure "Runeterra" region exists
+
+    # Step 2: Find champions without a region and assign them to "Runeterra"
+    champions_without_region = Champion.where(region_id: nil)
+
+    if champions_without_region.any?
+      champions_without_region.each do |champion|
+        champion.update(region_id: runeterra_region.id, validate: false) # Skip validation for assignment
+        puts "Assigned #{champion.name} to the 'Runeterra' region"
+      end
+    else
+      puts "No champions without a region."
+    end
+
+    # Step 3: Create challenges for each champion type
     Type.find_each do |type|
       challenge_name = "Find all #{type.name.pluralize}"
       
@@ -142,22 +157,6 @@ Champion.select(:region_id).distinct.each do |champion|
     puts "Created challenge: #{challenge.name} with required count #{challenge.required_count}"
   else
     puts "Challenge already exists: #{challenge.name}"
-  end
-end
-
-# Logic to unlock champions for users based on skins
-Region.find_each do |region| # Iterate over each region
-  Champion.where(region_id: region.id).each do |champion|
-    User.find_each do |user| # Iterate over each user
-      total_skins = champion.skins.count
-      owned_skins = user.skins.where(champion_id: champion.id).count
-      
-      if owned_skins == total_skins
-        # Unlock the champion for the user
-        user.champions << champion unless user.champions.include?(champion)
-        puts "Unlocked champion: #{champion.name} for user: #{user.id}"
-      end
-    end
   end
 end
 
