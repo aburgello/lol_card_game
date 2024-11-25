@@ -6,7 +6,7 @@
       <div class="grid grid-cols-1 gap-y-6 mx-auto">
         <% @user_progress.select { |p| p[:challenge].progress_type == 'rarity_based' }.sort_by { |progress| -progress[:progress][:percentage] }.each do |progress| %>
           <%= link_to challenge_path(progress[:challenge]), class: "block" do %>
-            <div class="bg-slate-800/30 rounded-lg p-6 border border-slate-700/30 hover:border-[#C8AA6E]/50 transition-all duration-300 w-full">
+            <div class="bg-slate-800/30 rounded-lg p-6 border border-slate-700/30 hover:border-[#C8AA6E]/50 hover:scale-105 hover:bg-slate-700/30 transition-all duration-300 w-full">
               <h4 class="text-xl text-[#C8AA6E] font-medium mb-2"><%= progress[:challenge].name %></h4>
               <p class="text-sm text-slate-400 mb-4"><%= progress[:challenge].description %></p>
 
@@ -44,7 +44,7 @@
       <% region = progress[:challenge].region %>
       <% if region.present? %>  <!-- Ensure region exists before generating the link -->
         <%= link_to region_path(region), class: "block" do %>
-          <div class="bg-slate-800/30 rounded-lg p-6 border border-slate-700/30 hover:border-[#C8AA6E]/50 transition-all duration-300 w-full">
+          <div class="bg-slate-800/30 rounded-lg p-6 border border-slate-700/30 hover:border-[#C8AA6E]/50 hover:scale-105 hover:bg-slate-700/30 transition-all duration-300 w-full">
             <h4 class="text-xl text-[#C8AA6E] font-medium mb-2"><%= progress[:challenge].name %></h4>
             <p class="text-sm text-slate-400 mb-4"><%= progress[:challenge].description %></p>
 
@@ -86,7 +86,7 @@
       <div class="grid grid-cols-1 gap-y-6 mx-auto">
         <% @user_progress.select { |p| p[:challenge].progress_type == 'champion_specific' }.sort_by { |progress| -progress[:progress][:percentage] }.each do |progress| %>
           <%= link_to challenge_path(progress[:challenge]), class: "block" do %>
-            <div class="bg-slate-800/30 rounded-lg p-6 border border-slate-700/30 hover:border-[#C8AA6E]/50 transition-all duration-300 w-full">
+            <div class="bg-slate-800/30 rounded-lg p-6 border border-slate-700/30 hover:border-[#C8AA6E]/50 hover:scale-105 hover:bg-slate-700/30 transition-all duration-300 w-full">
               <h4 class="text-xl text-[#C8AA6E] font-medium mb-2"><%= progress[:challenge].name %></h4>
               <p class="text-sm text-slate-400 mb-4"><%= progress[:challenge].description %></p>
 
@@ -122,7 +122,7 @@
       <div class="grid grid-cols-1 gap-y-6 mx-auto">
         <% @user_progress.select { |p| ['set_based', 'skin_set'].include?(p[:challenge].progress_type) }.sort_by { |progress| -progress[:progress][:percentage] }.each do |progress| %>
           <%= link_to challenge_path(progress[:challenge]), class: "block" do %>
-            <div class="bg-slate-800/30 rounded-lg p-6 border border-slate-700/30 hover:border-[#C8AA6E]/50 transition-all duration-300 w-full">
+            <div class="bg-slate-800/30 rounded-lg p-6 border border-slate-700/30 hover:border-[#C8AA6E]/50 hover:scale-105 hover:bg-slate-700/30 transition-all duration-300 w-full">
               <h4 class="text-xl text-[#C8AA6E] font-medium mb-2"><%= progress[:challenge].name %></h4>
               <p class="text-sm text-slate-400 mb-4"><%= progress[:challenge].description %></p>
 
