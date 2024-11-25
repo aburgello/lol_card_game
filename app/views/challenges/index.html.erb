@@ -1,155 +1,33 @@
-<div class="lg:max-w-full mt-8 mb-12 rounded-lg">
-  <div class="grid grid-cols-1 lg:grid-cols-4 max-w-[90vw] 2xl:max-w-[70vw] gap-6 mx-auto ">
-    <!-- Rarity Challenges Section -->
-    <div class="mb-auto p-4 max-w-[90vw] bg-gradient-to-r from-[#0A1428]/20 to-[#0A0C14]/20 pt-4 rounded-lg shadow-md border border-slate-900">
-      <h3 class="text-3xl font-semibold mb-6 text-center text-[#C8AA6E] border-b pb-4 mx-6 border-[#C8AA6E]/20">Rarity Challenges</h3>
-      <div class="grid grid-cols-1 gap-y-6 mx-auto">
-        <% @user_progress.select { |p| p[:challenge].progress_type == 'rarity_based' }.sort_by { |progress| -progress[:progress][:percentage] }.each do |progress| %>
-          <%= link_to challenge_path(progress[:challenge]), class: "block" do %>
-            <div class="bg-slate-800/30 rounded-lg p-6 border border-slate-700/30 hover:border-[#C8AA6E]/50 hover:scale-105 hover:bg-slate-700/30  transition-all duration-300 w-full">
-              <h4 class="text-xl text-[#C8AA6E] font-medium mb-2"><%= progress[:challenge].name %></h4>
-              <p class="text-sm text-slate-400 mb-4"><%= progress[:challenge].description %></p>
+<div class="grid grid-cols-1 lg:grid-cols-4 max-w-[90vw] 2xl:max-w-[70vw] gap-6 mx-auto mt-6">
+  <%= render partial: 'challenge_section', locals: {
+    challenges: @user_progress[:rarity][:items],
+    title: 'Rarity Challenges',
+    section_id: 'rarity',
+    current_page: @page,
+    total_pages: @user_progress[:rarity][:total_pages]
+  } %>
 
-              <div class="mt-4">
-                <div class="flex justify-between text-sm mb-2">
-                  <span class="text-slate-400">Progress</span>
-                  <span class="text-[#C8AA6E]">
-                    <%= progress[:progress][:current] %>/<%= progress[:progress][:total] %>
-                  </span>
-                </div>
+  <%= render partial: 'challenge_section', locals: {
+    challenges: @user_progress[:region][:items],
+    title: 'Region Challenges',
+    section_id: 'region',
+    current_page: @page,
+    total_pages: @user_progress[:region][:total_pages]
+  } %>
 
-                <div class="w-full bg-slate-700/30 rounded-full h-2">
-                  <div class="h-2 rounded-full bg-[#C8AA6E]" style="width: <%= progress[:progress][:percentage] %>%;"></div>
-                </div>
-              </div>
+  <%= render partial: 'challenge_section', locals: {
+    challenges: @user_progress[:type][:items],
+    title: 'Type Challenges',
+    section_id: 'type',
+    current_page: @page,
+    total_pages: @user_progress[:type][:total_pages]
+  } %>
 
-              <% if progress[:progress][:percentage] == 100 %>
-                <div class="mt-4 text-center">
-                  <span class="bg-green-500/20 text-green-400 px-3 py-1 rounded-full text-sm">
-                    Completed!
-                  </span>
-                </div>
-              <% end %>
-            </div>
-          <% end %>
-        <% end %>
-      </div>
-    </div>
-
-    <!-- Champion Region Challenges Section -->
-<div class="mb-auto p-4 max-w-[90vw] bg-gradient-to-r from-[#0A1428]/20 to-[#0A0C14]/20 pt-4 rounded-lg shadow-md border border-slate-900">
-  <h3 class="text-3xl font-semibold mb-6 text-center text-[#C8AA6E] border-b pb-4 mx-6 border-[#C8AA6E]/20">Region Challenges</h3>
-  <div class="grid grid-cols-1 gap-y-6 mx-auto">
-    <% @user_progress.select { |p| p[:challenge].progress_type == 'region_based' }.sort_by { |progress| -progress[:progress][:percentage] }.each do |progress| %>
-      <% region = progress[:challenge].region %>
-      <% if region.present? %>  <!-- Ensure region exists before generating the link -->
-        <%= link_to region_path(region), class: "block" do %>
-          <div class="bg-slate-800/30 rounded-lg p-6 border border-slate-700/30 hover:border-[#C8AA6E]/50 hover:scale-105 hover:bg-slate-700/30 transition-all duration-300 w-full">
-            <h4 class="text-xl text-[#C8AA6E] font-medium mb-2"><%= progress[:challenge].name %></h4>
-            <p class="text-sm text-slate-400 mb-4"><%= progress[:challenge].description %></p>
-
-            <div class="mt-4">
-              <div class="flex justify-between text-sm mb-2">
-                <span class="text-slate-400">Progress</span>
-                <span class="text-[#C8AA6E]">
-                  <%= progress[:progress][:current] %>/<%= progress[:progress][:total] %>
-                </span>
-              </div>
-
-              <div class="w-full bg-slate-700/30 rounded-full h-2">
-                <div class="h-2 rounded-full bg-[#C8AA6E]" style="width: <%= progress[:progress][:percentage] %>%;"></div>
-              </div>
-            </div>
-
-            <% if progress[:progress][:percentage] == 100 %>
-              <div class="mt-4 text-center">
-                <span class="bg-green-500/20 text-green-400 px-3 py-1 rounded-full text-sm">
-                  Completed!
-                </span>
-              </div>
-            <% end %>
-          </div>
-        <% end %>
-      <% else %>
-        <div class="text-center text-red-500">
-          Region information is missing for this challenge.
-        </div>
-      <% end %>
-    <% end %>
-  </div>
-</div>
-
-
-    <!-- Type Challenges Section -->
-    <div class="mb-auto p-4 max-w-[90vw] bg-gradient-to-r from-[#0A1428]/20 to-[#0A0C14]/20 pt-4 rounded-lg shadow-md border border-slate-900">
-      <h3 class="text-3xl font-semibold mb-6 text-center text-[#C8AA6E] border-b pb-4 mx-6 border-[#C8AA6E]/20">Type Challenges</h3>
-      <div class="grid grid-cols-1 gap-y-6 mx-auto">
-        <% @user_progress.select { |p| p[:challenge].progress_type == 'champion_specific' }.sort_by { |progress| -progress[:progress][:percentage] }.each do |progress| %>
-          <%= link_to challenge_path(progress[:challenge]), class: "block" do %>
-            <div class="bg-slate-800/30 rounded-lg p-6 border border-slate-700/30 hover:border-[#C8AA6E]/50 hover:scale-105 hover:bg-slate-700/30 transition-all duration-300 w-full">
-              <h4 class="text-xl text-[#C8AA6E] font-medium mb-2"><%= progress[:challenge].name %></h4>
-              <p class="text-sm text-slate-400 mb-4"><%= progress[:challenge].description %></p>
-
-              <div class="mt-4">
-                <div class="flex justify-between text-sm mb-2">
-                  <span class="text-slate-400">Progress</span>
-                  <span class="text-[#C8AA6E]">
-                    <%= progress[:progress][:current] %>/<%= progress[:progress][:total] %>
-                  </span>
-                </div>
-
-                <div class="w-full bg-slate-700/30 rounded-full h-2">
-                  <div class="h-2 rounded-full bg-[#C8AA6E]" style="width: <%= progress[:progress][:percentage] %>%;"></div>
-                </div>
-              </div>
-
-              <% if progress[:progress][:percentage] == 100 %>
-                <div class="mt-4 text-center">
-                  <span class="bg-green-500/20 text-green-400 px-3 py-1 rounded-full text-sm">
-                    Completed!
-                  </span>
-                </div>
-              <% end %>
-            </div>
-          <% end %>
-        <% end %>
-      </div>
-    </div>
-
-    <!-- Set Challenges Section -->
-    <div class="mb-auto p-4 max-w-[90vw] bg-gradient-to-r from-[#0A1428]/20 to-[#0A0C14]/20 pt-4 rounded-lg shadow-md border border-slate-900">
-      <h3 class="text-3xl font-semibold mb-6 text-center text-[#C8AA6E] border-b pb-4 mx-6 border-[#C8AA6E]/20">Set Challenges</h3>
-      <div class="grid grid-cols-1 gap-y-6 mx-auto">
-        <% @user_progress.select { |p| ['set_based', 'skin_set'].include?(p[:challenge].progress_type) }.sort_by { |progress| -progress[:progress][:percentage] }.each do |progress| %>
-          <%= link_to challenge_path(progress[:challenge]), class: "block" do %>
-            <div class="bg-slate-800/30 rounded-lg p-6 border border-slate-700/30 hover:border-[#C8AA6E]/50 hover:scale-105 hover:bg-slate-700/30 transition-all duration-300 w-full">
-              <h4 class="text-xl text-[#C8AA6E] font-medium mb-2"><%= progress[:challenge].name %></h4>
-              <p class="text-sm text-slate-400 mb-4"><%= progress[:challenge].description %></p>
-
-              <div class="mt-4">
-                <div class="flex justify-between text-sm mb-2">
-                  <span class="text-slate-400">Progress</span>
-                  <span class="text-[#C8AA6E]">
-                    <%= progress[:progress][:current] %>/<%= progress[:progress][:total] %>
-                  </span>
-                </div>
-
-                <div class="w-full bg-slate-700/30 rounded-full h-2">
-                  <div class="h-2 rounded-full bg-[#C8AA6E]" style="width: <%= progress[:progress][:percentage] %>%;"></div>
-                </div>
-              </div>
-
-              <% if progress[:progress][:percentage] == 100 %>
-                <div class="mt-4 text-center">
-                  <span class="bg-green-500/20 text-green-400 px-3 py-1 rounded-full text-sm">
-                    Completed!
-                  </span>
-                </div>
-              <% end %>
-            </div>
-          <% end %>
-        <% end %>
-      </div>
-    </div>
-  </div>
+  <%= render partial: 'challenge_section', locals: {
+    challenges: @user_progress[:set][:items],
+    title: 'Set Challenges',
+    section_id: 'set',
+    current_page: @page,
+    total_pages: @user_progress[:set][:total_pages]
+  } %>
 </div>

@@ -47,10 +47,8 @@ class SkinsController < ApplicationController
     Rails.logger.info "Rarity Distribution this roll: #{rarity_counts.inspect}"
     Rails.logger.info "Selected skins: #{selected_skins.map { |s| "#{s.name} (#{s.rarity})" }.join(', ')}"
 
-    # Add the selected skins to the user's collection in a transaction
     ActiveRecord::Base.transaction do
       selected_skins.each do |skin|
-        # Double-check to prevent duplicates
         unless current_user.skins.exists?(skin.id)
           current_user.user_skins.create!(skin: skin)
         end
