@@ -1,7 +1,9 @@
 class UnlockChampionsJob < ApplicationJob
   queue_as :default
 
-  def perform
+  def perform(user_id)
+    user = User.find(user_id)
+
     # Preload all necessary associations to minimize database queries
     User.includes(:user_skins, :skins, :user_champions, :champions, :user_regions).find_each do |user|
       process_user_unlocks(user)
