@@ -69,7 +69,7 @@
 <div class="mt-8 p-4 w-full bg-gradient-to-r from-[#0A1428]/20 to-[#0A0C14]/20 pt-4 rounded-lg shadow-md border border-slate-900">
   <h3 class="text-3xl font-semibold mb-6 text-center text-[#C8AA6E] border-b pb-4 mx-6 border-[#C8AA6E]/20 cursor-default">Skins</h3>
   
-  <% rarity_order = [ "common", "rare", "epic", "legendary", "mythic", "ultimate", "transcendent" ] %>
+  <% rarity_order = ["common", "rare", "epic", "legendary", "mythic", "ultimate", "transcendent"] %>
   <% grouped_skins = @champion.skins.group_by(&:rarity).sort_by { |rarity, _| rarity_order.index(rarity.downcase) || rarity_order.size } %>
   
   <% grouped_skins.each do |rarity, skins| %>
@@ -89,38 +89,38 @@
          end %>
       
       <div class="grid <%= grid_class %> gap-8 mx-auto lg:mx-24">
-        <% skins.each do |skin| %>
+        <% skins.sort_by(&:id).each do |skin| %> <!-- Sort skins by ID here -->
           <div class="relative group bg-gray-800 rounded-lg shadow-lg cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out overflow-hidden flex justify-center items-center <%= 'max-w-2xl mx-auto' if skins.length < 3 %>">
-           <% media_data = get_skin_media_data(skin) %>
-<% if media_data[:type] == 'video' %>
-  <video 
-    autoplay
-    loop
-    muted
-    playsinline
-    class="w-full h-full object-cover rounded-lg shadow-md group-hover:scale-110 <%= @user_skin_ids.include?(skin.id) ? 'saturate-[1]' : 'saturate-[0.10]' %> brightness-100 group-hover:saturate-[1.10] group-hover:brightness-[1.15] transition-all duration-500 ease-in-out"
-    data-skin-splash="<%= media_data[:uncentered_url] %>"
-    data-skin-name="<%= skin.name %>"
-    data-skin-id="<%= skin.id %>"
-    data-skin-description="<%= skin.description %>"
-    data-skin-rarity="<%= skin.rarity %>"
-    data-media-type="video">
-    <source src="<%= media_data[:centered_url] %>" type="video/webm">
-  </video>
-<% else %>
-  <%= image_tag media_data[:centered_url], 
-      alt: "#{skin.name} loading art",  
-      loading: "lazy",
-      class: "w-full h-full object-cover rounded-lg shadow-md group-hover:scale-110 #{@user_skin_ids.include?(skin.id) ? 'saturate-[1]' : 'saturate-[0.10]'} brightness-100  group-hover:saturate-[1.10] group-hover:brightness-[1.15] transition-all duration-500 ease-in-out",
-      data: { 
-        skin_splash: media_data[:uncentered_url],
-        skin_name: skin.name,
-        skin_id: skin.id,
-        skin_description: skin.description,
-        skin_rarity: skin.rarity,
-        media_type: 'image'
-      } %>
-<% end %>
+            <% media_data = get_skin_media_data(skin) %>
+            <% if media_data[:type] == 'video' %>
+              <video 
+                autoplay
+                loop
+                muted
+                playsinline
+                class="w-full h-full object-cover rounded-lg shadow-md group-hover:scale-110 <%= @user_skin_ids.include?(skin.id) ? 'saturate-[1]' : 'saturate-[0.10]' %> brightness-100 group-hover:saturate-[1.10] group-hover:brightness-[1.15] transition-all duration-500 ease-in-out"
+                data-skin-splash="<%= media_data[:uncentered_url] %>"
+                data-skin-name="<%= skin.name %>"
+                data-skin-id="<%= skin.id %>"
+                data-skin-description="<%= skin.description %>"
+                data-skin-rarity="<%= skin.rarity %>"
+                data-media-type="video">
+                <source src="<%= media_data[:centered_url] %>" type="video/webm">
+              </video>
+            <% else %>
+              <%= image_tag media_data[:centered_url], 
+                  alt: "#{skin.name} loading art",  
+                  loading: "lazy",
+                  class: "w-full h-full object-cover rounded-lg shadow-md group-hover:scale-110 #{@user_skin_ids.include?(skin.id) ? 'saturate-[1]' : 'saturate-[0.10]'} brightness-100  group-hover:saturate-[1.10] group-hover:brightness-[1.15] transition-all duration-500 ease-in-out",
+                  data: { 
+                    skin_splash: media_data[:uncentered_url],
+                    skin_name: skin.name,
+                    skin_id: skin.id,
+                    skin_description: skin.description,
+                    skin_rarity: skin.rarity,
+                    media_type: 'image'
+                  } %>
+            <% end %>
             <div class="absolute inset-0 border-0 group-hover:border-4 <%= 'border-' + skin.rarity.downcase %> group-hover:animate-pulse rounded-lg transition-all duration-300 ease-in-out" style="pointer-events: none;"></div>
           </div>
         <% end %>
@@ -128,6 +128,7 @@
     </div>
   <% end %>
 </div>
+
 
 
 
