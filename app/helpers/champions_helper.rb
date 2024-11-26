@@ -32,6 +32,16 @@ module ChampionsHelper
         uncentered: "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/characters/seraphine/skins/skin01/animatedsplash/seraphine_skin1_uncentered.webm",
         loading_art: "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/characters/seraphine/skins/skin01/animatedsplash/seraphine_skin1_centered.webm"
       },
+      "K/DA ALL OUT Seraphine Rising Star" => {
+        centered: "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/characters/seraphine/skins/skin02/animatedsplash/seraphine_skin2_centered.webm",
+        uncentered: "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/characters/seraphine/skins/skin02/animatedsplash/seraphine_skin2_uncentered.webm",
+        loading_art: "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/characters/seraphine/skins/skin02/animatedsplash/seraphine_skin2_centered.webm"
+      },
+      "K/DA ALL OUT Seraphine Superstar" => {
+        centered: "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/characters/seraphine/skins/skin03/animatedsplash/seraphine_skin3_centered.webm",
+        uncentered: "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/characters/seraphine/skins/skin03/animatedsplash/seraphine_skin3_uncentered.webm",
+        loading_art: "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/characters/seraphine/skins/skin03/animatedsplash/seraphine_skin3_centered.webm"
+      },
       "DJ Sona" => {
         centered: "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/characters/sona/skins/skin06/animatedsplash/sona_skin6_centered.webm",
         uncentered: "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/characters/sona/skins/skin06/animatedsplash/sona_skin6_uncentered.webm",
