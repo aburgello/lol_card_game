@@ -25,8 +25,11 @@
     
     <!-- Navbar -->
     <nav class="p-4 text-white border-b-2 border-slate-900">
-      <div class="flex justify-between items-center container mx-auto px-2 lg:px-32 2xl:px-20">
-        <a href="/" class="text-[#C8AA6E] text-2xl font-bold">Runeterra Prime</a>
+      <div class="flex justify-between items-center container mx-auto px-2 2xl:px-20">
+<a href="/" class="block lg:hidden text-[#C8AA6E] text-2xl font-bold">RP</a>
+<a href="/" class="hidden lg:block text-[#C8AA6E] text-2xl font-bold">Runeterra Prime</a>
+
+        
 
        <!-- Navbar Links (Hidden on mobile, shown on medium+ screens) -->
 <div class="hidden md:flex space-x-4">
@@ -36,9 +39,17 @@
   <a href="/champions" class="text-lg transition-all duration-200 ease-in-out <%= 'text-[#C8AA6E]' if request.path == '/champions' %> <%= 'text-[#A09B8C] hover:text-[#C8AA6E]' unless request.path == '/champions' %>">Champions</a>
   <a href="/regions" class="text-lg transition-all duration-200 ease-in-out  <%= 'text-[#C8AA6E]' if request.path == '/regions' %> <%= 'text-[#A09B8C] hover:text-[#C8AA6E]' unless request.path == '/regions' %>">Regions</a>
 
-  <% if user_signed_in? %>
+  
+</div>
+
+        <!-- Adding Hextech Cores Image -->
+        <div class="flex items-center space-x-1">
+<%= link_to "/challenges" do %>
+  <%= image_tag "hextech-core.png", alt: "Hextech Core", class: "w-6 h-6" %>
+<% end %>          <span class="text-lg text-[#C8AA6E]"><%= current_user.hextech_cores %></span>
+        <% if user_signed_in? %>
     <div class="group relative inline-block z-20">
-      <span class="text-lg cursor-pointer transition-all duration-200 ease-in-out text-[#A09B8C] hover:text-[#C8AA6E]">
+      <span class="mx-1 text-lg cursor-pointer transition-all duration-200 ease-in-out text-[#A09B8C] hover:text-[#C8AA6E]">
         <%= current_user.username.capitalize %>
       </span>
       <div class="absolute -left-1/2 mt-4 w-28 bg-[#0A1428] text-[#A09B8C] shadow-lg rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-100 ease-in-out hover:opacity-100 hover:visible">
@@ -50,13 +61,6 @@
     <a href="/users/sign_in" class="text-lg transition-all duration-200 ease-in-out <%= 'text-[#C8AA6E]' if request.path == '/users/sign_in' %> <%= 'text-[#A09B8C] hover:text-[#C8AA6E]' unless request.path == '/users/sign_in' %>">Login</a>
   <% end %>
 </div>
-
-        <!-- Adding Hextech Cores Image -->
-        <div class="hidden sm:flex items-center space-x-2">
-          <%= image_tag "hextech-core.png", alt: "Hextech Core", class: "w-6 h-6" %>
-          <span class="text-lg text-[#C8AA6E]"><%= current_user.hextech_cores %></span>
-        </div>
-
         <!-- Hamburger Menu (Visible only on mobile) -->
         <div class="md:hidden flex items-center">
           <button id="hamburger" class="text-[#C8AA6E] focus:outline-none">
