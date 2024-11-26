@@ -42,25 +42,33 @@
   
 </div>
 
-        <!-- Adding Hextech Cores Image -->
-        <div class="flex items-center space-x-1">
-<%= link_to "/challenges" do %>
-  <%= image_tag "hextech-core.png", alt: "Hextech Core", class: "w-6 h-6" %>
-<% end %>          <span class="text-lg text-[#C8AA6E]"><%= current_user.hextech_cores %></span>
-        <% if user_signed_in? %>
+<!-- Adding Hextech Cores Image -->
+<div class="flex items-center space-x-1">
+  <% if user_signed_in? %>
+    <%= link_to "/challenges" do %>
+      <%= image_tag "hextech-core.png", alt: "Hextech Core", class: "w-6 h-6" %>
+    <% end %>
+    <span class="text-lg text-[#C8AA6E]"><%= current_user.hextech_cores %></span>
+  <% end %>
+
+  <% if user_signed_in? %>
     <div class="group relative inline-block z-20">
       <span class="mx-1 text-lg cursor-pointer transition-all duration-200 ease-in-out text-[#A09B8C] hover:text-[#C8AA6E]">
         <%= current_user.username.capitalize %>
       </span>
       <div class="absolute -left-1/2 mt-4 w-28 bg-[#0A1428] text-[#A09B8C] shadow-lg rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-100 ease-in-out hover:opacity-100 hover:visible">
         <%= link_to "Edit Profile", edit_user_registration_path, class: "block text-lg hover:text-white text-center rounded-sm py-4 hover:bg-[#C8AA6E]" %>
-        <%= link_to "Sign Out", destroy_user_session_path, method: :delete, class: "block text-lg hover:text-red-500 text-center rounded-sm py-4 hover:bg-grey-800" %>
+        <%= link_to "Sign Out", destroy_user_session_path, method: :delete, class: "block text-lg hover:text-red-500 text-center rounded-sm py-4 hover:bg-gray-800" %>
       </div>
     </div>
   <% else %>
-    <a href="/users/sign_in" class="text-lg transition-all duration-200 ease-in-out <%= 'text-[#C8AA6E]' if request.path == '/users/sign_in' %> <%= 'text-[#A09B8C] hover:text-[#C8AA6E]' unless request.path == '/users/sign_in' %>">Login</a>
+    <%= link_to "/users/sign_in", class: "hidden md:block text-lg transition-all duration-200 ease-in-out #{'text-[#C8AA6E]' if request.path == '/users/sign_in'} #{'text-[#A09B8C] hover:text-[#C8AA6E]' unless request.path == '/users/sign_in'}" do %>
+      Login
+    <% end %>
   <% end %>
 </div>
+
+
         <!-- Hamburger Menu (Visible only on mobile) -->
         <div class="md:hidden flex items-center">
           <button id="hamburger" class="text-[#C8AA6E] focus:outline-none">
