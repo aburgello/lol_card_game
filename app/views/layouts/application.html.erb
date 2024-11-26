@@ -53,7 +53,7 @@
 
   <% if user_signed_in? %>
     <div class="group relative inline-block z-20">
-      <span class="mx-1 text-lg cursor-pointer transition-all duration-200 ease-in-out text-[#A09B8C] hover:text-[#C8AA6E]">
+      <span class="mx-1 text-lg cursor-pointer transition-all duration-200 ease-in-out text-[#A09B8C] hover:text-[#C8AA6E]" style="cursor: pointer; user-select: none;">
         <%= current_user.username.capitalize %>
       </span>
       <div class="absolute -left-1/2 mt-4 w-28 bg-[#0A1428] text-[#A09B8C] shadow-lg rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-100 ease-in-out hover:opacity-100 hover:visible">
