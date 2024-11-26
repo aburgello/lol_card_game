@@ -91,12 +91,36 @@
       <div class="grid <%= grid_class %> gap-8 mx-auto lg:mx-24">
         <% skins.each do |skin| %>
           <div class="relative group bg-gray-800 rounded-lg shadow-lg cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out overflow-hidden flex justify-center items-center <%= 'max-w-2xl mx-auto' if skins.length < 3 %>">
-            <%= image_tag skin.splash_art_centered, 
-    alt: "#{skin.name} loading art",  
-    loading: "lazy",
-    class: "w-full h-full object-cover rounded-lg shadow-md group-hover:scale-110 #{@user_skin_ids.include?(skin.id) ? 'saturate-[1]' : 'saturate-[0.10]'} brightness-100  group-hover:saturate-[1.10] group-hover:brightness-[1.15] transition-all duration-500 ease-in-out",
-    data: { skin_splash: skin.splash_art, skin_name: skin.name, skin_id: skin.id, skin_description: skin.description, skin_rarity: skin.rarity } %>
-
+           <% media_data = get_skin_media_data(skin) %>
+<% if media_data[:type] == 'video' %>
+  <video 
+    autoplay
+    loop
+    muted
+    playsinline
+    class="w-full h-full object-cover rounded-lg shadow-md group-hover:scale-110 <%= @user_skin_ids.include?(skin.id) ? 'saturate-[1]' : 'saturate-[0.10]' %> brightness-100 group-hover:saturate-[1.10] group-hover:brightness-[1.15] transition-all duration-500 ease-in-out"
+    data-skin-splash="<%= media_data[:uncentered_url] %>"
+    data-skin-name="<%= skin.name %>"
+    data-skin-id="<%= skin.id %>"
+    data-skin-description="<%= skin.description %>"
+    data-skin-rarity="<%= skin.rarity %>"
+    data-media-type="video">
+    <source src="<%= media_data[:centered_url] %>" type="video/webm">
+  </video>
+<% else %>
+  <%= image_tag media_data[:centered_url], 
+      alt: "#{skin.name} loading art",  
+      loading: "lazy",
+      class: "w-full h-full object-cover rounded-lg shadow-md group-hover:scale-110 #{@user_skin_ids.include?(skin.id) ? 'saturate-[1]' : 'saturate-[0.10]'} brightness-100  group-hover:saturate-[1.10] group-hover:brightness-[1.15] transition-all duration-500 ease-in-out",
+      data: { 
+        skin_splash: media_data[:uncentered_url],
+        skin_name: skin.name,
+        skin_id: skin.id,
+        skin_description: skin.description,
+        skin_rarity: skin.rarity,
+        media_type: 'image'
+      } %>
+<% end %>
             <div class="absolute inset-0 border-0 group-hover:border-4 <%= 'border-' + skin.rarity.downcase %> group-hover:animate-pulse rounded-lg transition-all duration-300 ease-in-out" style="pointer-events: none;"></div>
           </div>
         <% end %>
@@ -115,19 +139,23 @@
 
 <!-- Modal to Show Full Splash Art -->
 <div id="splash-art-modal" class="fixed inset-0 bg-black hidden bg-opacity-90 items-center justify-center z-50 flex">
-  <div id="splash-art-modal-bg" class="bg-slate-950 mx-4 p-3 rounded-xl opacity-0  max-w-6xl scale-up w-full relative">
+  <div id="splash-art-modal-bg" class="bg-slate-950 mx-4 p-3 rounded-xl opacity-0 max-w-6xl scale-up w-full relative">
     <div class="relative group flex justify-center">
-      
-      <img id="splash-art-image" src="/api/placeholder/800/400" alt="Splash Art" 
-           class="max-w-full max-h-full object-contain rounded-xl shadow-[0_4px_15px_rgba(0,0,0,0.75)]">
-<div class="absolute inset-0 flex flex-col justify-end items-start bg-gradient-to-t from-slate-950 via-slate-900/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 ease-in-out rounded-xl">
+      <!-- Container for media content (replaces the direct img tag) -->
+      <div id="splash-art-image" class="relative w-full rounded-xl flex justify-center">
+        <!-- Media content will be dynamically inserted here -->
+      </div>
+
+      <!-- Gradient overlay and text content -->
+      <div class="absolute inset-0 flex flex-col justify-end items-start bg-gradient-to-t from-slate-950 via-slate-900/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 ease-in-out rounded-xl">
         <div class="w-full relative">
           <div id="modal-skin-name" 
                class="bottom-0 left-0 px-6 py-0 translate-y-6 group-hover:translate-y-0
                       text-base md:text-2xl font-bold text-[#C8AA6E] text-center
-                      transform transition-all duration-500  md:opacity-100 group-hover:opacity-100
+                      transform transition-all duration-500 md:opacity-100 group-hover:opacity-100
                       group-hover:relative
-                      group-hover:text-[#C8AA6E]" style="cursor: default; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);">
+                      group-hover:text-[#C8AA6E]" 
+               style="cursor: default; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);">
             Skin Name
           </div>
           <div id="modal-skin-description"
@@ -144,36 +172,60 @@
 
 
 <script>
-document.querySelectorAll('[data-skin-splash]').forEach(img => {
-  img.addEventListener('click', function () {
-    const splashArt = this.getAttribute('data-skin-splash');
+document.querySelectorAll('[data-skin-splash]').forEach(media => {
+  media.addEventListener('click', function () {
+    const splashUrl = this.getAttribute('data-skin-splash');
     const skinName = this.getAttribute('data-skin-name');
     const skinDescription = this.getAttribute('data-skin-description');
     const rarity = this.getAttribute('data-skin-rarity');
+    const mediaType = this.getAttribute('data-media-type');
     const modal = document.getElementById('splash-art-modal');
-    const splashImage = document.getElementById('splash-art-image');
+    const modalContent = document.getElementById('splash-art-image');
     const modalSkinName = document.getElementById('modal-skin-name');
     const modalSkinDescription = document.getElementById('modal-skin-description');
     const modalBg = document.getElementById('splash-art-modal-bg');
     
     const championBySkinPath = (skinName) => `/champions/skin/${encodeURIComponent(skinName)}`;
 
-    // Remove existing rarity classes for background and border
+    // Remove existing content
+    while (modalContent.firstChild) {
+      modalContent.removeChild(modalContent.firstChild);
+    }
+
+    // Create and append new content based on media type
+    if (mediaType === 'video') {
+      const video = document.createElement('video');
+      video.autoplay = true;
+      video.loop = true;
+      video.muted = true;
+      video.playsInline = true;
+      video.className = "max-w-full max-h-full object-contain rounded-xl shadow-[0_4px_15px_rgba(0,0,0,0.75)]";
+      
+      const source = document.createElement('source');
+      source.src = splashUrl;
+      source.type = 'video/webm';
+      
+      video.appendChild(source);
+      modalContent.appendChild(video);
+    } else {
+      const img = document.createElement('img');
+      img.src = splashUrl;
+      img.alt = "Splash Art";
+      img.className = "max-w-full max-h-full object-contain rounded-xl shadow-[0_4px_15px_rgba(0,0,0,0.75)]";
+      modalContent.appendChild(img);
+    }
+
+    // Remove existing rarity classes and add new ones
     modalBg.classList.remove(
       'bg-mythic', 'bg-ultimate', 'bg-legendary', 'bg-transcendent', 'bg-common', 'bg-epic',
       'border-mythic', 'border-ultimate', 'border-legendary', 'border-transcendent', 'border-common', 'border-epic'
     );
 
-    // Add the new rarity classes based on the skin's rarity
     if (rarity) {
       modalBg.classList.add(`bg-${rarity.toLowerCase()}`);
       modalBg.classList.add(`border-${rarity.toLowerCase()}`);
     }
 
-    // Update modal content
-    splashImage.src = splashArt;
-
-    // Create a link for the skin name (Ensure that it doesn't redirect)
     modalSkinName.innerHTML = `<a href="${championBySkinPath(skinName)}" class="text-[#C8AA6E] hover:brightness-150 transition-all duration-200 ease-in-out" target="_self">${skinName}</a>`;
     modalSkinDescription.innerHTML = skinDescription || 'No description available.';
     modal.classList.remove('hidden');
@@ -184,6 +236,11 @@ document.querySelectorAll('[data-skin-splash]').forEach(img => {
 document.getElementById('splash-art-modal').addEventListener('click', function (e) {
   if (e.target === this) {
     this.classList.add('hidden');
+    // Stop video playback when closing modal
+    const video = document.querySelector('#splash-art-modal video');
+    if (video) {
+      video.pause();
+    }
   }
 });
 

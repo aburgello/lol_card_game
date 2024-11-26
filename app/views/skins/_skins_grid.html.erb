@@ -24,7 +24,7 @@
       <!-- Video overlay for this specific card -->
       <div class="absolute inset-0 pointer-events-none z-50 transition-all opacity-0 duration-300 fade-in-up ease-in-out"
            style="animation-delay: <%= 0.3 * index %>s;" data-reveal-video>
-        <video class="w-full h-full object-cover scale-x-[3] scale-[2] " muted autoplay loop>
+        <video class="w-full h-full object-cover scale-x-[3] scale-[2] " muted autoplay loop preload="auto">
           <source src="<%= asset_path(videos[:smoke]) %>" type="video/webm">
         </video>
       </div>
@@ -32,7 +32,7 @@
       <!-- Outro video -->
       <div class="absolute inset-0 pointer-events-none z-50 transition-all opacity-0 duration-300 fade-in-up ease-in-out"
            style="animation-delay: <%= 0.3 * index %>s;" data-reveal-video>
-        <video class="w-full h-full object-cover rounded-lg scale-x-[2.4] scale-[2.01] saturate-[1.18] opacity-0" muted>
+        <video class="w-full h-full object-cover rounded-lg scale-x-[2.4] scale-[2.01] saturate-[1.18] opacity-0" muted preload="auto">
           <source src="<%= asset_path(videos[:outro]) %>" type="video/webm">
         </video>
       </div>
@@ -40,7 +40,7 @@
       <!-- Intro video -->
       <div class="absolute inset-0 pointer-events-none z-50 transition-all opacity-0 duration-300 fade-in-up ease-in-out"
            style="animation-delay: <%= 0.3 * index %>s;" data-reveal-video>
-        <video class="w-full h-full object-fill rounded-lg scale-x-[3.5] scale-[2.01] saturate-[0.8] opacity-0" muted>
+        <video class="w-full h-full object-fill rounded-lg scale-x-[3.5] scale-[2.01] saturate-[0.8] opacity-0" muted preload="auto">
           <source src="<%= asset_path(videos[:intro]) %>" type="video/webm">
         </video>
       </div>
@@ -49,28 +49,53 @@
      style="animation-delay: <%= 0.3 * index %>s; ">
   <!-- Overlay based on rarity -->
 
-  <!-- Card content -->
-  <div id="card-collect" style="animation-delay: <%= 0.3 * index %>s;"
-       class="relative <%= "#{skin.rarity.downcase}" %> w-full h-full rounded-xl opacity-0 duration-300 ease-in-out animate-pulse-low  overflow-hidden transition-all" style="animation-delay: <%= 0.3 * index %>s; ">
-    <!-- Splash art -->
-    <%= image_tag skin.loading_art, 
+<!-- Card content -->
+<div id="card-collect" style="animation-delay: <%= 0.3 * index %>s;"
+     class="relative <%= "#{skin.rarity.downcase}" %> w-full h-full rounded-xl opacity-0 duration-300 ease-in-out animate-pulse-low overflow-hidden transition-all">
+  
+  <!-- Determine the loading art based on rarity -->
+  <% media_data = get_skin_media_data(skin) %>
+  <% loading_art_url = if skin.rarity.downcase == 'ultimate' || skin.rarity.downcase == 'transcendent'
+                         media_data[:loading_art_url]  # Use special loading art (webm)
+                       else
+                         skin.loading_art  # Default loading art (image)
+                       end %>
+
+  <!-- Splash art -->
+  <% if skin.rarity.downcase == 'ultimate' || skin.rarity.downcase == 'transcendent' %>
+    <video 
+      autoplay
+      loop
+      muted
+      playsinline
+      class="w-full h-full object-cover shadow-md scale-[1.07] inner-glow transition-all duration-300 group-hover:brightness-[1.1] group-hover:saturate-[1.10] ease-in-out"
+      data-skin-splash="<%= skin.splash_art %>"
+      data-skin-name="<%= skin.name %>"
+      data-skin-description="<%= skin.description %>"
+      data-skin-rarity="<%= skin.rarity %>">
+      <source src="<%= loading_art_url %>" type="video/webm">
+      Your browser does not support the video tag.
+    </video>
+  <% else %>
+    <%= image_tag loading_art_url, 
         data: { skin_splash: skin.splash_art, skin_name: skin.name, skin_description: skin.description, skin_rarity: skin.rarity },
         alt: "#{skin.name} loading art",  
         loading: "lazy",
         class: "w-full h-full object-cover shadow-md scale-[1.07] inner-glow transition-all duration-300 group-hover:brightness-[1.1] group-hover:saturate-[1.10] ease-in-out" %>
+  <% end %>
 
-    <!-- Skin name with fade-in -->
-    <div class="absolute bottom-0 opacity-100 sm:opacity-0 group-hover:opacity-100 left-0 w-full transition-opacity duration-300 ease-in-out">
-      <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/10 to-transparent opacity-0 rounded-lg"></div>
-      <div class="relative z-10 px-6 py-4 overflow-hidden">
-        <div class="text-[0.5rem] sm:text-xs 2xl:text-base min-[1700px]:text-lg font-bold <%= "glow-#{skin.rarity.downcase}"%> text-white text-center transition-opacity duration-300 ease-in-out" 
-             style="cursor: pointer; user-select: none;">
-          <%= skin.name %>
-        </div>
+  <!-- Skin name with fade-in -->
+  <div class="absolute bottom-0 opacity-100 sm:opacity-0 group-hover:opacity-100 left-0 w-full transition-opacity duration-300 ease-in-out">
+    <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/10 to-transparent opacity-0 rounded-lg"></div>
+    <div class="relative z-10 px-6 py-4 overflow-hidden">
+      <div class="text-[0.5rem] sm:text-xs 2xl:text-base min-[1700px]:text-lg font-bold <%= "glow-#{skin.rarity.downcase}" %> text-white text-center transition-opacity duration-300 ease-in-out" 
+           style="cursor: pointer; user-select: none;">
+        <%= skin.name %>
       </div>
     </div>
   </div>
-    <div id="card-overlay" class="absolute inset-0 bg-<%= rarity.downcase %>-overlay opacity-0 pointer-events-none z-60"></div>
+</div>
+<div id="card-overlay" class="absolute inset-0 bg-<%= skin.rarity.downcase %>-overlay opacity-0 pointer-events-none z-60"></div>
 
 </div>
     </div>
@@ -106,15 +131,13 @@
 </div>
 <script>
     
-// Select each card's clickable area
-// Select each card's clickable area
 document.querySelectorAll('.relative.group.bg-gradient-to-r').forEach((card, index) => {
   let hasBeenClicked = false;
   let isPlaying = false;
 
   const videoContainers = card.parentElement.querySelectorAll('[data-reveal-video]');
   
-  if (videoContainers.length < 3) {
+   if (videoContainers.length < 3) {
     console.warn('Could not find both video containers');
     return;
   }
@@ -129,9 +152,25 @@ document.querySelectorAll('.relative.group.bg-gradient-to-r').forEach((card, ind
   const cardCollect = card.querySelector('#card-collect');
   const cardOverlay = card.querySelector('#card-overlay');
   
-  // Get the skin name from the card for matching with pull results
-  const skinName = card.querySelector('img').getAttribute('data-skin-name');
-  
+  // Check for image or video and retrieve skin name accordingly
+  let skinName, splashArt, skinDescription, rarity;
+
+  const imgElement = card.querySelector('img');
+  const videoElement = card.querySelector('video');
+  if (imgElement) {
+    skinName = imgElement.getAttribute('data-skin-name');
+    splashArt = imgElement.getAttribute('data-skin-splash');
+    skinDescription = imgElement.getAttribute('data-skin-description');
+    rarity = imgElement.getAttribute('data-skin-rarity');
+  } else if (videoElement) {
+    skinName = videoElement.getAttribute('data-skin-name');
+    splashArt = videoElement.getAttribute('data-skin-splash');
+    skinDescription = videoElement.getAttribute('data-skin-description');
+    rarity = videoElement.getAttribute('data-skin-rarity');
+  } else {
+    console.warn('No image or video found in the card.');
+    return; // Exit if neither is found
+  }
   introVideo.load();
   outroVideo.load();
   shadowVideo.load();
@@ -143,7 +182,6 @@ document.querySelectorAll('.relative.group.bg-gradient-to-r').forEach((card, ind
     return;
   }
 
-  // Set up initial state
   introVideo.style.opacity = '1';
   introVideo.currentTime = 0;
   outroContainer.style.opacity = '0';
@@ -172,11 +210,10 @@ document.querySelectorAll('.relative.group.bg-gradient-to-r').forEach((card, ind
       pullCards.forEach(pullCard => {
         const pullSkinName = pullCard.querySelector('h5').textContent;
         if (pullSkinName === skinName) {
-          // Add a transition class for smoother unblur effect
           pullCard.classList.remove('blur-[6px]');
         }
       });
-    }, 3000); // 1 second delay
+    }, 3000); 
   };
 
   const playVideoSequence = async () => {
@@ -184,7 +221,6 @@ document.querySelectorAll('.relative.group.bg-gradient-to-r').forEach((card, ind
     hasBeenClicked = true;
     isPlaying = true;
 
-    // Unblur the corresponding pull result as soon as the animation starts
     unblurMatchingPullResult();
 
     await safePlayVideo(introVideo);
@@ -212,41 +248,50 @@ document.querySelectorAll('.relative.group.bg-gradient-to-r').forEach((card, ind
     }, { once: true });
   };
 
-  // Add click handler to the card
   card.addEventListener('click', playVideoSequence);
     
-  // Handle skin art click for modal
-  const skinArtContainer = card.querySelector('.relative.group.bg-gradient-to-r .relative.w-full');
-  skinArtContainer.addEventListener('click', function (e) {
-    if (!hasBeenClicked) return;
+ const skinArtContainer = card.querySelector('.relative.group.bg-gradient-to-r .relative.w-full');
+skinArtContainer.addEventListener('click', function (e) {
+  if (!hasBeenClicked) return;
 
-    const splashArt = this.querySelector('img').getAttribute('data-skin-splash');
-    const skinName = this.querySelector('img').getAttribute('data-skin-name');
-    const skinDescription = this.querySelector('img').getAttribute('data-skin-description');
-    const rarity = this.querySelector('img').getAttribute('data-skin-rarity');
-    const modal = document.getElementById('splash-art-modal');
-    const splashImage = document.getElementById('splash-art-image');
-    const modalSkinName = document.getElementById('modal-skin-name');
-    const modalSkinDescription = document.getElementById('modal-skin-description');
-    const modalBg = document.getElementById('splash-art-modal-bg');
+  let skinElement = e.target.closest('img, video');
 
-    const championBySkinPath = (skinName) => `/champions/skin/${encodeURIComponent(skinName)}`;
+  if (!skinElement) {
+    skinElement = card.querySelector('img, video');
+  }
 
-    modalBg.classList.remove(
-      'bg-mythic', 'bg-ultimate', 'bg-legendary', 'bg-transcendent', 'bg-common', 'bg-epic',
-      'border-mythic', 'border-ultimate', 'border-legendary', 'border-transcendent', 'border-common', 'border-epic'
-    );
+  if (!skinElement) {
+    console.warn('No image or video found in the card.');
+    return;
+  }
 
-    if (rarity) {
-      modalBg.classList.add(`bg-${rarity.toLowerCase()}`);
-      modalBg.classList.add(`border-${rarity.toLowerCase()}`);
-    }
+  const splashArt = skinElement.getAttribute('data-skin-splash');
+  const skinName = skinElement.getAttribute('data-skin-name');
+  const skinDescription = skinElement.getAttribute('data-skin-description');
+  const rarity = skinElement.getAttribute('data-skin-rarity');
+  const modal = document.getElementById('splash-art-modal');
+  const splashImage = document.getElementById('splash-art-image');
+  const modalSkinName = document.getElementById('modal-skin-name');
+  const modalSkinDescription = document.getElementById('modal-skin-description');
+  const modalBg = document.getElementById('splash-art-modal-bg');
 
-    splashImage.src = splashArt;
-    modalSkinName.innerHTML = `<a href="${championBySkinPath(skinName)}" class="text-[#C8AA6E] hover:brightness-125 hover:saturate-[1.25] transition-all duration-200 ease-in-out" target="_self">${skinName}</a>`;
-    modalSkinDescription.innerHTML = skinDescription || 'No description available.';
-    modal.classList.remove('hidden');
-  });
+  const championBySkinPath = (skinName) => `/champions/skin/${encodeURIComponent(skinName)}`;
+
+  modalBg.classList.remove(
+    'bg-mythic', 'bg-ultimate', 'bg-legendary', 'bg-transcendent', 'bg-common', 'bg-epic',
+    'border-mythic', 'border-ultimate', 'border-legendary', 'border-transcendent', 'border-common', 'border-epic'
+  );
+
+  if (rarity) {
+    modalBg.classList.add(`bg-${rarity.toLowerCase()}`);
+    modalBg.classList.add(`border-${rarity.toLowerCase()}`);
+  }
+
+  splashImage.src = splashArt;
+  modalSkinName.innerHTML = `<a href="${championBySkinPath(skinName)}" class="text-[#C8AA6E] hover:brightness-125 hover:saturate-[1.25] transition-all duration-200 ease-in-out" target="_self">${skinName}</a>`;
+  modalSkinDescription.innerHTML = skinDescription || 'No description available.';
+  modal.classList.remove('hidden');
+});
 });
 
 // Hide modal when clicking outside
