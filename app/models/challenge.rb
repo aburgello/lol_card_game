@@ -32,7 +32,6 @@ class Challenge < ApplicationRecord
     
     if match
       rarity = match[1]
-      Rails.logger.debug "Rarity: #{rarity}, Querying skins with rarity: #{rarity}"
       
       owned_skins = user.skins.where(rarity: rarity).count
       total_skins = Skin.where(rarity: rarity).count
@@ -53,7 +52,6 @@ class Challenge < ApplicationRecord
   def calculate_region_progress(user)
     # Extract region name from challenge name
     region_name = name.match(/Collect all (.+) Champions/)[1]
-    Rails.logger.debug "Calculating progress for region: #{region_name}"
     
     # Find the region
     region = Region.find_by(name: region_name)
@@ -114,7 +112,6 @@ class Challenge < ApplicationRecord
     
     if match
       set_word = match[1]
-      Rails.logger.debug "Calculating progress for skin set: #{set_word}"
       
       skins_in_set = self.skins
       owned_skins = user.skins.where(id: skins_in_set.pluck(:id)).count

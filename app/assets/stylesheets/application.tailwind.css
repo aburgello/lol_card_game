@@ -52,8 +52,8 @@ body {
 /* Define rarity border classes */
 
 .img-rock {
-  -webkit-animation: rockAni 1s infinite;
-  animation: rockAni 1s infinite;
+  -webkit-animation: rockAni 1s ease-in-out infinite;
+  animation: rockAni 1.3s ease-in-out infinite;
 }
 @-webkit-keyframes rockAni {
   0%, 100% {
@@ -61,15 +61,15 @@ body {
   }
 
   10%, 20% {
-      -webkit-transform: scale(0.9) rotate(-5deg);
+      -webkit-transform: scale(0.97) rotate(-3deg);
   }
 
   30%, 50%, 70%, 90% {
-      -webkit-transform: scale(1.1) rotate(5deg);
+      -webkit-transform: scale(1.03) rotate(3deg);
   }
 
   40%, 60%, 80% {
-      -webkit-transform: scale(1.1) rotate(-5deg);
+      -webkit-transform: scale(1.03) rotate(-3deg);
   }
 }
 
@@ -79,15 +79,15 @@ body {
   }
 
   10%, 20% {
-      transform: scale(0.9) rotate(-5deg);
+      transform: scale(0.97) rotate(-2deg);
   }
 
   30%, 50%, 70%, 90% {
-      transform: scale(1.1) rotate(5deg);
+      transform: scale(1.03) rotate(2deg);
   }
 
   40%, 60%, 80% {
-      transform: scale(1.1) rotate(-5deg);
+      transform: scale(1.03) rotate(-2deg);
   }
 }
 

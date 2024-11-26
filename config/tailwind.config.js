@@ -7,6 +7,9 @@ module.exports = {
     './app/javascript/**/*.js',
     './app/views/**/*.{erb,haml,html,slim}'
   ],
+  safelist: [
+    'bg-green-500/10', // Add this line to safelist
+  ],
   theme: {
     extend: {
       fontFamily: {

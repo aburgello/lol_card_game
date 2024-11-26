@@ -6,6 +6,17 @@ class SkinsController < ApplicationController
   end
 
   def add_skins
+    cost_per_roll = 10
+    total_cost = cost_per_roll * 5
+  
+    if current_user.hextech_cores < total_cost
+      flash[:alert] = "You do not have enough Hextech Cores to roll for skins."
+      redirect_to skins_path and return
+    end
+  
+    current_user.update!(hextech_cores: current_user.hextech_cores - total_cost)
+  
+
     selected_skins = []
     selected_skin_ids = []  # Track selected IDs within this batch
     rarity_counts = Hash.new(0)

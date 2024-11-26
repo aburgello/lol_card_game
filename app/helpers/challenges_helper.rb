@@ -1,4 +1,3 @@
-# app/helpers/challenges_helper.rb
 module ChallengesHelper
   def link_to_prev_page(challenges, section_id, current_page, total_pages, html_options = {})
     return if current_page == 1

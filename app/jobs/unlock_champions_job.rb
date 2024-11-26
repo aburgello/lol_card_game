@@ -2,18 +2,13 @@ class UnlockChampionsJob < ApplicationJob
   queue_as :default
 
   def perform(user_id)
-    user = User.find(user_id)
-
-    # Preload all necessary associations to minimize database queries
-    User.includes(:user_skins, :skins, :user_champions, :champions, :user_regions).find_each do |user|
-      process_user_unlocks(user)
-    end
+    user = User.includes(:skins, :user_champions, :champions, :user_regions).find(user_id)
+    process_user_unlocks(user)
   end
 
   private
 
   def process_user_unlocks(user)
-    # Group user's skins by champion to check completion
     owned_skins_by_champion = user.skins.group(:champion_id).count
 
     Champion.includes(:skins, :region, :types).find_each do |champion|
@@ -24,22 +19,29 @@ class UnlockChampionsJob < ApplicationJob
         unlock_champion_for_user(user, champion)
         discover_region_for_user(user, champion.region)
         update_challenge_progress(user, champion)
+        award_hextech_cores(user, 5000)
       end
     end
   end
 
   def unlock_champion_for_user(user, champion)
     UserChampion.create!(user: user, champion: champion)
-    
     Rails.logger.info "Unlocked champion: #{champion.name} for user: #{user.id}"
-    
-    # Add champion's skins to user's collections if not already there
+
     champion.skins.each do |skin|
       if user.owns_skin?(skin) && !user.collected_skins.exists?(skin.id)
         user.collections.create!(skin: skin)
         Rails.logger.info "Added skin: #{skin.name} to collection for user: #{user.id}"
       end
     end
+  end
+
+  def award_hextech_cores(user, amount)
+    user.transaction do
+      user.hextech_cores += amount
+      user.save!
+    end
+    Rails.logger.info "Awarded #{amount} Hextech Cores to #{user.name}"
   end
 
   def discover_region_for_user(user, region)
@@ -51,10 +53,7 @@ class UnlockChampionsJob < ApplicationJob
   end
 
   def update_challenge_progress(user, champion)
-    # Update region-based challenges
     update_region_challenges(user, champion)
-    
-    # Update champion-type challenges
     update_type_challenges(user, champion)
   end
 
@@ -95,10 +94,9 @@ class UnlockChampionsJob < ApplicationJob
     end
   end
 
-  # Error handling
   rescue_from(ActiveRecord::RecordInvalid) do |exception|
     Rails.logger.error "Failed to process champion unlocks: #{exception.message}"
-    Rollbar.error(exception) if defined?(Rollbar) # Optional: log to Rollbar if available
+    Rollbar.error(exception) if defined?(Rollbar)
     raise exception
   end
 end

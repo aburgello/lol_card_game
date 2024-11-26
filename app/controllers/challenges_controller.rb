@@ -34,15 +34,35 @@ class ChallengesController < ApplicationController
     @progress = @challenge.progress_for_user(current_user)
     @skins = @challenge.skins
     @user_skin_ids = current_user.skins.pluck(:id)
+  
+    # Check if the challenge is completed
+    if @progress[:percentage] == 100 && !challenge_completed?
+      award_hextech_cores
+      mark_challenge_completed
+    end
+  end
+  
+  private
+  
+  def challenge_completed?
+    # Check if the challenge has already been completed by the user
+    UserChallenge.exists?(user: current_user, challenge: @challenge, completed: true)
   end
 
-  private
+  def mark_challenge_completed
+    # Find or create the user's challenge record
+    user_challenge = UserChallenge.find_or_create_by(user: current_user, challenge: @challenge)
+    
+    # Update the challenge completion status
+    user_challenge.update(completed: true, completed_at: Time.current)
+    
+    flash[:notice] = "Challenge completed!"
+  end
 
   def calculate_all_progress(challenges)
     challenges.map do |challenge|
       progress = challenge.progress_for_user(current_user)
 
-      
       if progress
         {
           challenge: challenge,
@@ -74,6 +94,12 @@ class ChallengesController < ApplicationController
       total_pages: total_pages,
       total_items: sorted_progress.length
     }
+  end
+
+  def award_hextech_cores
+    # Award Hextech Cores before marking the challenge as completed
+    current_user.update(hextech_cores: current_user.hextech_cores + 1000) # Adjust the award value as necessary
+    flash[:notice] = "You've earned a Hextech Core!"
   end
 
   def authenticate_user!

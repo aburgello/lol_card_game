@@ -18,6 +18,7 @@ has_many :user_challenges
 has_many :challenges, through: :user_challenges
 has_many :user_champions, class_name: 'UserChampion'
 has_many :champions, through: :user_champions
+validates :hextech_cores, numericality: { greater_than_or_equal_to: 0 }
 
 # Check if a user owns a specific skin
 def owns_skin?(skin)
