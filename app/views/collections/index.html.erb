@@ -100,15 +100,23 @@ function initializeSwipers() {
         clickable: true,
       },
       breakpoints: {
-        640: {
-          slidesPerView: 3,
+        240: {
+          slidesPerView: 1,
+          spaceBetween: 20,
+          grid: {
+            rows: 1,
+            fill: 'row'
+          }
+        },
+        540: {
+          slidesPerView: 2,
           spaceBetween: 20,
           grid: {
             rows: 2,
             fill: 'row'
           }
         },
-        1500: {
+        800: {
           slidesPerView: 3,
           spaceBetween: 20,
           grid: {
