@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get "games/index"
+  get "games/show"
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
   devise_for :users
@@ -27,6 +29,11 @@ resources :champions, param: :name, only: [:show, :index]
 get 'champions/skin/:skin_name', to: 'champions#redirect_skin'
 
 resources :challenges, only: [:index, :show]
+resources :games, only: [:index, :show]
+resources :games do
+  post 'submit_answer', on: :member
+end
+patch 'update_score', to: 'games#update_score'
 
   # other routes
   resources :skins, only: [:index, :show] do

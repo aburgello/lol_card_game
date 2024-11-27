@@ -3,7 +3,7 @@ class ChallengesController < ApplicationController
 
   def index
     @page = (params[:page] || 1).to_i
-    @per_page = 7
+    @per_page = 8
     @section = params[:section]
 
     @challenges = Challenge.includes(:region).all
@@ -99,7 +99,7 @@ class ChallengesController < ApplicationController
 
   def award_hextech_cores
     # Award Hextech Cores before marking the challenge as completed
-    current_user.update(hextech_cores: current_user.hextech_cores + 1000) # Adjust the award value as necessary
+    current_user.update(hextech_cores: current_user.hextech_cores + 400) # Adjust the award value as necessary
     flash[:notice] = "You've earned Hextech Core!"
   end
 

@@ -1,0 +1,30 @@
+<% if @game.game_type == "quiz" %>
+  <div class="max-w-[90vw] xl:max-w-[70vw] mx-auto p-6 bg-gradient-to-r from-[#0A1428]/20 to-[#0A0C14]/20 rounded-lg shadow-md border border-slate-900">
+    <h3 class="text-3xl font-semibold mb-6 text-center text-[#C8AA6E] border-b pb-4 border-[#C8AA6E]/20">
+      <%= @game.name %>
+    </h3>
+    <p class="text-slate-400 text-center mb-6"><%= @game.description %></p>
+
+    <!-- Quiz Card -->
+    <div class="bg-slate-800/30 rounded-lg shadow-lg p-6 border border-slate-700/50">
+      <h4 id="question" class="text-xl text-[#C8AA6E] font-medium mb-4"><%= @question %></h4>
+      <div data-controller="quiz"
+           data-quiz-game-id="<%= @game.id %>"
+           data-quiz-min-reward="<%= @game.min_reward %>"
+           data-quiz-questions="<%= @questions.to_json %>">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <% @answers.each do |answer| %>
+            <button 
+              class="block w-full bg-slate-700 text-slate-300 hover:bg-[#C8AA6E] hover:text-slate-900 py-4 px-4 rounded-lg transition-all duration-200"
+              data-action="click->quiz#selectAnswer"
+              data-answer="<%= answer %>"
+            >
+              <%= answer %>
+            </button>
+          <% end %>
+        </div>
+        <div id="feedback" class="mt-4 text-center text-lg font-semibold"></div>
+      </div>
+    </div>
+  </div>
+<% end %>
