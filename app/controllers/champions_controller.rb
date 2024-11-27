@@ -8,6 +8,17 @@ class ChampionsController < ApplicationController
     if params[:region_id].present?
       @champions = @champions.where(region_id: params[:region_id])
     end
+
+    if params[:search].present?
+      search_term = "%#{params[:search]}%"
+      @champions = @champions.where("LOWER(name) LIKE LOWER(?) OR LOWER(title) LIKE LOWER(?)", 
+                                  search_term, search_term)
+    end
+
+    respond_to do |format|
+      format.html
+      format.js { render partial: 'champions/champion_grid', locals: { champions: @champions } }
+    end
   end
 
   def show

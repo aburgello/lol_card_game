@@ -1,8 +1,9 @@
+
 <% if @regions.present? %>
   <!-- Region Icons Grid (Filter Champions by Region) -->
-  <div class="mb-8">
-    <div class="flex flex-wrap justify-center gap-2 my-6 mx-8 md:mx-8 xl:mx-16">
-      <div class="regions-wrapper overflow-x-auto xl:overflow-x-visible max-w-full  py-4">
+  <div class="mb-4">
+    <div class="flex flex-wrap justify-center gap-2 my-2 mx-8 md:mx-8 xl:mx-16">
+      <div class="regions-wrapper overflow-x-auto xl:overflow-x-visible max-w-full ">
         <div class="flex gap-4 md:gap-10">
           <% @regions.each do |region| %>
             <div 
@@ -23,105 +24,127 @@
 <% end %>
 
 
+<div class="flex justify-center max-w-full mx-auto">
+  <input type="text" 
+         id="championSearchBox" 
+         placeholder="Search champions..." 
+         class="bg-[#0A1428] text-[#C8AA6E] border-2 border-[#C8AA6E] rounded-lg px-4 py-2 mt-2 w-full mx-[1.6rem] xl:mx-[8rem] min-[2100px]:mx-[18rem]"
+         data-url="<%= request.original_url %>" />
+</div>
 
-<% if @champions.present? %>
-  <!-- Champion Grid (Filtered by Region) -->
-  <div id="champion-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-8 mx-6 xl:mx-72 my-10">
-    <% @champions.each do |champion| %>
-      <% if champion.region.present? %>  <!-- Add this condition to check if the region exists -->
-        <div class="champion-card relative shadow-lg rounded-xl overflow-hidden group hover:scale-105 transition-all duration-500 ease-in-out"
-             data-region-id="<%= champion.region.id %>">
-         <%= link_to champion_path(champion.name) do %>
-            <div>
-              <!-- Champion Image -->
-              <img src="<%= champion.splash_art %>/centered" alt="<%= champion.name %> Splash Art" loading= "lazy"
-                   class="w-full h-56 md:h-72 object-cover rounded-xl group-hover:brightness-125 group-hover:scale-150 transition-all duration-[400ms] ease-in-out">
-              <!-- Overlay Gradient -->
-              <div class="absolute inset-0 bg-gradient-to-t from-[#0A1428]/95 via-[#091428]/40 to-transparent rounded-xl hover:border-[#C89B3C] hover:border-4 transition-all duration-100 ease-in-out"></div>
-              <!-- Champion Info -->
-              <div class="absolute bottom-2 left-4 text-white p-2 rounded-md">
-                <h2 class="text-lg md:text-3xl font-bold capitalize text-[#C8AA6E] group-hover:text-[#C89B3C] transition-all duration-300 ease-out">
-                  <%= champion.name %>
-                </h2>
-                <p class="text-sm md:text-base text-[#F0E6D2] italic"><%= champion.title %></p>
+
+<div id="champions-grid-container">
+  <% if @champions.present? %>
+    <div id="champion-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-8 mx-6 xl:mx-32 min-[2100px]:mx-72 my-6">
+      <% @champions.each do |champion| %>
+        <% if champion.region.present? %>
+          <div class="champion-card relative shadow-lg rounded-xl overflow-hidden group hover:scale-105 transition-all duration-500 ease-in-out"
+               data-region-id="<%= champion.region.id %>">
+            <%= link_to champion_path(champion.name) do %>
+              <div>
+                <img src="<%= champion.splash_art %>/centered" alt="<%= champion.name %> Splash Art" loading="lazy"
+                     class="w-full h-56 md:h-72 object-cover rounded-xl group-hover:brightness-125 group-hover:scale-150 transition-all duration-[400ms] ease-in-out">
+                <div class="absolute inset-0 bg-gradient-to-t from-[#0A1428]/95 via-[#091428]/40 to-transparent rounded-xl hover:border-[#C89B3C] hover:border-4 transition-all duration-100 ease-in-out"></div>
+                <div class="absolute bottom-2 left-4 text-white p-2 rounded-md">
+                  <h2 class="text-lg md:text-3xl font-bold capitalize text-[#C8AA6E] group-hover:text-[#C89B3C] transition-all duration-300 ease-out">
+                    <%= champion.name %>
+                  </h2>
+                  <p class="text-sm md:text-base text-[#F0E6D2] italic"><%= champion.title %></p>
+                </div>
               </div>
-            </div>
-          <% end %>
-        </div>
-      <% else %>
-        <!-- Optionally, display something else if region is nil -->
-        <div class="champion-card relative shadow-lg rounded-xl overflow-hidden group hover:scale-105 transition-all duration-500 ease-in-out">
-         <%= link_to champion_path(champion.name) do %>
-  <div>
-    <img src="<%= champion.splash_art %>/centered" alt="<%= champion.name %> Splash Art" 
-         class="w-full h-56 md:h-72 object-cover rounded-xl group-hover:scale-150 transition-all duration-500 ease-in-out">
-              <div class="absolute inset-0 bg-gradient-to-t from-[#0A1428]/95 via-[#091428]/40 to-transparent rounded-xl hover:border-[#C89B3C] hover:border-4 transition-all duration-100 ease-in-out"></div>
-              <div class="absolute bottom-2 left-4 text-white p-2 rounded-md">
-                <h2 class="text-lg md:text-3xl font-bold capitalize text-[#C8AA6E] group-hover:text-[#C89B3C] transition-all duration-300 ease-out">
-                  <%= champion.name %>
-                </h2>
-                <p class="text-sm md:text-base text-[#F0E6D2] italic"><%= champion.title %></p>
-              </div>
-            </div>
-          <% end %>
-        </div>
+            <% end %>
+          </div>
+        <% else %>
+        <% end %>
       <% end %>
-    <% end %>
-  </div>
-<% else %>
-  <p class="text-center text-gray-500">No champions available.</p>
-<% end %>
+    </div>
+  <% else %>
+    <p class="text-center text-gray-500">No champions available.</p>
+  <% end %>
+</div>
 
 <script>
 let currentRegionId = null;
 
 function filterChampionsByRegion(regionId, element) {
-  // Get all the champion cards
   const championCards = document.querySelectorAll('.champion-card');
   const regionItems = document.querySelectorAll('.region-item');
 
   if (currentRegionId === regionId) {
-    // Reset to showing all champions
-    currentRegionId = null; // No active region
+    currentRegionId = null; 
     championCards.forEach(card => {
-      card.style.display = 'block'; // Show all champions
+      card.style.display = 'block'; 
     });
 
-    // Remove active class from all region items
     regionItems.forEach(item => item.classList.remove('active'));
   } else {
-    // Filter champions by the selected region
     currentRegionId = regionId;
     championCards.forEach(card => {
       if (card.dataset.regionId == regionId) {
-        card.style.display = 'block'; // Show champions of the selected region
+        card.style.display = 'block';
       } else {
-        card.style.display = 'none'; // Hide other champions
+        card.style.display = 'none';
       }
     });
 
-    // Update active state for region items
-    regionItems.forEach(item => item.classList.remove('active')); // Remove active class from all
-    element.classList.add('active'); // Add active class to the clicked region
+    regionItems.forEach(item => item.classList.remove('active')); 
+    element.classList.add('active'); 
   }
 
-  // Adjust the grid layout after filtering
 }
 
+document.addEventListener('DOMContentLoaded', function() {
+  const searchBox = document.getElementById('championSearchBox');
+  let debounceTimeout;
 
+  if (searchBox) {
+    searchBox.addEventListener('input', function(e) {
+      clearTimeout(debounceTimeout);
+
+      debounceTimeout = setTimeout(() => {
+        const searchTerm = e.target.value.trim();
+        const url = new URL(searchBox.dataset.url);
+        
+        url.searchParams.set('search', searchTerm);
+        
+        const regionId = new URLSearchParams(window.location.search).get('region_id');
+        if (regionId) {
+          url.searchParams.set('region_id', regionId);
+        }
+
+        fetch(url, {
+          headers: {
+            'Accept': 'text/javascript',
+            'X-Requested-With': 'XMLHttpRequest'
+          },
+          credentials: 'same-origin'
+        })
+        .then(response => response.text())
+        .then(html => {
+          const gridContainer = document.querySelector('#champions-grid-container');
+          if (gridContainer) {
+            gridContainer.innerHTML = html;
+          }
+        })
+        .catch(error => {
+          console.error('Error updating champions grid:', error);
+        });
+      }, 300);
+    });
+  }
+});
 </script>
 <style>
   @media (max-width: 1860px) {
   .regions-wrapper {
     max-width: 100%;
-    overflow-x: auto; /* Enable horizontal scrolling */
+    overflow-x: auto; 
     display: flex;
-    flex-wrap: nowrap; /* Ensure items stay in a single row */
+    flex-wrap: nowrap; 
   }
 
   .regions-wrapper .flex {
     min-width: 60px;
-     /* Control the size of each region */
   }
 
   .regions-wrapper::-webkit-scrollbar {
@@ -130,16 +153,15 @@ function filterChampionsByRegion(regionId, element) {
   }
 
   .regions-wrapper::-webkit-scrollbar-thumb {
-    background-color: #C8AA6E; /* Customize scrollbar thumb */
+    background-color: #C8AA6E; 
     border-radius: 10px;
   }
 
   .regions-wrapper::-webkit-scrollbar-thumb:hover {
-    background-color: #B98739; /* Customize scrollbar thumb hover */
+    background-color: #B98739;
   }
 }
 
-/* If you're using a custom CSS file */
 .region-item.active {
   transform: scale(1.05);
   filter: brightness(1.5);

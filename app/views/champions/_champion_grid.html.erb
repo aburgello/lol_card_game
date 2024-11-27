@@ -1,0 +1,26 @@
+<% if champions.present? %>
+  <div id="champion-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-8 mx-6 xl:mx-72 my-10">
+    <% champions.each do |champion| %>
+      <% if champion.region.present? %>
+        <div class="champion-card relative shadow-lg rounded-xl overflow-hidden group hover:scale-105 transition-all duration-500 ease-in-out"
+             data-region-id="<%= champion.region.id %>">
+          <%= link_to champion_path(champion.name) do %>
+            <div>
+              <img src="<%= champion.splash_art %>/centered" alt="<%= champion.name %> Splash Art" loading="lazy"
+                   class="w-full h-56 md:h-72 object-cover rounded-xl group-hover:brightness-125 group-hover:scale-150 transition-all duration-[400ms] ease-in-out">
+              <div class="absolute inset-0 bg-gradient-to-t from-[#0A1428]/95 via-[#091428]/40 to-transparent rounded-xl hover:border-[#C89B3C] hover:border-4 transition-all duration-100 ease-in-out"></div>
+              <div class="absolute bottom-2 left-4 text-white p-2 rounded-md">
+                <h2 class="text-lg md:text-3xl font-bold capitalize text-[#C8AA6E] group-hover:text-[#C89B3C] transition-all duration-300 ease-out">
+                  <%= champion.name %>
+                </h2>
+                <p class="text-sm md:text-base text-[#F0E6D2] italic"><%= champion.title %></p>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+<% else %>
+  <p class="text-center text-gray-500">No champions found.</p>
+<% end %>

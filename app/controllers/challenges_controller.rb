@@ -30,6 +30,7 @@ class ChallengesController < ApplicationController
   end
 
   def show
+    
     @challenge = Challenge.find(params[:id])
     @progress = @challenge.progress_for_user(current_user)
     @skins = @challenge.skins

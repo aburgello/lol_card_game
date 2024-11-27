@@ -1,0 +1,55 @@
+<% if user_skins.empty? %>
+  <div class="flex flex-col items-center justify-center py-12 text-center mx-16  mt-4">
+    <h2 class="text-2xl font-bold text-[#C8AA6E] mb-2">No Skins Unlocked Yet</h2>
+    <p class="text-gray-400 mb-6">Complete challenges to unlock all champions unique skins.</p>
+    <%= link_to "Browse Champions", skins_path, class: "bg-[#C8AA6E] text-[#0A1428] px-6 py-2 rounded-lg hover:bg-opacity-90 hover:text-white transition-all duration-100 ease-in-out" %>
+  </div>
+<% else %>
+  <% rarity_order = ["common", "rare", "epic", "legendary", "mythic", "ultimate", "transcendent"] %>
+  <% grouped_skins = user_skins.group_by(&:rarity).sort_by { |rarity, _| rarity_order.index(rarity.downcase) || rarity_order.size } %>
+
+  <% grouped_skins.each do |rarity, skins| %>
+    <div class="mt-4 mb-4">
+      <div class="flex flex-col items-center">
+        <img src="<%= asset_path(rarity.capitalize + '_logo.webp') %>" alt="<%= rarity %> logo" class="cursor-default hover:brightness-125 w-6 h-6 shadow-md transition-all duration-200 ease-in-out">
+        <h4 class="text-2xl font-bold text-[#C8AA6E] mb-6 cursor-default"><%= rarity.capitalize %></h4>
+      </div>
+
+      <!-- Swiper Container for Skins -->
+      <div class="swiper skins-swiper-<%= rarity.downcase %> h-64 sm:h-80 md:h-96">
+        <div class="swiper-wrapper h-full">
+          <% skins.each do |skin| %>
+            <div class="swiper-slide h-full">
+              <div class="relative group bg-gray-800 rounded-lg shadow-lg cursor-pointer transition-all duration-300 ease-in-out overflow-hidden h-full">
+                <div class="relative w-full h-full">
+                  <%= image_tag skin.splash_art_centered, 
+                      alt: "#{skin.name} loading art",  
+                      loading: "lazy",
+                      class: "w-full h-full object-cover rounded-lg shadow-md saturate-[1.10] brightness-100 group-hover:brightness-[1.10] group-hover:scale-[1.25] transition-all duration-300 ease-in-out",
+                      data: { 
+                        skin_splash: skin.splash_art, 
+                        skin_name: "#{skin.champion.name} - #{skin.name}",
+                        skin_description: skin.description, 
+                        skin_rarity: skin.rarity 
+                      } %>
+                  <div class="absolute bottom-0 left-0 w-full">
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/10 to-transparent opacity-100 rounded-b-lg"></div>
+                    <div class="relative z-10 px-6 py-4">
+                      <div class="text-base md:text-2xl font-bold text-[#C8AA6E] text-left" style="cursor: default; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);">
+                        <%= skin.name %>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="absolute inset-0 border-0 group-hover:border-4 <%= 'border-' + skin.rarity.downcase %> group-hover:animate-pulse rounded-lg transition-all duration-300 ease-in-out" style="pointer-events: none;"></div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+        <div class="swiper-pagination"></div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+      </div>
+    </div>
+  <% end %>
+<% end %>
