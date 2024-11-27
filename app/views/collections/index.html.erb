@@ -1,5 +1,4 @@
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/11.0.5/swiper-bundle.min.css" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/11.0.5/swiper-bundle.min.js"></script>
+
 
 <div class="lg:max-w-screen-2xl lg:mx-32 2xl:mx-auto mb-12 rounded-lg">
   <div id="skins-container">
@@ -26,7 +25,8 @@
 
 <!-- Initialize Swiper -->
 <script>
-document.addEventListener('DOMContentLoaded', function() {
+
+    document.addEventListener("turbo:load", function () {
   // Initialize Swiper (keeping existing swiper initialization)
   initializeSwipers();
 
@@ -81,8 +81,6 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 
-// Separate function for initializing Swipers
-// Separate function for initializing Swipers
 function initializeSwipers() {
   const swiperElements = document.querySelectorAll('.swiper');
   swiperElements.forEach(swiperElement => {
@@ -90,7 +88,7 @@ function initializeSwipers() {
       slidesPerView: 'auto',
       spaceBetween: 20,
       grid: {
-        rows: 2,
+        rows: 3,
         fill: 'row'
       },
       autoHeight: true,
