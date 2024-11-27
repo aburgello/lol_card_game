@@ -100,7 +100,7 @@ class ChallengesController < ApplicationController
   def award_hextech_cores
     # Award Hextech Cores before marking the challenge as completed
     current_user.update(hextech_cores: current_user.hextech_cores + 1000) # Adjust the award value as necessary
-    flash[:notice] = "You've earned a Hextech Core!"
+    flash[:notice] = "You've earned Hextech Core!"
   end
 
   def authenticate_user!
