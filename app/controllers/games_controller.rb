@@ -107,6 +107,7 @@ class GamesController < ApplicationController
   def check_quiz_attempts
     if current_user.quiz_attempts_today >= 5
       flash[:alert] = "You've reached your quiz limit for today."
+      redirect_to games_path
     else
       current_user.increment!(:quiz_attempts_today)
     end
