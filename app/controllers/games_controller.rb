@@ -23,7 +23,7 @@ class GamesController < ApplicationController
       { question: "Which champion can create a 'Doppelganger'?", answers: ["Kassadin", "Shaco", "Zed", "Mordekaiser"], correct_answer: "Shaco" },
       { question: "What is the name of the ability that allows champions to dodge incoming attacks?", answers: ["Evasion ", "Dodge", "Spell Shield", "Counter"], correct_answer: "Spell Shield" },
       { question: "Which champion has the ability 'R' - Destiny?", answers: ["Twisted Fate", "Zyra", "Kennen", "Gragas"], correct_answer: "Twisted Fate" },
-      { question: "What does the 'S' rank in a game signify?", answers: ["Satisfactory", "Superb", "S-tier", "Special"], correct_answer: "Superb" }
+      { question: "What does the 'S' rank in a game signify?", answers: ["Satisfactory", "Superb", "S-tier", "Special"], correct_answer: "Superb" },
       { question: "What is the name of the dragon that grants bonus cooldown reduction?", answers: ["Ocean Drake", "Cloud Drake", "Infernal Drake", "Hextech Drake"], correct_answer: "Cloud Drake" },
       { question: "Which champion has the ability 'Q' - Mystic Shot?", answers: ["Ezreal", "Caitlyn", "Ashe", "Jhin"], correct_answer: "Ezreal" },
       { question: "What is the name of the item that increases critical strike chance and attack speed?", answers: ["Phantom Dancer", "Infinity Edge", "Rapid Firecannon", "Statikk Shiv"], correct_answer: "Phantom Dancer" },
