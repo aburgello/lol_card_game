@@ -37,7 +37,7 @@ namespace :games do
     ]
 
     games.each do |game_data|
-      game = Game.find_by!(name: game_data[:name])
+      game = Game.find_or_initialize_by(name: game_data[:name])
       game.update!(game_data)
       puts "Updated game: #{game.name}"
     end
