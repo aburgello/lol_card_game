@@ -4,7 +4,7 @@ class GamesController < ApplicationController
 
   QUESTIONS = [
       { question: "What is the cooldown of Flash in League of Legends?", answers: ["180 seconds", "210 seconds", "300 seconds", "150 seconds"], correct_answer: "300 seconds" },
-      { question: "Which champion has the ability 'R' - Leap Strike?", answers: ["Lee Sin", "Riven", "Jax", "Kennen"], correct_answer: "Jax" },
+      { question: "Which champion has the ability 'Leap Strike'?", answers: ["Lee Sin", "Riven", "Jax", "Kennen"], correct_answer: "Jax" },
       { question: "What is the maximum level a champion can reach?", answers: ["15", "18", "20", "25"], correct_answer: "18" },
       { question: "Which item grants bonus movement speed when out of combat?", answers: ["Boots of Speed", "Ionian Boots of Lucidity", "Berserker's Greaves", "Boots of Mobility"], correct_answer: "Boots of Mobility" },
       { question: "What is the name of the dragon that grants a team bonus attack damage?", answers: ["Cloud Drake", "Mountain Drake", "Infernal Drake", "Ocean Drake"], correct_answer: "Infernal Drake" },
