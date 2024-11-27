@@ -14,7 +14,7 @@ class GamesController < ApplicationController
       { question: "What is the name of the Rift Herald's ability?", answers: ["Rift Assault", "Herald's Charge", "Rift Surge", "Herald's Wrath"], correct_answer: "Rift Surge" },
       { question: "Which champion can teleport to a ward?", answers: ["Kennen", "Kassadin", "Shen", "Twisted Fate"], correct_answer: "Shen" },
       { question: "What does the Baron Nashor buff grant?", answers: ["Increased health regeneration", "Bonus attack damage and ability power", "Vision of the enemy jungle", "Increased gold per minion"], correct_answer: "Bonus attack damage and ability power" },
-      { question: "Which champion has a passive ability called 'Adrenaline Rush'?", answers: ["Warwick", "Rengar", "Olaf", "Dr. Mundo"], correct_answer: "Warwick" },
+      { question: "Which champion has a passive ability called 'Adrenaline Rush'?", answers: ["Warwick", "Rengar", "Olaf", "Dr. Mundo"], correct_answer: "Dr. Mundo" },
       { question: "What is the name of the jungle monster that grants a shield when killed?", answers: ["Gromp", "Krug", "Rift Scuttler", "Blue Buff"], correct_answer: "Rift Scuttler" },
       { question: "Which item is known for providing 'Spell Vamp'?", answers: ["Gunblade", "Rylai's Crystal Scepter", "Riftmaker", "Morellonomicon"], correct_answer: "Gunblade" },
       { question: "What is the cooldown of the ability 'Smite'?", answers: ["60 seconds", "90 seconds", "45 seconds", "30 seconds"], correct_answer: "90 seconds" },
@@ -43,7 +43,27 @@ class GamesController < ApplicationController
       { question: "Which item gives bonus attack damage and lifesteal?", answers: ["Ravenous Hydra", "Blade of the Ruined King", "Bloodthirster", "Death's Dance"], correct_answer: "Bloodthirster" },
       { question: "What is the name of the map used in professional League of Legends games?", answers: ["Twisted Treeline", "Summoner's Rift", "Howling Abyss", "Crystal Scar"], correct_answer: "Summoner's Rift" },
       { question: "Which champion's ultimate ability is 'The Box'?", answers: ["Thresh", "Morgana", "Leona", "Alistar"], correct_answer: "Thresh" },
-      { question: "Which item builds into 'Infinity Edge'?", answers: ["Cloak of Agility", "Long Sword", "Serrated Dirk", "B. F. Sword"], correct_answer: "B. F. Sword" }
+      { question: "Which item builds into 'Infinity Edge'?", answers: ["Cloak of Agility", "Long Sword", "Serrated Dirk", "B. F. Sword"], correct_answer: "B. F. Sword" },
+      { question: "Which champion is known as the 'Mad Chemist'?", answers: ["Dr. Mundo", "Singed", "Viktor", "Heimerdinger"], correct_answer: "Singed" },
+      { question: "What is the name of the Summoner's Rift boss monster?", answers: ["Baron Nashor", "Elder Dragon", "Rift Herald", "Infernal Drake"], correct_answer: "Baron Nashor" },
+      { question: "Which champion uses 'Ferocity' as a resource?", answers: ["Rengar", "Gnar", "Renekton", "Warwick"], correct_answer: "Rengar" },
+      { question: "What is the cost of the item 'Infinity Edge'?", answers: ["3400 gold", "3200 gold", "3600 gold", "3000 gold"], correct_answer: "3400 gold" },
+      { question: "Which champion's ultimate ability is called 'Glacial Prison'?", answers: ["Ashe", "Lissandra", "Sejuani", "Anivia"], correct_answer: "Sejuani" },
+      { question: "What type of damage does 'Lethality' affect?", answers: ["True Damage", "Magic Damage", "Physical Damage", "Critical Damage"], correct_answer: "Physical Damage" },
+      { question: "Which rune provides bonus attack speed and movement speed on hitting an enemy?", answers: ["Conqueror", "Phase Rush", "Fleet Footwork", "Lethal Tempo"], correct_answer: "Lethal Tempo" },
+      { question: "What is the name of the buff granted by killing the Red Brambleback?", answers: ["Crimson Fury", "Red Buff", "Elder Strength", "Bramble Flame"], correct_answer: "Red Buff" },
+      { question: "Which champion's passive ability is 'Sheen Proc'?", answers: ["Irelia", "Ezreal", "Gangplank", "Twisted Fate"], correct_answer: "Ezreal" },
+      { question: "What is the name of the item that increases a champion's critical strike damage?", answers: ["Infinity Edge", "Phantom Dancer", "Essence Reaver", "Rapid Firecannon"], correct_answer: "Infinity Edge" },
+      { question: "Which champion is referred to as 'The Darkin Blade'?", answers: ["Kayn", "Aatrox", "Varus", "Rhaast"], correct_answer: "Aatrox" },
+      { question: "What is the bonus gold for killing a cannon minion?", answers: ["60 gold", "40 gold", "70 gold", "50 gold"], correct_answer: "60 gold" },
+      { question: "Which champion has the ability 'R' - 'Moonfall'?", answers: ["Diana", "Leona", "Zoe", "Soraka"], correct_answer: "Diana" },
+      { question: "What is the cooldown for teleport summoner spell?", answers: ["300 seconds", "420 seconds", "360 seconds", "400 seconds"], correct_answer: "360 seconds" },
+      { question: "Which champion's passive ability is 'Ebb and Flow'?", answers: ["Soraka", "Nami", "Janna", "Karma"], correct_answer: "Nami" },
+      { question: "Which item grants a shield when immobilizing an enemy?", answers: ["Immortal Shieldbow", "Eclipse", "Crown of the Shattered Queen", "Sterak's Gage"], correct_answer: "Eclipse" },
+      { question: "What is the range of a basic attack by a melee champion?", answers: ["125 units", "150 units", "100 units", "175 units"], correct_answer: "125 units" },
+      { question: "Which champion can become untargetable with 'W' ability 'Shroud of Darkness'?", answers: ["Nocturne", "Akali", "Zed", "Kassadin"], correct_answer: "Nocturne" },
+      { question: "Which champion has the ability 'Q' - 'Barrel Roll'?", answers: ["Gragas", "Gangplank", "Ziggs", "Keg"], correct_answer: "Gragas" },
+      { question: "What is the maximum number of wards a player can place at a time?", answers: ["4", "3", "5", "6"], correct_answer: "3" }
     ]
     
 
