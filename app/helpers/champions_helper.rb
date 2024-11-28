@@ -1,4 +1,6 @@
 module ChampionsHelper
+  extend self # This allows us to use the method both as instance and class method
+
   def get_skin_media_data(skin)
     # Map of special skins to their webm URLs
     special_skins = {
