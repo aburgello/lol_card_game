@@ -3,7 +3,7 @@ class GamesController < ApplicationController
   before_action :check_daily_limit, only: [:submit_answer]
   before_action :check_skin_name_game_limit, only: [:handle_skin_name_answer]
 
-  QUESTIONS = [
+QUESTIONS = [
       { question: "What is the cooldown of Flash in League of Legends?", answers: ["180 seconds", "210 seconds", "300 seconds", "150 seconds"], correct_answer: "300 seconds" },
       { question: "Which champion has the ability 'Leap Strike'?", answers: ["Lee Sin", "Riven", "Jax", "Kennen"], correct_answer: "Jax" },
       { question: "What is the maximum level a champion can reach?", answers: ["15", "18", "20", "25"], correct_answer: "18" },
@@ -63,7 +63,7 @@ class GamesController < ApplicationController
       { question: "Which item grants a shield when immobilizing an enemy?", answers: ["Immortal Shieldbow", "Eclipse", "Crown of the Shattered Queen", "Sterak's Gage"], correct_answer: "Eclipse" },
       { question: "What is the range of a basic attack by a melee champion?", answers: ["125 units", "150 units", "100 units", "175 units"], correct_answer: "125 units" },
       { question: "Which champion can become untargetable with 'W' ability 'Shroud of Darkness'?", answers: ["Nocturne", "Akali", "Zed", "Kassadin"], correct_answer: "Nocturne" },
-      { question: "Which champion has the ability 'Q' - 'Barrel Roll'?", answers: ["Gragas", "Gangplank", "Ziggs", "Keg"], correct_answer: "Gragas" },
+      { question: "Which champion has the ability 'Q' - 'Barrel Roll'?", answers: ["Gragas", "Gangplank", "Ziggs", "Kled"], correct_answer: "Gragas" },
       { question: "What is the maximum number of wards a player can place at a time?", answers: ["4", "3", "5", "6"], correct_answer: "3" },
       { question: "What is the name of the passive that allows Aatrox to heal with his abilities?", answers: ["Blood Well", "Deathbringer Stance", "World Ender", "Darkin Pact"], correct_answer: "Deathbringer Stance" },
       { question: "Which champion has the ability 'E' - Shadow Dash?", answers: ["Shen", "Zed", "Akali", "Kayn"], correct_answer: "Shen" },
@@ -112,29 +112,13 @@ class GamesController < ApplicationController
       { question: "Which item provides the 'Lifeline' passive shield?", answers: ["Maw of Malmortius", "Sterak's Gage", "Guardian Angel", "Hexdrinker"], correct_answer: "Maw of Malmortius" }
     ]
 
-  ABILITY_ICONS = [
-    # You'll need to define ability icon data here
-    # Example format:
-    # { champion: "Ahri", ability_icon: "path_to_icon.png", options: ["Ahri", "Lux", "Annie", "Veigar"] }
-  ]
 
-  SKIN_SNIPPETS = [
-    # You'll need to define skin snippet data here
-    # Example format:
-    # { champion: "Ezreal", snippet: "path_to_snippet.png", options: ["Ezreal", "Lux", "Caitlyn", "Jinx"] }
-  ]
 
-  SKIN_NAMES = [
-    # You'll need to define skin name data here
-    # Example format:
-    # { champion: "Teemo", full_name: "Omega Squad Teemo", hidden_name: "Om_ga Sq__d T__mo" }
-  ]
+  def index
+    @games = Game.all
+  end
 
-    def index
-      @games = Game.all
-    end
-
-    def show
+  def show
       @game = Game.find(params[:id])
       @user = current_user
 
@@ -160,7 +144,7 @@ class GamesController < ApplicationController
         end
       end
 
-      def submit_ability_guess_answer
+  def submit_ability_guess_answer
         # Increment attempts for the ability icon game
         current_user.increment!(:ability_icon_attempts_today)
       
@@ -180,18 +164,18 @@ class GamesController < ApplicationController
           correct: correct,
           attempts: current_user.ability_icon_attempts_today
         }
-      end
+  end
 
     
     
-      def check_guess(guess)
+  def check_guess(guess)
         # Logic to check if the guess is correct (e.g., compare with the actual champion name)
         correct_ability = "CorrectChampionName" # Replace with actual logic
         guess == correct_ability
-      end
+  end
 
 
-      def submit_skin_snippet_answer
+  def submit_skin_snippet_answer
         current_user.increment!(:skin_snippet_attempts_today)
       
         submitted_skin = params[:submitted_skin]
@@ -209,10 +193,10 @@ class GamesController < ApplicationController
           correct: correct,
           attempts: current_user.skin_snippet_attempts_today
         }
-      end
+  end
 
 
-      def submit_answer
+  def submit_answer
         case @game.game_type
         when 'quiz'
           handle_quiz_answer
@@ -223,10 +207,10 @@ class GamesController < ApplicationController
         when 'skin_name'
           handle_skin_name_answer
         end
-      end
+  end
 
       
-      def handle_skin_name_answer
+  def handle_skin_name_answer
         submitted_name = params[:submitted_name]
         current_skin = session[:current_skin]
         @user = current_user
@@ -259,8 +243,9 @@ class GamesController < ApplicationController
         else
           render json: { success: false, message: "No skin name submitted" }, status: :unprocessable_entity
         end
-      end
-      def handle_skin_name_show
+  end
+  
+  def handle_skin_name_show
         return redirect_to games_path, alert: "No skin name data available" if @game_data.empty?
         
         # Fetch a random skin from the Skin model
@@ -277,12 +262,12 @@ class GamesController < ApplicationController
         else
           redirect_to games_path, alert: "No valid skin data available"
         end
-      end
+  end
       
   
       # ABILITY SECTION
 
-      def submit_guess
+  def submit_guess
         Rails.logger.info "Params received: #{params.inspect}"
         Rails.logger.info "Current user: #{current_user.inspect}"
         Rails.logger.info "Session champion_id: #{session[:current_champion_id]}"
@@ -337,9 +322,9 @@ class GamesController < ApplicationController
             message: "An error occurred: #{e.message}" 
           }, status: :internal_server_error
         end
-      end
+  end
     
-      def handle_ability_guess_show
+  def handle_ability_guess_show
         Rails.logger.info "Handling ability guess show"
         begin
           @ability = Ability.order('RANDOM()').first
@@ -358,15 +343,15 @@ class GamesController < ApplicationController
           Rails.logger.error e.backtrace.join("\n")
           redirect_to games_path, alert: "Error loading ability game: #{e.message}"
         end
-      end
+  end
 
-def check_guess(guess)
+  def check_guess(guess)
   # Fetch the correct ability name from the session
   correct_ability = session[:current_ability][:name] # Assuming you store the ability name in session
   guess == correct_ability
-end
+  end
       
-      def load_game_data
+  def load_game_data
           case @game.game_type
           when 'ability_guess'
             @game_data = Champion.ability_icon_data
@@ -375,32 +360,31 @@ end
           when 'skin_name'
             @game_data = Champion.skin_name_data
           end
-        end
+  end
         
-      def set_game
+  def set_game
         @game = Game.find(params[:id])
-      end
+  end
 
-      def check_daily_limit
+  def check_daily_limit
         if current_user.quiz_attempts_today >= 5
           flash[:alert] = "You've reached your quiz limit for today."
           redirect_to games_path and return
         else
         end
-      end
+  end
       
-      
-      def check_skin_name_game_limit
+  def check_skin_name_game_limit
         if current_user.skin_name_attempts_today >= 5
           flash[:alert] = "You've reached your daily limit for the Skin Name Game."
           redirect_to games_path and return
         end
-      end
+  end
       
       
       
 # QUIZ SHOW SECTION
-      def handle_quiz_show
+  def handle_quiz_show
       @current_question_index = session[:current_question_index] || 0
         
         # Ensure the question index is valid
@@ -425,9 +409,9 @@ end
         # Pass the shuffled QUESTIONS constant to the view
         @questions = @shuffled_questions
         
-      end
+  end
 
-      def handle_quiz_answer
+  def handle_quiz_answer
       current_question_index = session[:current_question_index] || 0
 
       @current_question = QUESTIONS[current_question_index]
@@ -477,13 +461,12 @@ end
     rescue StandardError => e
       Rails.logger.error("Error in submit_answer: #{e.message}")
       render json: { success: false, error: "An error occurred while processing your request." }, status: :internal_server_error
-      end
-
+end
      
-      def calculate_reward(correct)
+def calculate_reward(correct)
         correct ? 50 : 0
       end
-    end
+end
 
 
 # SKIN SNIPPET SECTION
@@ -508,20 +491,20 @@ end
 
 
       # Helper method to replace random letters with underscores
-      def mask_skin_name(name)
+def mask_skin_name(name)
         masked_name = name.chars.map do |char|
           rand < 0.5 ? "_" : char  # 50% chance to replace with an underscore
         end.join
         masked_name
-      end
+end
       
       
      
       
-      def calculate_reward(correct)
+def calculate_reward(correct)
         if correct
           rand(@game.min_reward..@game.max_reward)
         else
           0
         end
-      end
+end
