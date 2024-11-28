@@ -1,6 +1,7 @@
 class GamesController < ApplicationController
   before_action :set_game, only: [:show, :submit_answer]
   before_action :check_daily_limit, only: [:submit_answer]
+  before_action :check_skin_name_game_limit, only: [:handle_skin_name_answer]
 
   QUESTIONS = [
       { question: "What is the cooldown of Flash in League of Legends?", answers: ["180 seconds", "210 seconds", "300 seconds", "150 seconds"], correct_answer: "300 seconds" },
@@ -84,207 +85,317 @@ class GamesController < ApplicationController
     # { champion: "Teemo", full_name: "Omega Squad Teemo", hidden_name: "Om_ga Sq__d T__mo" }
   ]
 
-  def index
-    @games = Game.all
-  end
-
-  def show
-    @game = Game.find(params[:id])
-    @user = current_user
-
-    attempts_key = "#{@game.game_type}_plays_#{Date.today}_#{current_user.id}"
-  
-    # Now you can safely use the attempts_key and current_attempts variables
-    current_attempts = Rails.cache.read(attempts_key).to_i
-    Rails.logger.debug "Attempts key: #{attempts_key} - Current attempts: #{current_attempts}"
-  
-
-    case @game.game_type
-    when 'quiz'
-      handle_quiz_show
-      
-    when 'ability_guess'
-      @game_data = Champion.ability_icon_data
-      handle_ability_guess_show
-    when 'skin_snippet'
-      @game_data = Champion.skin_snippet_data
-      handle_skin_snippet_show
-    when 'skin_name'
-      @game_data = Champion.skin_name_data
-      handle_skin_name_show
+    def index
+      @games = Game.all
     end
 
+    def show
+      @game = Game.find(params[:id])
+      @user = current_user
+
+      attempts_key = "#{@game.game_type}_plays_#{Date.today}_#{current_user.id}"
     
-  end
+      # Now you can safely use the attempts_key and current_attempts variables
+      current_attempts = Rails.cache.read(attempts_key).to_i
+      Rails.logger.debug "Attempts key: #{attempts_key} - Current attempts: #{current_attempts}"
+    
 
-  def submit_answer
-    case @game.game_type
-    when 'quiz'
-      handle_quiz_answer
-    when 'ability_guess'
-      handle_ability_guess_answer
-    when 'skin_snippet'
-      handle_skin_snippet_answer
-    when 'skin_name'
-      handle_skin_name_answer
-    end
-  end
+        case @game.game_type
+        when 'quiz'
+          handle_quiz_show
+          
+        when 'ability_guess'
+          @game_data = Champion.ability_icon_data
+          handle_ability_guess_show
+        when 'skin_snippet'
+          @game_data = Champion.skin_snippet_data
+          handle_skin_snippet_show
+        when 'skin_name'
+          @game_data = Champion.skin_name_data
+          handle_skin_name_show
+        end
 
-  private
-  def load_game_data
-      case @game.game_type
-      when 'ability_guess'
-        @game_data = Champion.ability_icon_data
-      when 'skin_snippet'
-        @game_data = Champion.skin_snippet_data
-      when 'skin_name'
-        @game_data = Champion.skin_name_data
+        
       end
+      def submit_ability_guess_answer
+        # Increment attempts for the ability icon game
+        current_user.increment!(:ability_icon_attempts_today)
+      
+        # Logic for checking the selected ability guess
+        selected_ability = params[:selected_ability]
+        correct_ability = session[:current_ability][:champion] # Assuming you store the champion's name in session
+      
+        correct = selected_ability == correct_ability
+        reward = calculate_reward(correct)
+      
+        current_user.increment!(:hextech_cores, reward) if reward > 0
+        session[:current_ability] = nil  # Clear the session for the next question
+      
+        render json: {
+          success: true,
+          reward: reward,
+          correct: correct,
+          attempts: current_user.ability_icon_attempts_today
+        }
+      end
+
+      def submit_skin_snippet_answer
+        current_user.increment!(:skin_snippet_attempts_today)
+      
+        submitted_skin = params[:submitted_skin]
+        correct_skin = session[:current_snippet][:champion] # Assuming you store the champion's name in session
+      
+        correct = submitted_skin.downcase == correct_skin.downcase
+        reward = calculate_reward(correct)
+      
+        current_user.increment!(:hextech_cores, reward) if reward > 0
+        session[:current_snippet] = nil  # Clear the session for the next question
+      
+        render json: {
+          success: true,
+          reward: reward,
+          correct: correct,
+          attempts: current_user.skin_snippet_attempts_today
+        }
+      end
+
+
+      def submit_answer
+        case @game.game_type
+        when 'quiz'
+          handle_quiz_answer
+        when 'ability_guess'
+          handle_ability_guess_answer
+        when 'skin_snippet'
+          handle_skin_snippet_answer
+        when 'skin_name'
+          handle_skin_name_answer
+        end
+      end
+
+      def handle_skin_name_show
+        return redirect_to games_path, alert: "No skin name data available" if @game_data.empty?
+        
+        # Fetch a random skin from the Skin model
+        @skin = Skin.order('RANDOM()').first  # This will fetch a random skin
+      
+        # If the skin has a valid name, proceed
+        if @skin && @skin.name.present?
+          @icon_url = @skin.splash_art  # Assuming splash_art is the URL field for the skin image
+          @skin_name = @skin.name
+          @masked_skin_name = mask_skin_name(@skin_name)
+      
+          # Store skin data in session
+          session[:current_skin] = { full_name: @skin_name }  # Store the full name of the skin in the session
+        else
+          redirect_to games_path, alert: "No valid skin data available"
+        end
+      end
+      
+      def handle_skin_name_answer
+        submitted_name = params[:submitted_name]
+        current_skin = session[:current_skin]
+        @user = current_user
+      
+        # Increment attempts if under the limit
+        if @user.skin_name_attempts_today < 5
+          @user.increment!(:skin_name_attempts_today)
+        end
+      
+        # Handle skin name comparison
+        if submitted_name.present? && current_skin && current_skin[:full_name].present?
+          correct = current_skin[:full_name].downcase == submitted_name.downcase
+          reward = calculate_reward(correct)
+      
+          # Apply reward if correct
+          if correct
+            current_user.increment!(:hextech_cores, reward)
+            session[:current_skin] = nil  # Clear the current skin for new challenge
+          end
+      
+          # Turbo Stream update for correct/incorrect feedback and attempts count
+          if request.format.turbo_stream?
+            render turbo_stream: [
+              turbo_stream.replace("feedback", partial: "games/feedback", locals: { correct: correct, reward: reward }),
+              turbo_stream.replace("attempts-count-skin", partial: "games/attempts_count", locals: { attempts: @user.skin_name_attempts_today })
+            ]
+          else
+            redirect_to game_path(@game) # Regular redirect for non-Turbo Stream requests
+          end
+        else
+          render json: { success: false, message: "No skin name submitted" }, status: :unprocessable_entity
+        end
+      end
+      
+      
+      
+      
+      
+      
+      
+
+
+      def load_game_data
+          case @game.game_type
+          when 'ability_guess'
+            @game_data = Champion.ability_icon_data
+          when 'skin_snippet'
+            @game_data = Champion.skin_snippet_data
+          when 'skin_name'
+            @game_data = Champion.skin_name_data
+          end
+        end
+        
+      def set_game
+        @game = Game.find(params[:id])
+      end
+
+      def check_daily_limit
+        if current_user.quiz_attempts_today >= 5
+          flash[:alert] = "You've reached your quiz limit for today."
+          redirect_to games_path and return
+        else
+        end
+      end
+      
+      
+      def check_skin_name_game_limit
+        if current_user.skin_name_attempts_today >= 5
+          flash[:alert] = "You've reached your daily limit for the Skin Name Game."
+          redirect_to games_path and return
+        end
+      end
+      
+      
+      
+
+      def handle_quiz_show
+    @current_question_index = session[:current_question_index] || 0
+        
+        # Ensure the question index is valid
+        @current_question_index = @current_question_index % QUESTIONS.length
+
+        @current_question = QUESTIONS[@current_question_index]  
+        # Shuffle the QUESTIONS array for random order and store in session
+        session[:shuffled_questions] = QUESTIONS.shuffle
+      
+        # Retrieve shuffled questions from session
+        @shuffled_questions = session[:shuffled_questions]
+
+        if @current_question_index < @shuffled_questions.length
+          @question = @shuffled_questions[@current_question_index][:question]
+          @answers = @shuffled_questions[@current_question_index][:answers]
+          @correct_answer = @shuffled_questions[@current_question_index][:correct_answer]
+        else
+          flash[:notice] = "Quiz completed!"
+          redirect_to root_path and return
+        end
+      
+        # Pass the shuffled QUESTIONS constant to the view
+        @questions = @shuffled_questions
+        
+      end
+      
+
+      
+
+      def handle_ability_guess_show
+        return redirect_to games_path, alert: "No ability data available" if @game_data.empty?
+        
+        session[:current_ability] ||= @game_data.sample
+        @ability = session[:current_ability]
+        @options = @ability[:options]
+      
+        # Fetch the icon_url from the random ability data
+        @icon_url = @ability[:icon_url]  # Assuming that `@ability` contains an `icon_url` field
+      end
+
+      def handle_skin_snippet_show
+        return redirect_to games_path, alert: "No skin data available" if @game_data.empty?
+      
+        session[:current_snippet] ||= @game_data.sample
+        @snippet = session[:current_snippet]
+        @options = @snippet[:options]
+      
+        # Fetch the icon_url from the skin snippet data
+        @icon_url = @snippet[:icon_url]  # Assuming that `@snippet` contains an `icon_url` field
+      end
+      
+
+      
+      # Helper method to replace random letters with underscores
+      def mask_skin_name(name)
+        masked_name = name.chars.map do |char|
+          rand < 0.5 ? "_" : char  # 50% chance to replace with an underscore
+        end.join
+        masked_name
+      end
+      
+
+      def calculate_reward(correct)
+        if correct
+          rand(@game.min_reward..@game.max_reward)
+        else
+          0
+        end
+      end
+
+      def handle_quiz_answer
+        current_question_index = session[:current_question_index] || 0
+
+      @current_question = QUESTIONS[current_question_index]
+
+      Rails.logger.info("Received parameters: #{params.inspect}")
+      selected_answer = params[:selected_answer]
+      question_index = params[:question_index].to_i
+
+      # Increment the user's quiz attempts
+      current_user.increment!(:quiz_attempts_today)
+      self.check_daily_limit
+      # Retrieve shuffled questions from session
+      @shuffled_questions = session[:shuffled_questions]
+
+      # Ensure the shuffled questions exist
+      if @shuffled_questions.nil?
+        Rails.logger.error("Shuffled questions not found in session.")
+        render json: { success: false, error: "Session expired. Please restart the quiz." }, status: :unprocessable_entity and return
+      end
+
+      # Ensure the question index is valid
+      if question_index < 0 || question_index >= @shuffled_questions.length
+        Rails.logger.error("Invalid question index: #{question_index}")
+        render json: { success: false, error: "Invalid question index." }, status: :unprocessable_entity and return
+      end
+
+      # Check if the selected answer is correct
+      correct_answer = @shuffled_questions[question_index][:correct_answer]
+      user_score = (selected_answer == correct_answer) ? 1 : 0
+
+      # Increment the user's Hextech cores if the answer is correct
+      if user_score > 0
+        current_user.increment!(:hextech_cores, user_score * 50)
+      end
+
+      # Prepare the response data
+      response_data = {
+        success: true,
+        attempts: current_user.quiz_attempts_today, # Return the updated attempts
+        next_question: question_index + 1 < @shuffled_questions.length,
+        question: @shuffled_questions[question_index + 1] || nil,
+        correct_answer: @shuffled_questions[question_index + 1][:correct_answer] || nil,
+        answers: @shuffled_questions[question_index + 1][:answers] || []
+      }
+
+      render json: response_data
+    rescue StandardError => e
+      Rails.logger.error("Error in submit_answer: #{e.message}")
+      render json: { success: false, error: "An error occurred while processing your request." }, status: :internal_server_error
+      end
+
+     
+      def calculate_reward(correct)
+        correct ? 50 : 0
+      end
+      
+
     end
-    
-  def set_game
-    @game = Game.find(params[:id])
-  end
-
-  def check_daily_limit
-    if current_user.quiz_attempts_today >= 5
-      flash[:alert] = "You've reached your quiz limit for today."
-      redirect_to games_path and return
-    else
-    end
-  end
-  
-  
-  
-  
-  
-
-  def handle_quiz_show
- @current_question_index = session[:current_question_index] || 0
-    
-    # Ensure the question index is valid
-    @current_question_index = @current_question_index % QUESTIONS.length
-
-    @current_question = QUESTIONS[@current_question_index]  
-    # Shuffle the QUESTIONS array for random order and store in session
-    session[:shuffled_questions] = QUESTIONS.shuffle
-  
-    # Retrieve shuffled questions from session
-    @shuffled_questions = session[:shuffled_questions]
-
-    if @current_question_index < @shuffled_questions.length
-      @question = @shuffled_questions[@current_question_index][:question]
-      @answers = @shuffled_questions[@current_question_index][:answers]
-      @correct_answer = @shuffled_questions[@current_question_index][:correct_answer]
-    else
-      flash[:notice] = "Quiz completed!"
-      redirect_to root_path and return
-    end
-  
-    # Pass the shuffled QUESTIONS constant to the view
-    @questions = @shuffled_questions
-    
-  end
-  
-
-  
-
-  def handle_ability_guess_show
-    return redirect_to games_path, alert: "No ability data available" if @game_data.empty?
-    
-    session[:current_ability] ||= @game_data.sample
-    @ability = session[:current_ability]
-    @options = @ability[:options]
-  end
-
-  def handle_skin_snippet_show
-    return redirect_to games_path, alert: "No skin data available" if @game_data.empty?
-    
-    session[:current_snippet] ||= @game_data.sample
-    @snippet = session[:current_snippet]
-    @options = @snippet[:options]
-  end
-
-  def handle_skin_name_show
-    return redirect_to games_path, alert: "No skin name data available" if @game_data.empty?
-    
-    session[:current_skin] ||= @game_data.sample
-    @skin = session[:current_skin]
-    @hidden_name = @skin[:hidden_name]
-  end
-
-  def calculate_reward(correct)
-    if correct
-      rand(@game.min_reward..@game.max_reward)
-    else
-      0
-    end
-  end
-
-  def handle_quiz_answer
-    current_question_index = session[:current_question_index] || 0
-
-  @current_question = QUESTIONS[current_question_index]
-
-  Rails.logger.info("Received parameters: #{params.inspect}")
-  selected_answer = params[:selected_answer]
-  question_index = params[:question_index].to_i
-
-  # Increment the user's quiz attempts
-  current_user.increment!(:quiz_attempts_today)
-  self.check_daily_limit
-  # Retrieve shuffled questions from session
-  @shuffled_questions = session[:shuffled_questions]
-
-  # Ensure the shuffled questions exist
-  if @shuffled_questions.nil?
-    Rails.logger.error("Shuffled questions not found in session.")
-    render json: { success: false, error: "Session expired. Please restart the quiz." }, status: :unprocessable_entity and return
-  end
-
-  # Ensure the question index is valid
-  if question_index < 0 || question_index >= @shuffled_questions.length
-    Rails.logger.error("Invalid question index: #{question_index}")
-    render json: { success: false, error: "Invalid question index." }, status: :unprocessable_entity and return
-  end
-
-  # Check if the selected answer is correct
-  correct_answer = @shuffled_questions[question_index][:correct_answer]
-  user_score = (selected_answer == correct_answer) ? 1 : 0
-
-  # Increment the user's Hextech cores if the answer is correct
-  if user_score > 0
-    current_user.increment!(:hextech_cores, user_score * 50)
-  end
-
-  # Prepare the response data
-  response_data = {
-    success: true,
-    attempts: current_user.quiz_attempts_today, # Return the updated attempts
-    next_question: question_index + 1 < @shuffled_questions.length,
-    question: @shuffled_questions[question_index + 1] || nil,
-    correct_answer: @shuffled_questions[question_index + 1][:correct_answer] || nil,
-    answers: @shuffled_questions[question_index + 1][:answers] || []
-  }
-
-  render json: response_data
-rescue StandardError => e
-  Rails.logger.error("Error in submit_answer: #{e.message}")
-  render json: { success: false, error: "An error occurred while processing your request." }, status: :internal_server_error
-  end
-
-  def handle_skin_name_answer
-    submitted_name = params[:submitted_name]
-    correct = session[:current_skin][:full_name].downcase == submitted_name.downcase
-    reward = calculate_reward(correct)
-    
-    current_user.increment!(:hextech_cores, reward) if reward > 0
-    session[:current_skin] = nil
-
-    render json: {
-      success: true,
-      reward: reward,
-      correct: correct
-    }
-  end
-end

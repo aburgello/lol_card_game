@@ -20,7 +20,6 @@ export default class extends Controller {
     const questionsData = element.dataset.quizQuestions;
 
     // Debugging output
-    console.log("Raw Questions Data:", questionsData);
 
     try {
         this.questionsValue = JSON.parse(questionsData);
@@ -39,14 +38,11 @@ export default class extends Controller {
     if (this.questionsValue.length > 0) {
         // Ensure that the first question has a correct_answer property
         this.correctAnswerValue = this.questionsValue[0].correct_answer; // Set the correct answer for the first question
-        console.log("Initial Correct Answer:", this.correctAnswerValue);
     } else {
         console.error("No questions available.");
     }
 
-    console.log("Game ID:", this.gameIdValue);
-    console.log("Min Reward:", this.minRewardValue);
-    console.log("Questions:", this.questionsValue);
+
 }
 
 
@@ -91,7 +87,6 @@ selectAnswer(event) {
   })
   .then(response => response.json()) // Get the response as JSON
   .then(data => {
-    console.log("Response Data:", data); // Log the data received from the server
     if (data.success) {
       // Update attempts count in the UI
       this.updateAttemptsDisplay(data.attempts); // Ensure this accesses the correct property
@@ -124,7 +119,6 @@ updateAttemptsDisplay(attempts) {
   // This method should handle loading the next question
   loadNextQuestion(data) {
     // Log the data received
-    console.log("Loading next question with data:", data);
 
     // Get the question element and feedback element
     const questionElement = document.getElementById('question');
@@ -171,7 +165,6 @@ updateAttemptsDisplay(attempts) {
 
     // Update the correct answer for the next question
     this.correctAnswerValue = data.correct_answer; // Store the correct answer for comparison later
-    console.log("Correct answer for the next question:", this.correctAnswerValue);
 
     // Update the current question index in the URL or state
     const currentIndex = this.getCurrentQuestionIndex();

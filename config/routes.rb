@@ -32,8 +32,13 @@ resources :challenges, only: [:index, :show]
 resources :games, only: [:index, :show]
 resources :games do
   post 'submit_answer', on: :member
+  post 'submit_ability_guess_answer', on: :member
+  post 'submit_skin_snippet_answer', on: :member
+  post 'handle_skin_name_answer', on: :member
+  
 end
 patch 'update_score', to: 'games#update_score'
+post "/games/skin_name_guess", to: "games#handle_skin_name_answer"
 
   # other routes
   resources :skins, only: [:index, :show] do

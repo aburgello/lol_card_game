@@ -1,0 +1,9 @@
+<div id="feedback" class="mt-4 text-center text-lg font-semibold
+  <%= 'text-[#C8AA6E]' if correct %>
+  <%= 'text-red-500' unless correct %>">
+  <% if correct %>
+    🎉 Correct! You've earned <%= reward %> Hextech Cores!
+  <% else %>
+    ❌ Incorrect! Try again.
+  <% end %>
+</div>

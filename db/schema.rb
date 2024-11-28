@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_11_27_204831) do
+ActiveRecord::Schema[7.2].define(version: 2024_11_28_012128) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -229,6 +229,9 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_27_204831) do
     t.boolean "admin"
     t.integer "hextech_cores", default: 800, null: false
     t.integer "quiz_attempts_today", default: 0
+    t.integer "ability_guess_attempts_today", default: 0
+    t.integer "skin_snippet_attempts_today", default: 0
+    t.integer "skin_name_attempts_today", default: 0
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end

@@ -45,4 +45,13 @@ def region_completion_status(region)
     percentage: champions.count.zero? ? 0 : (completed.to_f / champions.count * 100).round
   }
 end
+
+def reset_daily_attempts
+  self.update(
+    quiz_attempts_today: 0,
+    ability_guess_attempts_today: 0,
+    skin_snippet_attempts_today: 0,
+    skin_name_attempts_today: 0
+  )
+end
 end
