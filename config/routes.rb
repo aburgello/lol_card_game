@@ -32,7 +32,7 @@ resources :challenges, only: [:index, :show]
 resources :games, only: [:index, :show]
 resources :games do
   post 'submit_answer', on: :member
-  post 'submit_ability_guess_answer', on: :member
+  post 'submit_guess', on: :member
   post 'submit_skin_snippet_answer', on: :member
   post 'handle_skin_name_answer', on: :member
   

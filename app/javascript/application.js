@@ -54,3 +54,25 @@ document.addEventListener('turbo:load', function() {
       });
     }
   });
+
+  document.addEventListener("turbo:load", function() {
+    const searchBox = document.getElementById('championSearchBox');
+    const championGrid = document.getElementById('championGrid');
+  
+    // Function to filter champions based on search
+    searchBox.addEventListener('input', function() {
+      const query = searchBox.value.toLowerCase();
+  
+      // Loop through all the champions and hide/show based on the search query
+      const championButtons = championGrid.querySelectorAll('button');
+      championButtons.forEach(button => {
+        const championName = button.getAttribute('data-champion-name').toLowerCase();
+        if (championName.includes(query)) {
+          button.style.display = 'block'; // Show champion if it matches
+        } else {
+          button.style.display = 'none'; // Hide champion if it doesn't match
+        }
+      });
+    });
+  });
+  

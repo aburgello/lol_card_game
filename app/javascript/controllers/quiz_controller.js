@@ -8,41 +8,71 @@ export default class extends Controller {
     questions: Array,
   };
 
-  connect() {
-    console.log("Quiz controller connected");
+ connect() {
+  console.log("Quiz controller connected");
 
-    // Access the data attributes from the DOM element
-    const element = this.element;
-    this.gameIdValue = element.dataset.quizGameId;
-    this.minRewardValue = element.dataset.quizMinReward;
+  // Access the data attributes from the DOM element
+  const element = this.element;
+  this.gameIdValue = element.dataset.quizGameId;
+  this.minRewardValue = element.dataset.quizMinReward;
 
-    // Attempt to parse questions data
-    const questionsData = element.dataset.quizQuestions;
+  // Attempt to parse questions data
+  const questionsData = element.dataset.quizQuestions;
 
-    // Debugging output
+  // Debugging output
+  try {
+      this.questionsValue = JSON.parse(questionsData);
+  } catch (error) {
+      console.error("Failed to parse questions data:", error);
+      this.questionsValue = []; // Fallback to an empty array
+  }
 
-    try {
-        this.questionsValue = JSON.parse(questionsData);
-    } catch (error) {
-        console.error("Failed to parse questions data:", error);
-        this.questionsValue = []; // Fallback to an empty array
-    }
+  // Check if questionsValue is an array
+  if (!Array.isArray(this.questionsValue) || this.questionsValue.length === 0) {
+      console.error("Expected questionsValue to be a non-empty array, but got:", this.questionsValue);
+      this.questionsValue = []; // Fallback to an empty array
+      return; // Exit if no questions are available
+  }
 
-    // Check if questionsValue is an array
-    if (!Array.isArray(this.questionsValue)) {
-        console.error("Expected questionsValue to be an array, but got:", this.questionsValue);
-        this.questionsValue = []; // Fallback to an empty array
-    }
+  // Shuffle the questions (if they are not already shuffled on the server)
+  this.shuffleQuestions();
 
-    // Set the initial correct answer and question index
-    if (this.questionsValue.length > 0) {
-        // Ensure that the first question has a correct_answer property
-        this.correctAnswerValue = this.questionsValue[0].correct_answer; // Set the correct answer for the first question
-    } else {
-        console.error("No questions available.");
-    }
+  // Set the initial correct answer and question index
+  this.setCurrentQuestion(0); // Load the first question
+}
 
+shuffleQuestions() {
+  for (let i = this.questionsValue.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [this.questionsValue[i], this.questionsValue[j]] = [this.questionsValue[j], this.questionsValue[i]];
+  }
+}
 
+setCurrentQuestion(index) {
+  if (index < this.questionsValue.length) {
+      const currentQuestion = this.questionsValue[index];
+      this.correctAnswerValue = currentQuestion.correct_answer; // Set the correct answer
+      const questionElement = document.getElementById('question');
+      const answersContainer = this.element.querySelector('.grid');
+
+      // Update the question text
+      questionElement.textContent = currentQuestion.question;
+
+      // Clear previous answers
+      answersContainer.innerHTML = '';
+
+      // Add new answer buttons
+      currentQuestion.answers.forEach(answer => {
+          const button = document.createElement('button');
+          button.className = "block w-full bg-slate-700 text-slate-300 hover:bg-[#C8AA6E] hover:text-slate-900 py-4 px-4 rounded-lg transition-all duration-200";
+          button.dataset.action = "click->quiz#selectAnswer";
+          button.dataset.answer = answer;
+          button.textContent = answer;
+          answersContainer.appendChild(button);
+      });
+  } else {
+      console.error("Invalid question index:", index);
+  }
 }
 
 
