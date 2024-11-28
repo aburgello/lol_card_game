@@ -181,7 +181,7 @@ class GamesController < ApplicationController
       
         # If the skin has a valid name, proceed
         if @skin && @skin.name.present?
-          @icon_url = @skin.splash_art  # Assuming splash_art is the URL field for the skin image
+          @icon_url = @skin.splash_art_centered  # Assuming splash_art is the URL field for the skin image
           @skin_name = @skin.name
           @masked_skin_name = mask_skin_name(@skin_name)
       
@@ -228,13 +228,6 @@ class GamesController < ApplicationController
       end
       
       
-      
-      
-      
-      
-      
-
-
       def load_game_data
           case @game.game_type
           when 'ability_guess'
