@@ -13,6 +13,8 @@ export default class extends Controller {
     console.log("Current attempts:", this.attemptsValue)
   }
 
+  
+  
   search() {
     const query = this.searchBoxTarget.value.toLowerCase()
     
@@ -93,8 +95,14 @@ export default class extends Controller {
     this.feedbackTarget.textContent = data.message || "Correct!"
     this.feedbackTarget.classList.remove("text-red-500")
     this.feedbackTarget.classList.add("text-green-500")
-  }
 
+    if (this.feedbackTarget.textContent.includes("Correct")) {
+        setTimeout(() => {
+          location.reload();
+        }, 1500);
+      }
+  }
+  
   showIncorrectAnswer(data) {
     if (!this.hasFeedbackTarget) return
     
@@ -121,3 +129,4 @@ export default class extends Controller {
     })
   }
 }
+
