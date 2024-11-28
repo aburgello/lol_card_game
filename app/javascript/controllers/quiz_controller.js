@@ -90,11 +90,11 @@ selectAnswer(event) {
   // Show feedback
   const feedbackElement = this.element.querySelector("#feedback");
   if (selectedAnswer === this.correctAnswerValue) {
-    feedbackElement.textContent = `Correct! You've earned ${this.minRewardValue} cores.`;
+    feedbackElement.textContent = `🎉 Correct! You've earned 25 cores.`;
     feedbackElement.classList.add("text-green-500");
     feedbackElement.classList.remove("text-red-500");
   } else {
-    feedbackElement.textContent = `Incorrect! The correct answer is: ${this.correctAnswerValue}`;
+    feedbackElement.textContent = `❌ Incorrect! The correct answer is: ${this.correctAnswerValue}`;
     feedbackElement.classList.add("text-red-500");
     feedbackElement.classList.remove("text-green-500");
   }
@@ -142,7 +142,7 @@ selectAnswer(event) {
 updateAttemptsDisplay(attempts) {
   const attemptsElement = document.getElementById("attempts-count");
   if (attemptsElement) {
-      attemptsElement.textContent = `${attempts} / 5`; // Update with the new attempts count
+      attemptsElement.textContent = `${attempts} / 7`; // Update with the new attempts count
   }
 }
 

@@ -64,5 +64,18 @@ module GamesHelper
   ]
   
 
-
+  def daily_attempts_for(game_type, user)
+    case game_type
+    when "quiz"
+      "#{user.quiz_attempts_today}/7"
+    when "ability_guess"
+      "#{user.ability_guess_attempts_today}/7"
+    when "skin_snippet"
+      "#{user.skin_snippet_attempts_today}/7"
+    when "skin_name"
+      "#{user.skin_name_attempts_today}/7"
+    else
+      "0/7"
+    end
+  end
 end

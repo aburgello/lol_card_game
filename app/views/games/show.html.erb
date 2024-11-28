@@ -3,17 +3,17 @@
     <h3 class="text-3xl font-semibold mb-6 text-center text-[#C8AA6E] border-b pb-4 border-[#C8AA6E]/20">
       <%= @game.name %>
     </h3>
-     <% if @user.quiz_attempts_today < 5 %><p class="text-slate-400 text-center mb-6"><%= @game.description %></p>
+     <% if @user.quiz_attempts_today < 7 %><p class="text-slate-400 text-center mb-6"><%= @game.description %></p>
 
     <!-- Show Quiz Attempts -->
     <div class="text-center text-sm text-slate-400 mb-6">
-      You had <span id="attempts-count"><%= @user.quiz_attempts_today %> / 5</span> attempts today
+      You had <span id="attempts-count"><%= @user.quiz_attempts_today %> / 7</span> attempts today
     </div>
       <% else %>
 <%end%>
     <!-- Quiz Card -->
     <div class="bg-slate-800/30 rounded-lg shadow-lg p-6 border border-slate-700/50">
-      <% if @user.quiz_attempts_today >= 5 %>
+      <% if @user.quiz_attempts_today >= 7 %>
         <!-- Limit reached message -->
         <h4 class="text-xl text-[#C8AA6E] mx-auto text-center font-medium">You've reached your daily limit! Come back tomorrow.</h4>
       <% else %>
@@ -54,14 +54,16 @@
     <%= @game.name %>
   </h3>
   
-  <% if @user.ability_guess_attempts_today < 5 %>
+  <% if @user.ability_guess_attempts_today < 7 %>
     <p class="text-slate-400 text-center mb-6"><%= @game.description %></p>
     <div class="text-center text-sm text-slate-400 mb-6">
-      You have used <span data-ability-guess-target="attemptsCount"><%= @user.ability_guess_attempts_today %></span> / 5 attempts today
+      You have used <span data-ability-guess-target="attemptsCount"><%= @user.ability_guess_attempts_today %></span> / 7 attempts today
     </div>
-    
+      <% end %>    
+
     <div class="bg-slate-800/30 rounded-lg px-8 shadow-lg p-4 mx-4 border border-slate-700/50">
-      <div class="text-center">
+       <% if @user.ability_guess_attempts_today < 7 %>
+ <div class="text-center">
         <div class="mb-4 text-lg text-[#C8AA6E] font-semibold"><%= @ability_name %></div>
         <img src="<%= @icon_url %>" alt="Ability Icon" class="mx-auto mb-6 w-24 h-24 object-contain rounded-3xl border-2 border-[#C8AA6E] saturate-[0.2] hover:saturate-[1.1] transition-all duration-300 ease-in-out" />
         
@@ -91,13 +93,13 @@
         
         <div data-ability-guess-target="feedback" class="mt-4 text-center text-lg font-semibold"></div>
       </div>
-    </div>
   <% else %>
     <h4 class="text-xl text-[#C8AA6E] mx-auto text-center font-medium">You've reached your daily limit! Come back tomorrow.</h4>
-  <% end %>
+  <% end %>    
+  </div>
+
 </div>
 <% end %>
-
 
 
 <style>
@@ -160,14 +162,14 @@
     </h3>
     <% if @user.skin_name_attempts_today < 5 %>
       <div class="text-center text-sm text-slate-400 mb-6">
-        You had <span id="attempts-count-skin"><%= @user.skin_name_attempts_today %> / 5</span> attempts today
+        You had <span id="attempts-count-skin"><%= @user.skin_name_attempts_today %> / 7</span> attempts today
       </div>
     <% else %>
     <% end %>
 
     <div class="bg-slate-800/30 rounded-lg shadow-lg p-6 border border-slate-700/50 relative">
-      <% if @user.skin_name_attempts_today >= 5 %>      
-        <h4 class="text-md text-[#C8AA6E] mx-auto text-center font-medium">You've reached your daily limit! Come back tomorrow.</h4>
+      <% if @user.skin_name_attempts_today >= 7 %>      
+    <h4 class="text-xl text-[#C8AA6E] mx-auto text-center font-medium">You've reached your daily limit! Come back tomorrow.</h4>
       <% else %>
         <div class="text-center">
           <!-- Display the splash art with blur effect -->

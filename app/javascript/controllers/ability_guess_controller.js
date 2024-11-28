@@ -28,7 +28,7 @@ export default class extends Controller {
     event.preventDefault()
     const championId = event.currentTarget.dataset.championId
     
-    if (this.attemptsValue >= 5) {
+    if (this.attemptsValue >= 7) {
       this.showDailyLimit()
       return
     }
@@ -76,7 +76,7 @@ export default class extends Controller {
       this.attemptsValue = attempts
       this.attemptsCountTarget.textContent = attempts
       
-      if (attempts >= 5) {
+      if (attempts >= 7) {
         this.disableGuessing()
       }
     }
@@ -92,7 +92,7 @@ export default class extends Controller {
   showCorrectAnswer(data) {
     if (!this.hasFeedbackTarget) return
     
-    this.feedbackTarget.textContent = data.message || "Correct!"
+    this.feedbackTarget.textContent = data.message || "🎉 Correct! You have earned 25 Hextech Cores."
     this.feedbackTarget.classList.remove("text-red-500")
     this.feedbackTarget.classList.add("text-green-500")
 
@@ -106,7 +106,7 @@ export default class extends Controller {
   showIncorrectAnswer(data) {
     if (!this.hasFeedbackTarget) return
     
-    this.feedbackTarget.textContent = data.message || "Incorrect. Try again!"
+    this.feedbackTarget.textContent = data.message || "❌ Incorrect. Try again!"
     this.feedbackTarget.classList.remove("text-green-500")
     this.feedbackTarget.classList.add("text-red-500")
   }

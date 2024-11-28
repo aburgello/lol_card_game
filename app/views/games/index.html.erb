@@ -1,4 +1,3 @@
-
 <div class="mb-auto p-4 mx-auto max-w-[90vw] bg-gradient-to-r from-[#0A1428]/20 to-[#0A0C14]/20 pt-4 rounded-lg shadow-md border border-slate-900">
   <h3 class="text-3xl font-semibold mb-6 text-center text-[#C8AA6E] border-b pb-4 mx-6 border-[#C8AA6E]/20">
     Available Games
@@ -6,15 +5,38 @@
 
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 mx-auto">
     <% @games.each do |game| %>
+      <% # Determine if the daily attempts are maxed out %>
+      <% total_attempts = case game.game_type
+         when "quiz"
+           current_user.quiz_attempts_today
+         when "ability_guess"
+           current_user.ability_guess_attempts_today
+         when "skin_snippet"
+           current_user.skin_snippet_attempts_today
+         when "skin_name"
+           current_user.skin_name_attempts_today
+         else
+           0
+       end %>
+
+      <% maxed_out = total_attempts >= 7 %>
+      
       <%= link_to game_path(game), class: "block relative" do %>
-        <div class="rounded-lg p-6 border hover:border-[#C8AA6E]/50 hover:scale-[1.02] hover:bg-slate-700/30 transition-all duration-300 w-full bg-slate-800/30 border-slate-700/30 cursor-pointer">
+        <div class="rounded-lg p-6 border hover:border-[#C8AA6E]/50 hover:scale-[1.02] hover:bg-slate-700/30 transition-all duration-300 w-full cursor-pointer 
+          <%= maxed_out ? 'bg-green-500/10 border-green-600' : 'bg-slate-800/30 border-slate-700/30' %>">
+          
           <h4 class="text-xl text-[#C8AA6E] font-medium mb-2"><%= game.name %></h4>
+          <div class="absolute -top-3 right-4 bg-[#C8AA6E] text-slate-900 text-sm px-2 md:px-3 py-1 rounded-full flex items-center space-x-0 shadow-lg <%= maxed_out ? 'hidden' : 'block' %>">
+            <%= image_tag "hextech-core.png", alt: "Hextech Core", class: "w-5 h-5" %>
+            <span>175 Daily Max Reward</span>
+          </div>
           <p class="text-sm text-slate-400 mb-4"><%= game.description %></p>
           <p class="text-sm text-slate-400">
-            Rewards: 
+            Daily Attempts:
             <span class="inline-flex items-center space-x-1 text-[#C8AA6E]">
-              <span><%= game.min_reward %> - <%= game.max_reward %></span>
-              <%= image_tag "hextech-core.png", alt: "Hextech Core", class: "w-4 h-4" %>
+              <span>
+                <%= "#{total_attempts}/7" %>
+              </span>
             </span>
           </p>
         </div>

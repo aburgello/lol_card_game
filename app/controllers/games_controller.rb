@@ -216,7 +216,7 @@ QUESTIONS = [
         @user = current_user
       
         # Increment attempts if under the limit
-        if @user.skin_name_attempts_today < 5
+        if @user.skin_name_attempts_today < 7
           @user.increment!(:skin_name_attempts_today)
         end
       
@@ -279,7 +279,7 @@ QUESTIONS = [
                 return render json: { success: false, message: "User not found" }, status: :unauthorized
               end
     
-              if current_user.ability_guess_attempts_today >= 5
+              if current_user.ability_guess_attempts_today >= 7
                 return render json: { 
                   success: false, 
                   message: "You've reached your daily limit!", 
@@ -302,13 +302,13 @@ QUESTIONS = [
               # Calculate score and award hextech cores
               user_score = correct ? 1 : 0
               if user_score > 0
-                current_user.increment!(:hextech_cores, user_score * 50)
+                current_user.increment!(:hextech_cores, user_score * 25)
               end
               current_user.increment!(:ability_guess_attempts_today)
               
               render json: {
           success: correct,
-          message: correct ? "Correct! You earned 50 Hextech Cores!" : "Incorrect. Try again!",
+          message: correct ? "🎉 Correct! You earned 25 Hextech Cores!" : "❌ Incorrect. Try again!",
           attempts: current_user.ability_guess_attempts_today,
           hextech_cores: current_user.hextech_cores
         }
@@ -367,7 +367,7 @@ QUESTIONS = [
   end
 
   def check_daily_limit
-        if current_user.quiz_attempts_today >= 5
+        if current_user.quiz_attempts_today >= 7
           flash[:alert] = "You've reached your quiz limit for today."
           redirect_to games_path and return
         else
@@ -375,7 +375,7 @@ QUESTIONS = [
   end
       
   def check_skin_name_game_limit
-        if current_user.skin_name_attempts_today >= 5
+        if current_user.skin_name_attempts_today >= 7
           flash[:alert] = "You've reached your daily limit for the Skin Name Game."
           redirect_to games_path and return
         end
@@ -444,7 +444,7 @@ QUESTIONS = [
 
       # Increment the user's Hextech cores if the answer is correct
       if user_score > 0
-        current_user.increment!(:hextech_cores, user_score * 50)
+        current_user.increment!(:hextech_cores, user_score * 25)
       end
 
       # Prepare the response data
@@ -464,7 +464,7 @@ QUESTIONS = [
 end
      
 def calculate_reward(correct)
-        correct ? 50 : 0
+        correct ? 25 : 0
       end
 end
 
@@ -503,7 +503,7 @@ end
       
 def calculate_reward(correct)
         if correct
-          rand(@game.min_reward..@game.max_reward)
+          25
         else
           0
         end
