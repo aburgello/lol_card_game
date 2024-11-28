@@ -50,66 +50,75 @@ export default class extends Controller {
 }
 
 
-  selectAnswer(event) {
-    const selectedAnswer = event.target.dataset.answer;
+selectAnswer(event) {
+  const selectedAnswer = event.target.dataset.answer;
+
+  // Disable all buttons after an answer is selected
+  const buttons = this.element.querySelectorAll("button");
+  buttons.forEach(button => button.disabled = true);
+
+  // Highlight selected answer
+  buttons.forEach(button => button.classList.remove("bg-[#C8AA6E]", "text-slate-900"));
+  event.target.classList.add("bg-[#C8AA6E]", "text-slate-900");
+
+  // Show feedback
+  const feedbackElement = this.element.querySelector("#feedback");
+  if (selectedAnswer === this.correctAnswerValue) {
+    feedbackElement.textContent = `Correct! You've earned ${this.minRewardValue} cores.`;
+    feedbackElement.classList.add("text-green-500");
+    feedbackElement.classList.remove("text-red-500");
+  } else {
+    feedbackElement.textContent = `Incorrect! The correct answer is: ${this.correctAnswerValue}`;
+    feedbackElement.classList.add("text-red-500");
+    feedbackElement.classList.remove("text-green-500");
+  }
+
+  // Prepare the data to send to the server
+  const selectedAnswerData = {
+    selected_answer: selectedAnswer,
+    question_index: this.getCurrentQuestionIndex() // Get the current question index
+  };
+
+  const token = document.querySelector('meta[name="csrf-token"]').content;
+
+  fetch(`/games/${this.gameIdValue}/submit_answer`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-CSRF-Token": token,  // Include CSRF token
+    },
+    body: JSON.stringify(selectedAnswerData),
+  })
+  .then(response => response.json()) // Get the response as JSON
+  .then(data => {
+    console.log("Response Data:", data); // Log the data received from the server
+    if (data.success) {
+      // Update attempts count in the UI
+      this.updateAttemptsDisplay(data.attempts); // Ensure this accesses the correct property
   
-    // Disable all buttons after an answer is selected
-    const buttons = this.element.querySelectorAll("button");
-    buttons.forEach(button => button.disabled = true);
-  
-    // Highlight selected answer
-    buttons.forEach(button => button.classList.remove("bg-[#C8AA6E]", "text-slate-900"));
-    event.target.classList.add("bg-[#C8AA6E]", "text-slate-900");
-  
-    // Show feedback
-    const feedbackElement = this.element.querySelector("#feedback");
-    if (selectedAnswer === this.correctAnswerValue) {
-      feedbackElement.textContent = `Correct! You've earned ${this.minRewardValue} cores.`;
-      feedbackElement.classList.add("text-green-500");
-      feedbackElement.classList.remove("text-red-500");
+      // Wait for 2 seconds before moving to the next question
+      setTimeout(() => {
+        if (data.next_question) {
+          this.loadNextQuestion(data.question); // Pass the next question data
+        } else {
+          // Handle quiz completion
+          this.showModal("Quiz Complete", `You earned ${this.minRewardValue} cores!`);
+        }
+      }, 2000);
     } else {
-      feedbackElement.textContent = `Incorrect! The correct answer is: ${this.correctAnswerValue}`;
-      feedbackElement.classList.add("text-red-500");
-      feedbackElement.classList.remove("text-green-500");
+      console.error("Error in response:", data.error); // Handle error case
     }
-  
-    // Prepare the data to send to the server
-    const selectedAnswerData = {
-      selected_answer: selectedAnswer,
-      question_index: this.getCurrentQuestionIndex() // Get the current question index
-    };
-  
-    const token = document.querySelector('meta[name="csrf-token"]').content;
-  
-    fetch(`/games/${this.gameIdValue}/submit_answer`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-CSRF-Token": token,  // Include CSRF token
-      },
-      body: JSON.stringify(selectedAnswerData),
-    })
-    .then(response => {
-      // Log the response for debugging
-      console.log("Response status:", response.status);
-      return response.json(); // Get the response as JSON
-    })
-    .then(data => {
-      if (data.success) {
-        // Wait for 2 seconds before moving to the next question
-        setTimeout(() => {
-          if (data.next_question) {
-            this.loadNextQuestion(data.question); // Pass the next question data
-          } else {
-            // Handle quiz completion
-            this.showModal("Quiz Complete", `You earned ${this.minRewardValue} cores!`);
-          }
-        }, 2000);
-      }
-    })
-    .catch(error => {
-      console.error('Error:', error);
-    });
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  });
+}
+
+updateAttemptsDisplay(attempts) {
+  const attemptsElement = document.getElementById("attempts-count");
+  if (attemptsElement) {
+      attemptsElement.textContent = `${attempts} / 5`; // Update with the new attempts count
+  }
 }
 
   // This method should handle loading the next question

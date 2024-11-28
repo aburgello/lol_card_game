@@ -8,7 +8,7 @@ namespace :games do
         min_reward: 50,
         max_reward: 200,
         game_type: 'quiz',
-        daily_plays_limit: 1
+        daily_plays_limit: 5
       },
       {
         name: "Ability Icon Challenge",
@@ -16,7 +16,7 @@ namespace :games do
         min_reward: 50,
         max_reward: 200,
         game_type: 'ability_guess',
-        daily_plays_limit: 1
+        daily_plays_limit: 5
       },
       {
         name: "Skin Detective",
@@ -24,7 +24,7 @@ namespace :games do
         min_reward: 50,
         max_reward: 200,
         game_type: 'skin_snippet',
-        daily_plays_limit: 1
+        daily_plays_limit: 5
       },
       {
         name: "Skin Name Challenge",
@@ -32,7 +32,7 @@ namespace :games do
         min_reward: 50,
         max_reward: 200,
         game_type: 'skin_name',
-        daily_plays_limit: 1
+        daily_plays_limit: 5
       }
     ]
 
