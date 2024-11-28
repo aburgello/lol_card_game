@@ -14,7 +14,7 @@ export default class extends Controller {
             imageElement.classList.remove("blur-effect");
             setTimeout(() => {
             window.location.reload();
-          }, 2000);
+          }, 3000);
         }
       });
 
