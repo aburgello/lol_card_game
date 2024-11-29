@@ -60,6 +60,7 @@
       You have used <span data-ability-guess-target="attemptsCount"><%= @user.ability_guess_attempts_today %></span> / 7 attempts today
     </div>
       <% end %>    
+        <div data-ability-guess-target="feedback" class="mb-4 text-center text-lg font-semibold"></div>
 
     <div class="bg-slate-800/30 rounded-lg px-8 shadow-lg p-4 mx-4 border border-slate-700/50">
        <% if @user.ability_guess_attempts_today < 7 %>
@@ -76,7 +77,8 @@
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-4 mt-4" data-ability-guess-target="championGrid">
-          <% Champion.all.each do |champion| %>
+          <% Champion.all.order(:name).each do |champion| %> 
+
             <button class="group champion-option px-4 py-8 rounded-lg w-full"
                     data-ability-guess-target="championButton"
                     data-action="click->ability-guess#submitGuess"
@@ -84,14 +86,13 @@
                     data-champion-name="<%= champion.name %>"
                     style="background-image: url('<%= champion.splash_art %>/centered'); background-size: cover; background-position: center -15px; position: relative;">
               <div class="absolute inset-0 bg-black/[0.85] group-hover:bg-black/[0.45] rounded-lg group-hover:border-[#C8AA6E] group-hover:border-4 transition-all duration-100 ease-in-out"></div>
-              <span class="relative z-10 text-center text-white group-hover:text-[#C8AA6E] group-hover:scale-105 transition-all duration-300 font-bold text-lg">
+              <span class="relative z-10 text-center text-white group-hover:text-[#C8AA6E] group-hover:scale-105 transition-all duration-300 font-bold text-xl">
                 <%= champion.name %>
               </span>
             </button>
           <% end %>
         </div>
         
-        <div data-ability-guess-target="feedback" class="mt-4 text-center text-lg font-semibold"></div>
       </div>
   <% else %>
     <h4 class="text-xl text-[#C8AA6E] mx-auto text-center font-medium">You've reached your daily limit! Come back tomorrow.</h4>
