@@ -250,48 +250,37 @@ document.querySelectorAll('.relative.group.bg-gradient-to-r').forEach((card, ind
 
   card.addEventListener('click', playVideoSequence);
     
- const skinArtContainer = card.querySelector('.relative.group.bg-gradient-to-r .relative.w-full');
-skinArtContainer.addEventListener('click', function (e) {
-  if (!hasBeenClicked) return;
+  const skinArtContainer = card.querySelector('.relative.group.bg-gradient-to-r .relative.w-full');
+  skinArtContainer.addEventListener('click', function (e) {
+    if (!hasBeenClicked) return;
 
-  let skinElement = e.target.closest('img, video');
+    const splashArt = this.querySelector('img').getAttribute('data-skin-splash');
+    const skinName = this.querySelector('img').getAttribute('data-skin-name');
+    const skinDescription = this.querySelector('img').getAttribute('data-skin-description');
+    const rarity = this.querySelector('img').getAttribute('data-skin-rarity');
+    const modal = document.getElementById('splash-art-modal');
+    const splashImage = document.getElementById('splash-art-image');
+    const modalSkinName = document.getElementById('modal-skin-name');
+    const modalSkinDescription = document.getElementById('modal-skin-description');
+    const modalBg = document.getElementById('splash-art-modal-bg');
 
-  if (!skinElement) {
-    skinElement = card.querySelector('img, video');
-  }
+    const championBySkinPath = (skinName) => `/champions/skin/${encodeURIComponent(skinName)}`;
 
-  if (!skinElement) {
-    console.warn('No image or video found in the card.');
-    return;
-  }
+    modalBg.classList.remove(
+      'bg-mythic', 'bg-ultimate', 'bg-legendary', 'bg-transcendent', 'bg-common', 'bg-epic',
+      'border-mythic', 'border-ultimate', 'border-legendary', 'border-transcendent', 'border-common', 'border-epic'
+    );
 
-  const splashArt = skinElement.getAttribute('data-skin-splash');
-  const skinName = skinElement.getAttribute('data-skin-name');
-  const skinDescription = skinElement.getAttribute('data-skin-description');
-  const rarity = skinElement.getAttribute('data-skin-rarity');
-  const modal = document.getElementById('splash-art-modal');
-  const splashImage = document.getElementById('splash-art-image');
-  const modalSkinName = document.getElementById('modal-skin-name');
-  const modalSkinDescription = document.getElementById('modal-skin-description');
-  const modalBg = document.getElementById('splash-art-modal-bg');
+    if (rarity) {
+      modalBg.classList.add(`bg-${rarity.toLowerCase()}`);
+      modalBg.classList.add(`border-${rarity.toLowerCase()}`);
+    }
 
-  const championBySkinPath = (skinName) => `/champions/skin/${encodeURIComponent(skinName)}`;
-
-  modalBg.classList.remove(
-    'bg-mythic', 'bg-ultimate', 'bg-legendary', 'bg-transcendent', 'bg-common', 'bg-epic',
-    'border-mythic', 'border-ultimate', 'border-legendary', 'border-transcendent', 'border-common', 'border-epic'
-  );
-
-  if (rarity) {
-    modalBg.classList.add(`bg-${rarity.toLowerCase()}`);
-    modalBg.classList.add(`border-${rarity.toLowerCase()}`);
-  }
-
-  splashImage.src = splashArt;
-  modalSkinName.innerHTML = `<a href="${championBySkinPath(skinName)}" class="text-[#C8AA6E] hover:brightness-125 hover:saturate-[1.25] transition-all duration-200 ease-in-out" target="_self">${skinName}</a>`;
-  modalSkinDescription.innerHTML = skinDescription || 'No description available.';
-  modal.classList.remove('hidden');
-});
+    splashImage.src = splashArt;
+    modalSkinName.innerHTML = `<a href="${championBySkinPath(skinName)}" class="text-[#C8AA6E] hover:brightness-125 hover:saturate-[1.25] transition-all duration-200 ease-in-out" target="_self">${skinName}</a>`;
+    modalSkinDescription.innerHTML = skinDescription || 'No description available.';
+    modal.classList.remove('hidden');
+  });
 });
 
 // Hide modal when clicking outside
