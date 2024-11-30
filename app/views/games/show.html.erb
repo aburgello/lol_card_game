@@ -1,3 +1,6 @@
+          <!-- QUIZ GAME -->
+
+
 <% if @game.game_type == "quiz" %>
   <div class="max-w-[90vw] xl:max-w-[70vw] mx-auto p-6 bg-gradient-to-r from-[#0A1428]/20 to-[#0A0C14]/20 rounded-lg shadow-md border border-slate-900">
     <h3 class="text-3xl font-semibold mb-6 text-center text-[#C8AA6E] border-b pb-4 border-[#C8AA6E]/20">
@@ -11,8 +14,7 @@
     </div>
       <% else %>
 <%end%>
-    <!-- Quiz Card -->
-    <div class="bg-slate-800/30 rounded-lg shadow-lg p-6 border border-slate-700/50">
+  <div class="bg-slate-800/30 rounded-lg shadow-lg p-6 border border-slate-700/50">
       <% if @user.quiz_attempts_today >= 7 %>
         <!-- Limit reached message -->
         <h4 class="text-xl text-[#C8AA6E] mx-auto text-center font-medium">You've reached your daily limit! Come back tomorrow.</h4>
@@ -43,6 +45,7 @@
   </div>
 <% end %>
 
+          <!-- ABILITY GAME -->
 
 <% if @game.game_type == "ability_guess" %>
 <div class="max-w-[90vw] xl:max-w-[70vw] mx-auto p-6 bg-gradient-to-r from-[#0A1428]/20 to-[#0A0C14]/20 rounded-lg shadow-md border border-slate-900"
@@ -84,7 +87,7 @@
                     data-action="click->ability-guess#submitGuess"
                     data-champion-id="<%= champion.id %>"
                     data-champion-name="<%= champion.name %>"
-                    style="background-image: url('<%= champion.splash_art %>/centered'); background-size: cover; background-position: center -15px; position: relative;">
+                    style="background-image: url('<%= champion.splash_art %>'); background-size: cover; background-position: center -15px; position: relative;">
               <div class="absolute inset-0 bg-black/[0.85] group-hover:bg-black/[0.45] rounded-lg group-hover:border-[#C8AA6E] group-hover:border-4 transition-all duration-100 ease-in-out"></div>
               <span class="relative z-10 text-center text-white group-hover:text-[#C8AA6E] group-hover:scale-105 transition-all duration-300 font-bold text-xl">
                 <%= champion.name %>
@@ -102,24 +105,7 @@
 </div>
 <% end %>
 
-
-<style>
-.champion-option {
-  color: white;
-  text-align: center;
-  overflow: hidden;
-}
-
-.champion-option:hover .absolute {
-}
-
-.champion-option span {
-  position: relative;
-  z-index: 10;
-}
-
-</style>
-
+          <!-- SKIN SNIPPET GAME -->
 
 <% if @game.game_type == "skin_snippet" %>
   <div class="max-w-[90vw] xl:max-w-[70vw] mx-auto p-6 bg-gradient-to-r from-[#0A1428]/20 to-[#0A0C14]/20 rounded-lg shadow-md border border-slate-900">
@@ -130,7 +116,7 @@
       <p class="text-slate-400 text-center mb-6"><%= @game.description %></p>
 
       <div class="text-center text-sm text-slate-400 mb-6">
-        You had <span id="attempts-count"><%= @user.skin_snippet_attempts_today %> / 5</span> attempts today
+        You had <span id="attempts-count"><%= @user.skin_snippet_attempts_today %> / 7</span> attempts today
       </div>
     <% else %>
       <h4 class="text-xl text-[#C8AA6E] mx-auto text-center font-medium">You've reached your daily limit! Come back tomorrow.</h4>
@@ -155,6 +141,8 @@
     </div>
   </div>
 <% end %>
+
+
           <!-- SKIN NAME GAME -->
 <% if @game.game_type == "skin_name" %>
   <div class="max-w-[90vw] xl:max-w-[50vw] mx-auto p-6 bg-gradient-to-r from-[#0A1428]/20 to-[#0A0C14]/20 rounded-lg shadow-md border border-slate-900">
@@ -208,4 +196,19 @@
 .blur-effect {
   filter: blur(0.5rem);
 }
+
+.champion-option {
+  color: white;
+  text-align: center;
+  overflow: hidden;
+}
+
+.champion-option:hover .absolute {
+}
+
+.champion-option span {
+  position: relative;
+  z-index: 10;
+}
+
 </style>
