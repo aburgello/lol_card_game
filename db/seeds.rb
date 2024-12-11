@@ -35,29 +35,3 @@ puts "Seeding complete!"
 
 
 puts "Successfully associated champions with regions!"
-
-=begin Skin.create(
-  id: 147002,
-  champion_id: 147, # Use the appropriate champion ID
-  name: "K/DA ALL OUT Seraphine Rising Star",
-  description: "Seraphine's life is changing faster than she ever expected, and she's trying to hold on to her unique voice, keep up with Kai'Sa's intimidatingly sharp choreography, and still somehow manage to get enough sleep.",
-  splash_art: "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/characters/seraphine/skins/skin02/images/seraphine_splash_centered_2.jpg",
-  loading_art: "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/characters/seraphine/skins/skin02/seraphineloadscreen_2.jpg",
-  is_base: false,
-  rarity: "Ultimate",
-  is_legacy: false,
-  splash_art_centered: "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/characters/seraphine/skins/skin02/images/seraphine_splash_centered_2.jpg"
-)
-
-Skin.create(
-  id: 147003,
-  champion_id: 147, # Use the appropriate champion ID
-  name: "K/DA ALL OUT Seraphine Superstar",
-  description: "After her whirlwind rise to stardom, Seraphine is on top of the world, and the charts, with her feature on K/DA's new EP. Her music and her message are resonating with her fans, and she's excited to show them what's to come on her journey of self-discovery through music.",
-  splash_art: "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/characters/seraphine/skins/skin03/images/seraphine_splash_centered_3.jpg",
-  loading_art: "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/characters/seraphine/skins/skin03/seraphineloadscreen_3.jpg",
-  is_base: false,
-  rarity: "Ultimate",
-  is_legacy: false,
-  splash_art_centered: "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/characters/seraphine/skins/skin03/images/seraphine_splash_centered_3.jpg"
-) =end

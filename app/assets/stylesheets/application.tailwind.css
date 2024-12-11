@@ -132,6 +132,13 @@ body {
 .bg-ultimate-modal {
   background: rgba(204, 136, 0, 0.3); /* Darker #FFA500 with 0.3 opacity */
 }
+.bg-exalted {
+  background: linear-gradient(to bottom, rgba(50, 205, 50, 0.5), rgba(25, 102, 25, 0.5)); /* Lime green */
+}
+
+.bg-exalted-modal {
+  background: rgba(40, 164, 40, 0.3); /* Darker lime green with 0.3 opacity */
+}
 
 .bg-legendary-modal {
   background: rgba(204, 0, 0, 0.1); /* Darker #FF3232 with 0.3 opacity */
@@ -440,3 +447,31 @@ body {
   }
 }
 
+.border-exalted {
+  border: 1px solid #1b5e20; /* Deep green */
+}
+
+.group-hover\:border-exalted:hover {
+  border: solid #1b5e20; /* Deep green on hover */
+}
+
+.glow-exalted {
+  animation: pulse-text-exalted 2.5s infinite;
+}
+
+@keyframes pulse-text-exalted {
+  0%, 100% {
+    text-shadow: 0 0 5px rgba(27, 94, 32, 1.5), 0 0 10px rgba(27, 94, 32, 0.7); /* Rich green glow */
+  }
+  50% {
+    text-shadow: 0 0 15px rgba(27, 94, 32, 1.2), 0 0 30px rgba(27, 94, 32, 0.8); /* Stronger green glow */
+  }
+}
+
+.exalted {
+  --shimmer-color-1: rgba(27, 94, 32, 0.4);  /* Subtle green shimmer */
+  --shimmer-color-2: rgba(27, 94, 32, 0.2);  /* Lighter green shimmer */
+  --shimmer-color-3: rgba(27, 94, 32, 0.3);  /* Intermediate green shimmer */
+  --shimmer-color-4: rgba(27, 94, 32, 0.5);  /* Rich green shimmer */
+  --shimmer-color-5: rgba(27, 94, 32, 0.6);  /* Vibrant green shimmer */
+}
