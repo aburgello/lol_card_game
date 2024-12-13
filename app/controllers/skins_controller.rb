@@ -28,7 +28,7 @@ class SkinsController < ApplicationController
       max_attempts = 10  # Prevent infinite loops
 
       while skin.nil? && attempts < max_attempts
-        roll = rand(1..3000)
+        roll = rand(1..6000)
         rarity = determine_rarity(roll)
         rarity_counts[rarity] += 1
 
@@ -76,22 +76,22 @@ class SkinsController < ApplicationController
   private
 
   def determine_rarity(roll)
-    case roll
-    when 1..1500    # 50% chance (1500/3000)
-      "Common"
-    when 1501..2250 # 25% chance (750/3000)
+    case random_number
+    when 1..3000      # 50% chance (3000/6000)
+      " "
+    when 3001..4500   # 25% chance (1500/6000)
       "Epic"
-    when 2251..2700 # 15% chance (450/3000)
+    when 4501..5400   # 15% chance (900/6000)
       "Rare"
-    when 2701..2916 # 6.67% chance (200/3000)
+    when 5401..5832   # 6.67% chance (400/6000)
       "Legendary"
-    when 2917..2970 # 2.33% chance (70/3000)
+    when 5833..5946   # 2.33% chance (140/6000)
       "Mythic"
-    when 2971..2990 # 0.67% chance (20/3000)
+    when 5947..5991   # 0.67% chance (40/6000)
       "Ultimate"
-    when 2991..2997 # 0.2% chance (7/3000)
+    when 5992..5995   # 0.2% chance (14/6000)
       "Exalted"
-    when 2998..3000 # 0.1% chance (3/3000)
+    when 5996..6000   # 0.1% chance (6/6000)
       "Transcendent"
     end
   end
