@@ -53,19 +53,24 @@ module ChampionsHelper
         centered: "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/characters/udyr/skins/skin03/animatedsplash/udyr_skin3_centered.webm",
         uncentered: "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/characters/udyr/skins/skin03/animatedsplash/udyr_skin3_uncentered.webm",
         loading_art: "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/characters/udyr/skins/skin03/animatedsplash/udyr_skin03_card.webm"
+      },
+      "Arcane Fractured Jinx" => {
+        centered: "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/characters/jinx/skins/skin60/animatedsplash/jinx_skin60_centered.skins_jinx_skin60.webm",
+        uncentered: "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/characters/jinx/skins/skin60/animatedsplash/jinx_skin60_uncentered.skins_jinx_skin60.webm",
+        loading_art: "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/characters/jinx/skins/skin60/animatedsplash/jinx_skin60_card.skins_jinx_skin60.webm"
       }
     }
 
     if special_skins[skin.name]
       {
-        type: 'video',
+        type: "video",
         centered_url: special_skins[skin.name][:centered],
         uncentered_url: special_skins[skin.name][:uncentered],
         loading_art_url: special_skins[skin.name][:loading_art]
       }
     else
       {
-        type: 'image',
+        type: "image",
         centered_url: skin.splash_art_centered,
         uncentered_url: skin.splash_art,
         loading_art_url: skin.loading_art
