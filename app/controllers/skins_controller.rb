@@ -78,7 +78,7 @@ class SkinsController < ApplicationController
   def determine_rarity(roll)
     case random_number
     when 1..3000      # 50% chance (3000/6000)
-      " "
+      "Common"
     when 3001..4500   # 25% chance (1500/6000)
       "Epic"
     when 4501..5400   # 15% chance (900/6000)
